@@ -6,13 +6,13 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.scm.entity.Shipment;
+import com.scm.entity.ScmUsers;
 
 @RestController
 public class ScmController {
 	
 	@PostMapping("/signup")
-	public String signUpUserData(@RequestBody Shipment shipmentDetails)
+	public String signUpUserData(@RequestBody ScmUsers user)
 	{
 		return "";
 	}
