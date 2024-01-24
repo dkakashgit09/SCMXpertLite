@@ -6,7 +6,7 @@ import com.scm.entity.Shipment;
 
 public interface ScmService 
 {
-	public ScmUsers saveUserData();
+	public ScmUsers saveUserData(ScmUsers users);
 	public String loginUser();
 	public Shipment createShipment();
 	public Shipment getShipmentDetails(long shipmentNumber);

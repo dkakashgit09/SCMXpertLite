@@ -4,20 +4,15 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
+
 @Document(collection = "shipment")
 public class Shipment 
 {
 	@Id
 	private long shipmentNumber;
+	@NotNull(message="User ID cannot be null")
+	private long userId;
 	@NotNull(message="containerNumber cannot be null")
 	private long containerNumber;
 	@NotNull(message="routeDetails cannot be null")
