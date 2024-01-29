@@ -12,18 +12,21 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.scm.entity.ScmUsers;
 
+//Implementation of the UserDetails interface to represent authenticated user details
 public class UserDetailsImplementation implements UserDetails
 {
 	private static final long serialVersionUID = 1L;
-	private long id;
+	private String id;
 	private String username;
 	private String email;
+	
+	//Password is ignored during serialization/deserialization
 	@JsonIgnore
 	private String password;
 	private Collection<? extends GrantedAuthority> authorities;
 	
-	
-	public UserDetailsImplementation(long id, String username, String email, String password, Collection<? extends GrantedAuthority> authorities) 
+	//Constructor to initialize user details
+	public UserDetailsImplementation(String id, String username, String email, String password, Collection<? extends GrantedAuthority> authorities) 
 	{
 		this.id = id;
 		this.username = username;
@@ -31,9 +34,11 @@ public class UserDetailsImplementation implements UserDetails
 		this.password = password;
 		this.authorities = authorities;
 	}
-
+	
+	//Static method to build UserDetailsImplementation object from ScmUsers entity
 	public static UserDetailsImplementation build(ScmUsers user)
 	{
+		//Map ScmRoles to GrantedAuthority objects
 		List<GrantedAuthority> authorities = user.getRoles().stream().map(role -> new SimpleGrantedAuthority(role.getName().name())).collect(Collectors.toList());
 		return new UserDetailsImplementation(user.getId(), user.getUserName(), user.getEmail(), user.getPassword(), authorities);
 	}
@@ -43,7 +48,7 @@ public class UserDetailsImplementation implements UserDetails
 		return authorities;
 	}
 	
-	public long getId() 
+	public String getId() 
 	{
 	    return id;
 	  
@@ -67,7 +72,8 @@ public class UserDetailsImplementation implements UserDetails
 		
 		return username;
 	}
-
+	
+	//Below Methods represents account expiration, lock status, and credential expiration
 	@Override
 	public boolean isAccountNonExpired() 
 	{
@@ -86,20 +92,26 @@ public class UserDetailsImplementation implements UserDetails
 	{
 		return true;
 	}
-
+	
+	//Method to indicate whether the user account is enabled
 	@Override
 	public boolean isEnabled()
 	{
 		return true;
 	}
 	
+	//Method to compare UserDetailsImplementation objects based on their IDs
 	@Override
 	public boolean equals(Object obj) 
 	{
-	    if (this == obj)
+	    if(this == obj)
+	    {
 	      return true;
-	    if (obj == null || getClass() != obj.getClass())
+	    }
+	    if(obj == null || getClass() != obj.getClass())
+	    {
 	      return false;
+	    }
 	    UserDetailsImplementation user = (UserDetailsImplementation) obj;
 	    return Objects.equals(id, user.id);
 	}

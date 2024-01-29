@@ -7,8 +7,8 @@ import org.springframework.stereotype.Repository;
 
 import com.scm.entity.ScmUsers;
 
-@Repository
-public interface ScmUsersRepository extends MongoRepository<ScmUsers, Long> 
+
+public interface ScmUsersRepository extends MongoRepository<ScmUsers, String> 
 {
 	  Optional<ScmUsers> findByUsername(String username);
 

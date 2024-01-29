@@ -8,8 +8,7 @@ import org.springframework.stereotype.Repository;
 import com.scm.entity.ERole;
 import com.scm.entity.ScmRoles;
 
-@Repository
-public interface ScmRoleRepository extends MongoRepository<ScmRoles, Long> 
+public interface ScmRoleRepository extends MongoRepository<ScmRoles, String> 
 {
 	Optional<ScmRoles> findByName(ERole name);
 }

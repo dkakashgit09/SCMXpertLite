@@ -15,16 +15,18 @@ import jakarta.validation.constraints.Size;
 public class ScmUsers 
 {
 	@Id
-	private Long id;
+	private String id;
 	@NotBlank
-	@Size(max = 30)
-	private String userName;
+	@Size(max = 50)
+	private String username;
 	@NotBlank
-	@Size(max = 45)
+	@Size(max = 70)
 	private String email;
 	@NotBlank
-	@Size(max = 30)
+	@Size(max = 60)
 	private String password;
+	
+	//Set of roles assigned to the user, mapped as references to ScmRoles documents in MongoDB
 	@DBRef
 	private Set<ScmRoles> roles = new HashSet<>();
 	
@@ -32,25 +34,23 @@ public class ScmUsers
 	{
 		
 	}
-	public ScmUsers(Long id, @NotBlank @Size(max = 30) String userName, @NotBlank @Size(max = 45) String email, @NotBlank @Size(max = 30) String password, Set<ScmRoles> roles) 
+	public ScmUsers(String username, String email, String password) 
 	{
-		this.id = id;
-		this.userName = userName;
+		this.username = username;
 		this.email = email;
 		this.password = password;
-		this.roles = roles;
 	}
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 	public String getUserName() {
-		return userName;
+		return username;
 	}
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setUserName(String username) {
+		this.username = username;
 	}
 	public String getEmail() {
 		return email;
@@ -70,12 +70,6 @@ public class ScmUsers
 	public void setRoles(Set<ScmRoles> roles) {
 		this.roles = roles;
 	}
-	@Override
-	public String toString() {
-		return "ScmUsers [id=" + id + ", userName=" + userName + ", email=" + email + ", password=" + password
-				+ ", roles=" + roles + "]";
-	}
-	
 	
 	
 }

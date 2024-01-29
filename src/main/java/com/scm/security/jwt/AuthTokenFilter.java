@@ -18,6 +18,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+
+//Filter to intercept and authenticate requests by validating JWT tokens.
 public class AuthTokenFilter extends OncePerRequestFilter 
 {
 	
@@ -27,6 +29,7 @@ public class AuthTokenFilter extends OncePerRequestFilter
 	@Autowired
 	private UserDetailsServiceImplementation userDetailsService;
 	
+	//Logger for logging filter actions
 	private static final Logger logger = LoggerFactory.getLogger(AuthTokenFilter.class);
 
 	@Override
@@ -34,14 +37,21 @@ public class AuthTokenFilter extends OncePerRequestFilter
 	{
 		try 
 		{
+            //Parse JWT token from the request
 			String jwt = parseJwt(request);
+			
+			//Validate the JWT token
 		    if (jwt != null && jwtUtils.validateJwtToken(jwt)) 
 		    {
+		    	//Extract username from the JWT token
 		        String username = jwtUtils.getUserNameFromJwtToken(jwt);
+		        //Load user details using the extracted username
 		        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+		        //Creates authentication token with user details
 		        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+		        //Set authentication details
 		        authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-		        
+		        //Set the authentication token in the security context
 		        SecurityContextHolder.getContext().setAuthentication(authentication);
 
 		    }
@@ -49,15 +59,19 @@ public class AuthTokenFilter extends OncePerRequestFilter
 		}
 		catch(Exception e)
 		{
+			//Set the authentication token in the security context
 			logger.error("Cannot set user authentication: {}", e);
 		}
 		
+		//Proceed with the filter chain
 	    filterChain.doFilter(request, response);
 
 	}
-
+	
+	//Method to parse JWT token from the request
 	private String parseJwt(HttpServletRequest request) 
 	{
+		//Retrieve JWT token from cookies in the HTTP request
 	    String jwt = jwtUtils.getJwtFromCookies(request);
 		return jwt;
 	}

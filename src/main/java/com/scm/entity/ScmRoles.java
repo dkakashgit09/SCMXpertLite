@@ -7,7 +7,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class ScmRoles 
 {
 	@Id
-	private long id;
+	private String id;
 	private ERole name;
 	
 	public ScmRoles() 
@@ -15,17 +15,16 @@ public class ScmRoles
 		
 	}
 
-	public ScmRoles(long id, ERole name) 
+	public ScmRoles(ERole name) 
 	{
-		this.id = id;
 		this.name = name;
 	}
 
-	public long getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
@@ -35,11 +34,6 @@ public class ScmRoles
 
 	public void setName(ERole name) {
 		this.name = name;
-	}
-
-	@Override
-	public String toString() {
-		return "ScmRoles [id=" + id + ", name=" + name + "]";
 	}
 	
 	
