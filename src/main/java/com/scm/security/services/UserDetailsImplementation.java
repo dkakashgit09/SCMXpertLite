@@ -9,7 +9,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.scm.entity.ScmUsers;
 
 //Implementation of the UserDetails interface to represent authenticated user details
@@ -19,9 +18,6 @@ public class UserDetailsImplementation implements UserDetails
 	private String id;
 	private String username;
 	private String email;
-	
-	//Password is ignored during serialization/deserialization
-	@JsonIgnore
 	private String password;
 	private Collection<? extends GrantedAuthority> authorities;
 	
@@ -40,7 +36,7 @@ public class UserDetailsImplementation implements UserDetails
 	{
 		//Map ScmRoles to GrantedAuthority objects
 		List<GrantedAuthority> authorities = user.getRoles().stream().map(role -> new SimpleGrantedAuthority(role.getName().name())).collect(Collectors.toList());
-		return new UserDetailsImplementation(user.getId(), user.getUserName(), user.getEmail(), user.getPassword(), authorities);
+		return new UserDetailsImplementation(user.getId(), user.getUsername(), user.getEmail(), user.getPassword(), authorities);
 	}
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() 

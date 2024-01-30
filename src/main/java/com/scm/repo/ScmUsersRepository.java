@@ -7,12 +7,12 @@ import org.springframework.stereotype.Repository;
 
 import com.scm.entity.ScmUsers;
 
-
+@Repository
 public interface ScmUsersRepository extends MongoRepository<ScmUsers, String> 
 {
-	  Optional<ScmUsers> findByUsername(String username);
-
+	  ScmUsers findByUsername(String username);
+	  Optional<ScmUsers> findByEmail(String email);
+	  ScmUsers findByToken(String token);
 	  Boolean existsByUsername(String username);
-
 	  Boolean existsByEmail(String email);
 }

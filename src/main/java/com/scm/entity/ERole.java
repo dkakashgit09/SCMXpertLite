@@ -5,8 +5,6 @@ public enum ERole
 {
 	  //Role for regular users
 	  ROLE_USER,
-	  //Role for moderators
-	  ROLE_MODERATOR,
 	  //Role for administrators
 	  ROLE_ADMIN
 }

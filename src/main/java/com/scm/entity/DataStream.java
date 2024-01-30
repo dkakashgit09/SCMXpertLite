@@ -1,25 +1,46 @@
 package com.scm.entity;
 
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import jakarta.validation.constraints.NotNull;
 
 
 @Document(collection = "shipment")
 public class DataStream 
 {
-	@Id
 	private long deviceId;
-	@NotNull(message="Battery level cannot be null")
 	private double batteryLevel;
-	@NotNull(message="Temperature cannot be null")
-	private String temperature;
-	@NotNull(message="To Route cannot be null")
+	private double temperature;
 	private String routeFrom;
-	@NotNull(message="From Route cannot be null")
 	private String routeTo;
-	@NotNull(message="Time Stamp cannot be null")
-	private String timeStamp;
+	public long getDeviceId() {
+		return deviceId;
+	}
+	public void setDeviceId(long deviceId) {
+		this.deviceId = deviceId;
+	}
+	public double getBatteryLevel() {
+		return batteryLevel;
+	}
+	public void setBatteryLevel(double batteryLevel) {
+		this.batteryLevel = batteryLevel;
+	}
+	public double getTemperature() {
+		return temperature;
+	}
+	public void setTemperature(double temperature) {
+		this.temperature = temperature;
+	}
+	public String getRouteFrom() {
+		return routeFrom;
+	}
+	public void setRouteFrom(String routeFrom) {
+		this.routeFrom = routeFrom;
+	}
+	public String getRouteTo() {
+		return routeTo;
+	}
+	public void setRouteTo(String routeTo) {
+		this.routeTo = routeTo;
+	}
 		
 }

@@ -1,5 +1,7 @@
 package com.scm.entity;
 
+import java.util.List;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -9,7 +11,8 @@ public class ScmRoles
 	@Id
 	private String id;
 	private ERole name;
-	
+	List<String> url;
+
 	public ScmRoles() 
 	{
 		
@@ -36,6 +39,13 @@ public class ScmRoles
 		this.name = name;
 	}
 	
+	public List<String> getUrl() {
+		return url;
+	}
+
+	public void setUrl(List<String> url) {
+		this.url = url;
+	}
 	
 	
 }
