@@ -1,4 +1,6 @@
-package com.scm.security.services;
+package com.scm.services;
+
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,13 +21,10 @@ public class UserDetailsServiceImplementation implements UserDetailsService
 
 	//This method is to load user details by username
 	@Override
-	@Transactional
-	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException 
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException 
 	{
-		//Retrieves user entity from the repository by username, or throw an exception if not found
-		ScmUsers user = userRepo.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User Not Found with email: " + email));
-		//Build UserDetailsImplementation object from retrieved user entity and return it
-	    return UserDetailsImplementation.build(user);
+		Optional<ScmUsers> findByEmail = userRepo.findByEmail(username);
+		return findByEmail.map(UserDetailsImplementation::new).orElseThrow(() -> new UsernameNotFoundException("user not found " + username));
 	}
 
 }
