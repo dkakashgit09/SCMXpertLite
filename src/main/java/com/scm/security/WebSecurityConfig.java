@@ -63,12 +63,13 @@ public class WebSecurityConfig
 	{
 		http.cors(cors -> cors.configure(http));
 		http.csrf(csrf -> csrf.disable());
-		http.authorizeHttpRequests(req -> req.requestMatchers("/auth/login", "/auth/signup").permitAll());
-		http.authorizeHttpRequests(req -> req.anyRequest().authenticated());
+		http.authorizeHttpRequests(req -> req.requestMatchers("/auth/login", "/auth/signup","/login","/signup").permitAll());
+//		http.authorizeHttpRequests(req -> req.anyRequest().authenticated().and().formLogin().loginPage("/login").defaultSuccessUrl("/userdashboard").failureForwardUrl("/admindashboard"));
 		http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 		http.authenticationProvider(authenticationProvider());
 		http.addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class);
 		http.exceptionHandling(authentication -> authentication.authenticationEntryPoint(authEntryPointJwt));
+//		http.cors().and().csrf().disable().authorizeHttpRequests().requestMatchers("/**").permitAll().anyRequest().authenticated().and().formLogin().loginPage("/login").defaultSuccessUrl("/userdashboard").failureForwardUrl("/admindashboard");
 		return http.build();
 	}
 }

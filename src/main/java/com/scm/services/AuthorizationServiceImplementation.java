@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import com.scm.entity.ScmRoles;
 import com.scm.entity.ScmUsers;
+import com.scm.payload.request.LoginRequest;
 import com.scm.payload.request.SignRequest;
 import com.scm.payload.response.LoginResponse;
 import com.scm.repo.ScmUsersRepository;
@@ -43,8 +44,10 @@ public class AuthorizationServiceImplementation implements AuthorizationService
 	private static Logger logger = LoggerFactory.getLogger(AuthorizationServiceImplementation.class);
 
 	@Override
-	public ResponseEntity<?> loginIn(String email, String password) 
+	public ResponseEntity<?> loginIn(LoginRequest loginRequest) 
 	{
+		String email = loginRequest.getEmail();
+		String password = loginRequest.getPassword();
 		Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
 		if(authentication.isAuthenticated())
 		{

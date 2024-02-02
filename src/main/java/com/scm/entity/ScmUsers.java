@@ -18,7 +18,7 @@ import lombok.Data;
 public class ScmUsers 
 {
 	@Id
-	private ObjectId objectId;
+	private String id;
 	@NotBlank
 	private String username;
 	@NotBlank

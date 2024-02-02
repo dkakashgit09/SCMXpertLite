@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import com.scm.entity.ScmUsers;
 
 @Repository
-public interface ScmUsersRepository extends MongoRepository<ScmUsers, ObjectId> 
+public interface ScmUsersRepository extends MongoRepository<ScmUsers, String> 
 {
 	  ScmUsers findByUsername(String username);
 	  Optional<ScmUsers> findByEmail(String email);
