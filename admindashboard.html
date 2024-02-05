@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+<head>
+    <title>SCMXpertLite</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
+        integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ"
+        crossorigin="anonymous" />
+    <style>
+        /* Sidebar */
+        .sidenav {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            background-color: #111;
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 60px;
+        }
+
+        .sidenav a {
+            padding: 10px 8px 10px 16px;
+            text-decoration: none;
+            font-size: 20px;
+            color: #818181;
+            display: block;
+            transition: 0.3s;
+        }
+
+        .sidenav a:hover {
+            color: #f1f1f1;
+        }
+
+        .sidenav .closebtn {
+            position: absolute;
+            top: 0;
+            right: 25px;
+            font-size: 36px;
+            margin-left: 50px;
+        }
+
+        @media screen and (max-height: 450px) {
+            .sidenav {
+                padding-top: 15px;
+            }
+
+            .sidenav a {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-sm sticky-top" style="box-shadow: 0.3em 0.3em 5em rgb(0, 0, 0); background: rgb(58, 58, 58);">
+        <span style="font-size:30px;cursor:pointer; color:white;" onclick="toggleNav()">&#9776; </span> &nbsp;&nbsp;&nbsp;&nbsp;
+        <a class="navbar-brand text-white"><strong>SCM</strong></a>
+    </nav>    
+    <div id="mySidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <a href="#">Link 1</a>
+        <a href="#">Link 2</a>
+        <a href="#">Link 3</a>
+        <!-- Add more links as needed -->
+    </div>
+    <div class="container-fluid bg-dark">
+        <div class="row">
+            <div class="col-md-7">
+                <!-- Adjusted column size for better responsiveness -->
+            </div>
+            <div class="col-md-4" style="margin-top: 2px;">
+                <form action="">
+                    <div class="table-responsive"> <!-- Added for better handling of table on smaller screens -->
+                        <table class="table table-dark">
+
+                            <tr>
+                              <th>Shipment Number</th>
+                              <td>
+                                  <input type="text" class="form-control" id="shipmentNumber" name="shipmentNumber" required pattern="[0-9]+" placeholder="Enter Shipment Number"/>
+                              </td>
+                            </tr>
+      
+                            <tr>
+                              <th>Container Number</th>
+                              <td>
+                                  <input type="number" class="form-control" id="containerNumber" name="containerNumber" required pattern="[0-9]+" placeholder="Enter Container Number"/>
+                              </td>
+                            </tr>
+                            <tr>
+                              <th>Route Details</th>
+                              <td>
+                                  <select class="form-control" name="routeDetails" id="route">
+                                      <option value="">Select Route</option>
+                                      <option value="Hyderabad">Hyderabad</option>
+                                      <option value="Delhi">Delhi</option>
+                                      <option value="Chennai">Chennai</option>
+                                      <option value="Hyderabad">Bengaluru</option>
+                                      <option value="Delhi">Mumbai</option>
+                                      <option value="Chennai">Pune</option>
+      
+                                  </select>
+                              </td>
+                            </tr>
+                            <tr>
+                              <th>Goods Type</th>
+                              <td>
+                                  <select class="form-control" name="goodsType" id="goods">
+                                      <option value="">Select Goods Type</option>
+                                      <option value="raw">Raw Material</option>
+                                      <option value="consumer">Consumer Goods</option>
+                                      <option value="spare">Spare Parts</option>
+                                      <option value="finished">Finished Goods</option>
+                                      <option value="industrial">Industrial Goods</option>
+                                      <option value="luxury">Luxury Goods</option>
+      
+                                  </select>
+                              </td>
+                            </tr>
+                            <tr>
+                              <th>Device</th>
+                              <td>
+                                  <select class="form-control" name="device" id="device">
+                                      <option value="">Select Device</option>
+                                      <option >123</option>
+                                      <option >124</option>
+                                      <option >125</option>
+                                      <option >126</option>
+                                      <option >127</option>
+                                      <option >128</option>
+                                  </select>
+                              </td>
+                            </tr>
+                            <tr>
+                              <th>Date</th>
+                              <td>
+                                  <input type="date" class="form-control" id="date" name="deliveryDate" required placeholder="choose date"/>
+                              </td>
+                            </tr>
+                            <tr>
+                              <th>PO Number</th>
+                              <td>
+                                  <input type="number" class="form-control" id="poNumber" name="poNumber" required pattern="[0-9]+" placeholder="Enter PO Number"/>
+                              </td>
+                            </tr>
+                            <tr>
+                              <th>Delivery Number</th>
+                              <td>
+                                  <input type="number" class="form-control" id="deliveryNumber" name="deliveryNumber" required pattern="[0-9]+" placeholder="Enter Delivery Number"/>
+                              </td>
+                            </tr>
+                            <tr>
+                              <th>NDC Number</th>
+                              <td>
+                                  <input type="number" class="form-control" id="ndcNumber" name="ndcNumber" required pattern="[0-9]+" placeholder="Enter NDC Number"/>
+                              </td>
+                            </tr>
+                            <tr>
+                              <th>Batch ID</th>
+                              <td>
+                                  <input type="number" class="form-control" id="batchId" name="batchId" required pattern="[0-9]+" placeholder="Enter Batch ID"/>
+                              </td>
+                            </tr>
+                            <tr>
+                              <th>Number of Goods</th>
+                              <td>
+                                  <input type="number" class="form-control" id="noOfGoods" name="noOfGoods" required placeholder="Enter Number of Goods"/>
+                              </td>
+                            </tr>
+                            <tr>
+                              <th>Shipment Description</th>
+                              <td>
+                                  <textarea class="form-control" name="shipmentDescription" id="description" rows="3"></textarea>
+                              </td>
+                            </tr>
+                            <tr>
+                              
+                              <td colspan="2"> 
+                                 <button class="form-control">Submit</button>
+                              </td>
+                            </tr>
+      
+                        </table>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        function toggleNav() {
+            var sidebar = document.getElementById("mySidenav");
+            if (sidebar.style.width === "250px") {
+                sidebar.style.width = "0";
+            } else {
+                sidebar.style.width = "250px";
+            }
+        }
+    </script>
+    
+</body>
+
+</html>

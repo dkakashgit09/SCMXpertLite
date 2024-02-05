@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>SCMXpertLite</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous" />
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        .image-container {
+            max-height: 80vh; /* Set maximum height */
+            overflow: hidden; /* Hide overflowing content */
+        }
+
+        .image-container img {
+            width: 100%; /* Ensure image fills container width */
+            height: auto; /* Maintain aspect ratio */
+        }
+    </style>
+</head>
+<body>
+    <div class="text-center bg-dark sticky-top" style="margin-bottom: -15px; padding: 1%;">
+        <nav class="navbar navbar-expand-sm bg-dark navbar-dark " >
+            <a class="navbar-brand" href="#"><strong>SCM</strong></a>
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link text-danger" href="#"><strong><i class="fas fa-rupee-sign">&nbsp;</i>Account Settings</strong></a>
+                </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <li class="nav-item">
+                    <a class="nav-link text-danger" href="#"><strong><i class="fa fa-sign-out-alt">&nbsp;</i>My Shipments</strong></a>
+                </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <li class="nav-item">
+                    <a class="nav-link text-danger" href="/shipment.html"><strong><i class="fa fa-sign-out-alt">&nbsp;</i>Create Shipments</strong></a>
+                </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <li class="nav-item">
+                    <a class="nav-link text-danger" href="#"><strong><i class="fa fa-sign-out-alt">&nbsp;</i>Device Data</strong></a>
+                </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <li class="nav-item">
+                    <a class="nav-link text-danger" href="/home.html"><strong><i class="fa fa-sign-out-alt">&nbsp;</i>Logout</strong></a>
+                </li>
+            </ul>
+        </nav>
+
+    </div>
+    <div class="container-fluid bg-dark">
+        <div class="row">
+            <div class="col-md-12 position-relative">
+                <div class="image-container">
+                    <!-- Replace the src attribute with your image path -->
+                    <img src="./20289222_6226323.jpg" alt="User Dashboard" class="img-fluid" />
+                    <div class="overlay"></div>
+                            <h1 class="text-center text-danger"><strong>Welcome</strong></h1>
+                            <div class="row">
+                                <!-- Left Side Form Inputs -->
+                                <div class="col-md-6">
+                                    <button class="form-control bg-success text-white mt-3"><strong>Submit</strong></button>
+                                </div>
+                    
+                                <!-- Right Side Form Inputs -->
+                                <div class="col-md-6">
+                                    <button class="form-control bg-danger text-white mt-3"><strong>Clear</strong></button>
+
+                                </div>
+                            </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="jumbotron text-center bg-dark" style="margin-bottom: 0">
+        <div class="container footer text-danger">
+           <h3> <strong>&copy; 2024 SCMXpertLite</strong></h3>
+        </div>
+    </div>
+</body>
+</html>
