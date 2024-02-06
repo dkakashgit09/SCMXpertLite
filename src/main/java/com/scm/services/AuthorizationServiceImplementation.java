@@ -81,7 +81,7 @@ public class AuthorizationServiceImplementation implements AuthorizationService
 			users.setPassword(passwordEncoder.encode(signupRequest.getPassword()));
 
 				ScmRoles roles = new ScmRoles();
-				roles.setRole("ADMIN");
+				roles.setRole("USER");
 				Set<ScmRoles> addRole = new HashSet<>();
 				addRole.add(roles);
 				users.setRoles(addRole);

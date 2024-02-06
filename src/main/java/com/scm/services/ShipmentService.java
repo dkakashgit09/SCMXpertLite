@@ -8,5 +8,4 @@ public interface ShipmentService
 {
 	public String saveShipment(Shipment shipment);
 	public List<Shipment> getShipmentsByEmail(String email);
-	public Shipment getShipment(long shipmentNumber);
 }

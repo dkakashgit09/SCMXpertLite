@@ -1,7 +1,5 @@
 package com.scm.entity;
 
-import java.util.Date;
-
 import javax.validation.constraints.Email;
 
 import org.springframework.data.annotation.Id;
@@ -10,19 +8,21 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import lombok.Data;
 
 @Data
-@Document(collection = "scmusers")
+@Document(collection = "shipment")
 public class Shipment 
 {
 	@Id
 	private long shipmentNumber;
 	private long containerNumber;
-	private String RouteDetails;
-	private String GoodsType;
-	private String Device;
-	private Date DeliveryDate;
+	private String route;
+	private String goods;
+	private String device;
+	private String deliveryDate;
+	private long poNumber;
+	private long deliveryNumber;
 	private long ndcNumber;
-	private long BatchId;
-	private long noOfGoods;
+	private long batchId;
+	private long serialNumberOfGoods;
 	private String description;
 	
 	@Email

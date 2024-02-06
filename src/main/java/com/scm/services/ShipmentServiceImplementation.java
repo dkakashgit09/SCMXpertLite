@@ -43,20 +43,4 @@ public class ShipmentServiceImplementation implements ShipmentService
         }
 	}
 
-	@Override
-	public Shipment getShipment(long shipmentNumber) 
-	{
-		boolean exists = shipmentRepo.existsByShipmentNumber(shipmentNumber);
-		if(!exists)
-		{
-			return null;
-		}
-		else
-		{
-			Shipment result = shipmentRepo.findByShipmentNumber(shipmentNumber);
-			return result;
-		}
-		
-	}
-
 }
