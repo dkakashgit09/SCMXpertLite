@@ -230,12 +230,15 @@
     })
     .then(data => {
         console.log(data);
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('email', data.email);
+        localStorage.setItem('username', data.username);
         if (data.roles.includes('ADMIN'))
         {
-            window.location.href = 'admindashboard.html?token=' + data.token;
+            window.location.href = 'admindashboard.html?username=' + encodeURIComponent(data.username);
         }
         else{
-            window.location.href = 'dashboard.html?token=' + data.token;
+            window.location.href = 'dashboard.html?username=' + encodeURIComponent(data.username);
         }
     })
     .catch(error => {
@@ -289,8 +292,9 @@
         }, 3000);
 
     });
-});
 
+    
+});
 </script>
 </body>
 </html>

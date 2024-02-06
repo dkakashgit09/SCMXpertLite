@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>United Bank</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous" />
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Function to fetch shipments by email
+            function fetchShipmentsByEmail() {
+                var email = localStorage.getItem('email');
+                if (!email) {
+                    console.error('User email not found in localStorage.');
+                    return;
+                }
+                
+                $.ajax({
+                    url: 'http://localhost:7077/shipment/find?email=' + email,
+                    type: 'POST',
+                    success: function(response) {
+                        // Clear existing table data
+                        $('#shipmentTable tbody').empty();
+
+                        // Populate table with shipment data
+                        response.forEach(function(shipment) {
+                            $('#shipmentTable tbody').append('<tr>' +
+                                '<td>' + shipment.shipmentNumber + '</td>' +
+                                '<td>' + shipment.containerNumber + '</td>' +
+                                '<td>' + shipment.route + '</td>' +
+                                '<td>' + shipment.goodsType + '</td>' +
+                                '<td>' + shipment.device + '</td>' +
+                                '<td>' + shipment.date + '</td>' +
+                                '<td>' + shipment.poNumber + '</td>' +
+                                '<td>' + shipment.deliveryNumber + '</td>' +
+                                '<td>' + shipment.ndcNumber + '</td>' +
+                                '<td>' + shipment.batchID + '</td>' +
+                                '<td>' + shipment.totalGoods + '</td>' +
+                                '<td>' + shipment.description + '</td>' +
+                                '</tr>');
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        // Handle error
+                        console.error(xhr.responseText);
+                    }
+                });
+            }
+
+            // Call fetchShipmentsByEmail when the document is ready
+            fetchShipmentsByEmail();
+        });
+    </script>
+</head>
+<body>
+    <!-- Your existing HTML content -->
+    <!-- Add an ID to your table for easy selection -->
+    <table id="shipmentTable" class="table table-dark">
+        <thead>
+            <tr>
+                <th>ShipmentNumber</th>
+                <th>ContainerNumber</th>
+                <th>Route</th>
+                <th>GoodsType</th>
+                <th>Device</th>
+                <th>Date</th>
+                <th>PoNumber</th>
+                <th>DeliveryNumber</th>
+                <th>NdcNumber</th>
+                <th>BatchID</th>
+                <th>TotalGoods</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Table rows will be dynamically added here -->
+        </tbody>
+    </table>
+</body>
+</html>
