@@ -30,7 +30,7 @@ public class PasswordServicesImplementation implements PasswordServices
 
         if (userOptional.isEmpty()) 
         {
-            return "Invalid email id.";
+            return "Invalid email id";
         }
         else
         {
@@ -52,7 +52,27 @@ public class PasswordServicesImplementation implements PasswordServices
 	@Override
 	public String resetPassword(String token, String password) 
 	{
-		return null;
+		ForgotPasswordRequest userOptional = passwordRepo.findByToken(token);
+		
+        if (userOptional == null) 
+        {
+        	return "Invalid password";
+        }
+        
+        LocalDateTime tokenCreationDate = userOptional.getTokenCreationDate();
+        if(isTokenExpired(tokenCreationDate)) 
+        {
+        	return "Token expired.";
+        }
+        
+        ScmUsers user = userRepo.findByUsername(userOptional.getUsername());
+    	user.setPassword(password);
+        userOptional.setToken(null);
+        userOptional.setTokenCreationDate(null);
+        passwordRepo.save(userOptional);
+        userRepo.save(user);
+        
+        return "Your password has been successfully updated.";
 	}
 	
 	private String generateToken() 

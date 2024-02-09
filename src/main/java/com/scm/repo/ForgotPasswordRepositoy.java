@@ -8,5 +8,5 @@ import com.scm.payload.request.ForgotPasswordRequest;
 @Repository
 public interface ForgotPasswordRepositoy extends MongoRepository<ForgotPasswordRequest, String> 
 {
-
+	ForgotPasswordRequest findByToken(String token);
 }

@@ -15,11 +15,13 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.scm.entity.ScmRoles;
 import com.scm.entity.ScmUsers;
+import com.scm.payload.request.EditRequest;
 import com.scm.payload.request.LoginRequest;
 import com.scm.payload.request.SignRequest;
 import com.scm.payload.response.LoginResponse;
@@ -27,7 +29,7 @@ import com.scm.repo.ScmUsersRepository;
 import com.scm.security.JwtUtils;
 
 @Service
-public class AuthorizationServiceImplementation implements AuthorizationService 
+public class UserServiceImplementation implements UserService 
 {
 	@Autowired
 	private ScmUsersRepository userRepo;
@@ -39,9 +41,12 @@ public class AuthorizationServiceImplementation implements AuthorizationService
     private AuthenticationManager authenticationManager;
 	
 	@Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+	
+	@Autowired
 	private JwtUtils jwtUtils;
 	
-	private static Logger logger = LoggerFactory.getLogger(AuthorizationServiceImplementation.class);
+	private static Logger logger = LoggerFactory.getLogger(UserServiceImplementation.class);
 
 	@Override
 	public ResponseEntity<?> loginIn(LoginRequest loginRequest) 
@@ -96,5 +101,81 @@ public class AuthorizationServiceImplementation implements AuthorizationService
 			return new ResponseEntity<String>("EmailAlreadyExist", HttpStatus.BAD_REQUEST);
 		}
 	}
+	
+	@Override
+	public ResponseEntity<?> editUser(EditRequest editRequest, String email) 
+	{
+		String username=editRequest.getUsername();
+		if(editRequest.getEmail().equals(email))
+		{
+			ScmUsers users = userRepo.findByUsername(username);
+			String existedPassword=users.getPassword();
+			boolean existsPassword=bCryptPasswordEncoder.matches(editRequest.getPassword(), existedPassword);
+			if(existsPassword)
+			{
+				users.setPassword(passwordEncoder.encode(editRequest.getUpdatePassword()));
+				users.setUsername(username);
+				userRepo.save(users);
+				logger.info("Account Updated With Given Details " + editRequest.getEmail());
+				return new ResponseEntity<String>("AccountUpdated", HttpStatus.OK);
+			}
+			else
+			{
+				logger.info("The Password You Have Entered is InCorrect");
+				return new ResponseEntity<String>("IncorrectPassword", HttpStatus.BAD_REQUEST);
+			}
+		}
+		else
+		{
+			logger.warn("The given mail is not matching with your account details :- " + editRequest.getEmail());
+			return new ResponseEntity<String>("EmailNotMatching", HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@Override
+	public ResponseEntity<?> deleteUser(LoginRequest deleteRequest, String username) 
+	{
+		String email=deleteRequest.getEmail();
+		ScmUsers users = userRepo.findByUsername(username);
+		if(deleteRequest.getEmail().equals(users.getEmail()))
+		{
+			String existedPassword=users.getPassword();
+			boolean existsPassword=bCryptPasswordEncoder.matches(deleteRequest.getPassword(), existedPassword);
+			if(existsPassword)
+			{
+				userRepo.deleteById(users.getId());
+				logger.info("Account Deleted Sucessfully ");
+				return new ResponseEntity<String>("AccountDeleted", HttpStatus.OK);
+			}
+			else
+			{
+				logger.info("The Password You Have Entered is InCorrect");
+				return new ResponseEntity<String>("IncorrectPassword", HttpStatus.BAD_REQUEST);
+			}
+		}
+		else
+		{
+			logger.warn("The given mail is not matching with your account details :- " + deleteRequest.getEmail());
+			return new ResponseEntity<String>("EmailNotMatching", HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@Override
+	public Optional<ScmUsers> retriveDetails(String email) 
+	{
+		Optional<ScmUsers> user = userRepo.findByEmail(email);
+		if(user.isEmpty())
+		{
+			logger.warn("No User found with this email" + email);
+			return Optional.empty();
+		}
+		else
+		{
+			return user;
+		}
+		
+	}
 
+
+	
 }
