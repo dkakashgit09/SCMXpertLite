@@ -319,8 +319,8 @@
                                 <div class="input-group">
                                     <input style="padding: 15px;" type="text" id="captchaInput" name="captchaInput" class="form-control" placeholder="Enter Characters" required/>
                                     <div class="input-group-append">
-                                        <button style="margin-top: 15%;" class="btn btn-outline-warning" type="button" id="refreshCaptcha">
-                                            <i class="fas fa-sync fa-lg"></i>
+                                        <button style="margin-top: 18%;" class="btn btn-outline-warning" type="button" id="refreshCaptcha">
+                                            <i class="fas fa-sync"></i>
                                         </button>
                                     </div>
                                 </div>
@@ -522,17 +522,16 @@
         })
         .then(response => {
             if (!response.ok) {
-                throw new Error('Registration failed');
+                throw new Error('Registration failed, User Exists!');
             }
-            // Clear form fields
+            
             document.getElementById('username').value = '';
             document.getElementById('regEmail').value = ''; // Clear email field
             document.getElementById('regPassword').value = '';
     
-            // Display success message
+            document.getElementById('errorMessage').textContent = "Registered Successfully";
             document.getElementById('successMessage').style.display = 'block';
     
-            // Hide success message after 3 seconds
             setTimeout(function() {
                 document.getElementById('successMessage').style.display = 'none';
             }, 3000);

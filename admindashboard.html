@@ -56,14 +56,14 @@
 <body>
 
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-  <a class="navbar-brand text-danger" href="#"><strong>SCMXpertLite</strong></a>
+  <a class="navbar-brand text-danger" href="./admindashboard.html"><strong>SCMXpertLite</strong></a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="collapse navbar-collapse justify-content-center" id="collapsibleNavbar">
     <ul class="navbar-nav" style="margin-left: -7%;">
       <li class="nav-item">
-        <a class="nav-link text-warning fa-md" href="./usersettings.html"><strong><i class="fas fa-user-tie text-danger">&nbsp;&nbsp;&nbsp;</i>Account Settings</strong></a>
+        <a class="nav-link text-warning fa-md" href="./adminaccount.html"><strong><i class="fas fa-user-tie text-danger">&nbsp;&nbsp;&nbsp;</i>My Account</strong></a>
       </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
       <li class="nav-item">
         <a class="nav-link text-warning fa-md" href="./adminshipments.html"><strong><i class="fas fa-box text-danger">&nbsp;&nbsp;&nbsp;</i>My Shipments</strong></a>
@@ -85,7 +85,7 @@
   <img class="image img-fluid" src="./shipments.jpg" alt="Image" />
   <div class="content-over-image">
 
-    <div class="container-fluid transparent-bg" style="margin-top:30px">
+    <div class="container-fluid transparent-bg" style="margin-top:-10px">
       <div class="row">
         <div class="col-sm-4">
           <h2 class="text-info"><i class="fa fa-bars fa-sm"></i>&nbsp;<strong>SCMXpertLite Services</strong></h2>
@@ -115,6 +115,7 @@
           <hr class="d-sm-none">
         </div>
         <div class="col-sm-8">
+          <h1 id="welcomeMessage" class="font-weight-bold " style="margin-left: 30%; letter-spacing: 3px; color: rgb(0, 255, 179); text-shadow: 1px 1px 2px black, 0 0 25px rgb(0, 182, 106), 0 0 5px rgb(0, 103, 187);"></h1>
           <h2 class="text-info"><strong>SCMXpertLite</strong></h2>
           <h5 class="text-warning"><strong>Revolutionizing Supply Chain Management</strong></h5>
           <p class="text-white">
@@ -158,6 +159,32 @@
             event.preventDefault();
         });
     });
+</script>
+<script>
+  // Retrieve username from local storage
+  var username = localStorage.getItem('username');
+
+  // Display welcome message
+  var welcomeMessageElement = document.getElementById('welcomeMessage');
+  if (username) {
+    welcomeMessageElement.innerHTML = '<div class="row align-items-center">' +
+                                         '<div class="col-auto">' +
+                                             '<i class="fas fa-user-tie"></i>' +
+                                         '</div>' +
+                                         '<div class="col">' +
+                                             'Welcome ' + username +
+                                         '</div>' +
+                                     '</div>';
+  } else {
+    welcomeMessageElement.innerHTML = '<div class="row align-items-center">' +
+                                         '<div class="col-auto">' +
+                                             '<i class="fas fa-user-tie"></i>' +
+                                         '</div>' +
+                                         '<div class="col">' +
+                                             'Welcome' +
+                                         '</div>' +
+                                     '</div>';
+  }
 </script>
 
 </body>

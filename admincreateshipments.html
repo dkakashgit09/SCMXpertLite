@@ -72,21 +72,21 @@
 </head>
 <body>
     <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-        <a class="navbar-brand text-danger" href="/dashboard.html"><strong>SCMXpertLite</strong></a>
+        <a class="navbar-brand text-danger" href="/admindashboard.html"><strong>SCMXpertLite</strong></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse justify-content-center" id="collapsibleNavbar">
           <ul class="navbar-nav" style="margin-left: -7%;">
             <li class="nav-item">
-              <a class="nav-link text-warning fa-md" href="#"><strong><i class="fas fa-user-tie text-danger">&nbsp;&nbsp;&nbsp;</i>Account Settings</strong></a>
+              <a class="nav-link text-warning fa-md" href="./adminaccount.html"><strong><i class="fas fa-user-tie text-danger">&nbsp;&nbsp;&nbsp;</i>My Account</strong></a>
             </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <li class="nav-item">
               <a class="nav-link text-warning fa-md" href="./adminshipments.html"><strong><i class="fas fa-box text-danger">&nbsp;&nbsp;&nbsp;</i>My Shipments</strong></a>
             </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <li class="nav-item">
                 <a class="nav-link text-warning fa-md" href="./datastream.html"><strong><i class="fa fa-database text-danger">&nbsp;&nbsp;&nbsp;</i>Data Stream</strong></a>
-              </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <li class="nav-item">
               <a class="nav-link text-warning fa-md" href="./home.html"><strong><i class="fas fa-sign-out-alt text-danger">&nbsp;&nbsp;&nbsp;</i>Logout</strong></a>
             </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -250,14 +250,7 @@
           e.preventDefault();
           var myHeaders = new Headers();
           myHeaders.append("Content-Type", "application/json");
-    
-          // const formData = new FormData(this).entries();
-          // var raw = JSON.stringify(Object.fromEntries(formData));
-          // console.log("***",email);
-          // // const formData = new FormData(thisForm);
-          // formData.append('email', email);
-          // console.log(formData);
-          // // const raw = JSON.stringify(Object.fromEntries(formData));
+
           const thisForm = document.getElementById('shipment');
     
           const formData = new FormData(thisForm);

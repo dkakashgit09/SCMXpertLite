@@ -70,14 +70,14 @@
 </head>
 <body>
     <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-        <a class="navbar-brand text-danger" href="#"><strong>SCMXpertLite</strong></a>
+        <a class="navbar-brand text-danger" href="./admindashboard.html"><strong>SCMXpertLite</strong></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse justify-content-center" id="collapsibleNavbar">
           <ul class="navbar-nav" style="margin-left: -7%;">
             <li class="nav-item">
-              <a class="nav-link text-warning fa-md" href="#"><strong><i class="fas fa-user-tie text-danger">&nbsp;&nbsp;&nbsp;</i>Account Settings</strong></a>
+                <a class="nav-link text-warning fa-md" href="./adminaccount.html"><strong><i class="fas fa-user-tie text-danger">&nbsp;&nbsp;&nbsp;</i>My Account</strong></a>
             </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <li class="nav-item">
                 <a class="nav-link text-warning fa-md" href="./admincreateshipments.html"><strong><i class="fas fa-shipping-fast text-danger">&nbsp;&nbsp;&nbsp;</i>Create Shipment</strong></a>
@@ -101,7 +101,7 @@
                     <div class="overlay"></div>
                     <div class="form-container">
                         <div id="error-message" class="alert alert-danger" style="display: none;"></div>
-                        <table id="shipmentTable" class="table table-dark">
+                        <table id="streamTable" class="table table-dark">
                             <thead class="text-warning">
                                 <tr>
                                   <th>Device_ID</th>
@@ -126,59 +126,43 @@
            <h3> <strong>&copy; 2024 SCMXpertLite</strong></h3>
         </div>
     </div>
-    <script>
-        $(document).ready(function() {
+    <!-- <script>
+        $(document).ready(function()  
+        {
             // Function to fetch shipments by email
-            function fetchShipmentsByEmail() {
+            function fetchStreamByEmail() 
+            {
                 var email = localStorage.getItem('email');
-                if (!email) {
+                if (!email) 
+                {
                     console.error('User email not found in localStorage.');
                     return;
                 }
-                
-                var xhr = new XMLHttpRequest();
-        xhr.open('POST', 'http://localhost:7077/find?email=' + email, true);
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === 4) {
-                if (xhr.status === 200) {
-                    // Handle successful response
-                    var response = JSON.parse(xhr.responseText);
-                    // Clear existing table data
-                    $('#shipmentTable tbody').empty();
-                    // Populate table with shipment data
-                    response.forEach(function(shipment) {
-                        $('#shipmentTable tbody').append('<tr class="text-white font-weight-bold">' +
-                            '<td>' + shipment.shipmentNumber + '</td>' +
-                            '<td>' + shipment.containerNumber + '</td>' +
-                            '<td>' + shipment.route + '</td>' +
-                            '<td>' + shipment.goods + '</td>' +
-                            '<td>' + shipment.device + '</td>' +
-                            '<td>' + shipment.deliveryDate + '</td>' +
-                            '<td>' + shipment.poNumber + '</td>' +
-                            '<td>' + shipment.deliveryNumber + '</td>' +
-                            '<td>' + shipment.ndcNumber + '</td>' +
-                            '<td>' + shipment.batchId + '</td>' +
-                            '<td>' + shipment.serialNumberOfGoods + '</td>' +
-                            '<td>' + shipment.description + '</td>' +
-                            '</tr>');
-                    });
-                } else {
-                    // Display error message
-                    var errorMessage = xhr.status === 0 ? "Failed to connect to the server." : xhr.responseText;
-                    $('#error-message').text(errorMessage).show();
-                    // Hide error message after 5 seconds
-                    setTimeout(function() {
+                $.ajax
+                ({
+                    type: "POST",
+                    url: "http://localhost:7077/stream",
+                    data:{email : email},
+                    success:function(stream)
+                    {
                         $('#error-message').hide();
-                    }, 5000);
-                }
-            }
-        };
-        xhr.send();
+                        if(stream && user.email)
+                        {
+                            $('#streamTable tbody').html(
+                                '<tr class="text-white font-weight-bold">' +
+                                '<td>' + user.username + '</td>' +
+                                '<td>' + user.email + '</td>' +
+                                '<td>' + roles.join(', ') + '</td>' +
+                                '</tr>'
+                            );
+                        }
+                    }
+                })
+                
+        
             }
 
-            // Call fetchShipmentsByEmail when the document is ready
-            fetchShipmentsByEmail();
         });
-    </script>
+    </script> -->
 </body>
 </html>
