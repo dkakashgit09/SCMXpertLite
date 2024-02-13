@@ -113,6 +113,9 @@
 
                               </tbody>
                         </table>
+                        <div id="success-message" class="alert alert-success" style="display: none;"></div>
+                        <div id="error-message" class="alert alert-danger" style="display: none;"></div>
+
                         <div id="editFormContainer" style="display: none;">
                             <form id="editUserForm">
                                 <table id="editTable" class="table table-dark">
@@ -149,6 +152,7 @@
                                 </table>
                             </form>
                         </div>
+
                         <div id="deleteFormContainer" style="display: none;">
                             <form id="deleteUserForm">
                                 <table id="editTable" class="table table-dark">
@@ -163,7 +167,7 @@
                                             <input type="text" class="form-control" id="deleteEmail" required placeholder="Enter Your Registered Email">
                                         </td>
                                         <td>
-                                            <input type="text" class="form-control" id="oldPassword" required placeholder="Confirm Your Password">
+                                            <input type="text" class="form-control" id="deletePassword" required placeholder="Confirm Your Password">
                                         </td>
                                         <tr>
                                             <td>
@@ -234,8 +238,13 @@
             // Call fetchUserDetailsByEmail when the document is ready
             fetchUserDetailsByEmail();
 
-            // JavaScript to handle showing edit form
-            $(document).on('click', '.editUserBtn', function() {
+        });
+    </script>
+
+    <!-- To showing edit and delete forms -->
+    <script>
+        // JavaScript to handle showing edit form
+        $(document).on('click', '.editUserBtn', function() {
                 // Hide delete form container
                 $('#deleteFormContainer').hide();
 
@@ -278,6 +287,122 @@
             $('#deleteFormContainer').on('click', '.btn-dark', function() {
                 // Hide the delete form container
                 $('#deleteFormContainer').hide();
+            });
+    </script>
+
+    <!-- Edit Form API -->
+    <script>
+        $(document).on('submit', '#editUserForm', function(e) {
+            e.preventDefault(); // Prevent default form submission
+
+            var email = localStorage.getItem('email');
+            var username = localStorage.getItem('username');
+            var username1 = $('#editUsername').val()
+            console.log(username1);
+            if (!email) {
+                console.error('User email not found in localStorage.');
+                return;
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "http://localhost:7077/edituser?email=" + email + "&username=" + username, 
+                data: JSON.stringify({
+                    username: $('#editUsername').val(),
+                    email: $('#editEmail').val(),
+                    password: $('#oldPassword').val(), // Assuming this is the current password
+                    updatePassword: $('#editPassword').val()
+                }),
+                contentType: "application/json",
+                success: function(response) {
+            
+                    // Update the username in localStorage with the new value
+                    localStorage.setItem('username', username1);
+            
+                    // Hide error message, if shown
+                    $('#error-message').hide();
+
+                    // Show success message
+                    $('#success-message').text("User details updated successfully.").show();
+
+                    // Optionally, reset the form fields
+                    // $('#editUserForm')[0].reset();
+
+                    // Hide the success message after 3 seconds
+                    setTimeout(function() {
+                        $('#success-message').hide();
+                        location.reload();
+                    }, 3000);
+                    console.log(response);
+                },
+                error: function(xhr, status, error) {
+                    $('#success-message').hide();
+
+                    // Show error message
+                    $('#error-message').text(xhr.responseText).show();
+
+                    // Hide the error message after 3 seconds
+                    setTimeout(function() {
+                        $('#error-message').hide();
+                    }, 3000);
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+
+    </script>
+    <script>
+        $(document).on('submit', '#deleteUserForm', function(e) 
+        {
+            e.preventDefault();
+
+            var username = localStorage.getItem('username');
+            if (!username) 
+            {
+                console.error('User email not found in localStorage.');
+                return;
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "http://localhost:7077/deleteuser?username=" + username, 
+                data: JSON.stringify({
+                    email: $('#deleteEmail').val(),
+                    password: $('#deletePassword').val()
+                }),
+                contentType: "application/json",
+
+                success: function(response) 
+                {
+                    // Hide error message, if shown
+                    $('#error-message').hide();
+
+                    // Show success message
+                    $('#success-message').text("User deleted successfully.").show();
+
+                    localStorage.clear();
+
+                    // Hide the success message after 3 seconds
+                    setTimeout(function() {
+                        $('#success-message').hide();
+                        location.href = "home.html";
+                    }, 3000);
+                    console.log(response);
+                },
+                error: function(xhr, status, error) 
+                {
+                    console.log($('#deletePassword').val()+1111);
+                    $('#success-message').hide();
+
+                    // Show error message
+                    $('#error-message').text(xhr.responseText).show();
+
+                    // Hide the error message after 3 seconds
+                    setTimeout(function() {
+                        $('#error-message').hide();
+                    }, 3000);
+                    console.error(xhr.responseText);
+                }
             });
 
         });

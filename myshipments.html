@@ -120,6 +120,11 @@
                               </tbody>
                         </table>
                     </div>
+                    <nav aria-label="Page navigation">
+                        <ul id="pagination" class="pagination justify-content-center">
+                            <!-- Pagination links will be dynamically added here -->
+                        </ul>
+                    </nav>
                 </div>
             </div>
         </div>
@@ -131,6 +136,9 @@
     </div>
     <script>
         $(document).ready(function() {
+
+            var currentPage = 1;
+            var itemsPerPage = 5;
             // Function to fetch shipments by email
             function fetchShipmentsByEmail() {
                 var email = localStorage.getItem('email');
@@ -146,8 +154,11 @@
                         // Clear existing table data
                         $('#shipmentTable tbody').empty();
 
+                        var startIndex = (currentPage - 1) * itemsPerPage;
+                        var endIndex = startIndex + itemsPerPage;
+                        var shipmentsToShow = response.slice(startIndex, endIndex);
                         // Populate table with shipment data
-                        response.forEach(function(shipment) {
+                        shipmentsToShow.forEach(function(shipment) {
                             $('#shipmentTable tbody').append('<tr class="text-white font-weight-bold">' +
                                 '<td>' + shipment.shipmentNumber + '</td>' +
                                 '<td>' + shipment.containerNumber + '</td>' +
@@ -175,9 +186,70 @@
                     }
                 });
             }
+            // Function to handle pagination
+            function handlePagination() {
+                // Calculate total number of pages
+                var totalItems = $('#shipmentTable tbody tr').length;
+                var totalPages = Math.ceil(totalItems / itemsPerPage);
+
+                // Update pagination UI
+                $('#pagination').html('');
+                
+                // Previous button
+                $('#pagination').append('<li class="page-item" id="prevPage"><a class="page-link" href="#">Previous</a></li>');
+
+
+                for (var i = 1; i <= totalPages; i++) {
+                    $('#pagination').append('<li class="page-item"><a class="page-link" href="#">' + i + '</a></li>');
+                }
+
+                // Next button
+                $('#pagination').append('<li class="page-item" id="nextPage"><a class="page-link" href="#">Next</a></li>');
+
+                // Add click event handler for pagination links
+                $('#pagination li').on('click', function() 
+                {
+                    if (pageClicked === "Previous")
+                    {
+                        if (currentPage > 1) 
+                        {
+                            currentPage--;
+                            fetchShipmentsByEmail();
+                            handlePagination();
+                        }
+                    }
+                    else if (pageClicked === "Next")
+                    {
+                        if (currentPage < totalPages)
+                        {
+                            currentPage++;
+                            fetchShipmentsByEmail();
+                            handlePagination();
+                        }
+                    }
+                    else
+                    {
+                        currentPage = parseInt(pageClicked);
+                        fetchShipmentsByEmail();
+                        handlePagination();
+                    }
+                    // Disable Next button if on the last page
+                    if (currentPage === totalPages) 
+                    {
+                        $('#nextPage').addClass('disabled');
+                    } else 
+                    {
+                        $('#nextPage').removeClass('disabled');
+                    }
+
+                    // fetchShipmentsByEmail();
+                    // // handlePagination();
+                });
+            }
 
             // Call fetchShipmentsByEmail when the document is ready
             fetchShipmentsByEmail();
+            handlePagination();
         });
     </script>
 </body>
