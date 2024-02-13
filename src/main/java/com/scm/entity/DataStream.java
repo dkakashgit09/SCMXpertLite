@@ -1,8 +1,11 @@
 package com.scm.entity;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import lombok.Data;
 
 @Data
+@Document(collection = "datastream")
 public class DataStream 
 {
     private int Device_ID;

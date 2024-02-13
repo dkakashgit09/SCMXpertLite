@@ -15,6 +15,6 @@ public interface UserService
 	public ResponseEntity<?> loginIn(LoginRequest loginRequest);
 	public ResponseEntity<?> signUp(SignRequest signupRequest);
 	public Optional<ScmUsers> retriveDetails(String email);
-	public ResponseEntity<?> editUser(EditRequest editRequest, String email);
+	public ResponseEntity<?> editUser(EditRequest editRequest, String email, String username);
 	public ResponseEntity<?> deleteUser(LoginRequest deleteRequest, String username);
 }

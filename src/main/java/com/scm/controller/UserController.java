@@ -80,9 +80,9 @@ public class UserController
 	}
 	
 	@PostMapping("/edituser")
-	public ResponseEntity<?> editUser(@RequestBody EditRequest editRequest, @RequestParam("email") String email)
+	public ResponseEntity<?> editUser(@RequestBody EditRequest editRequest, @RequestParam("email") String email, @RequestParam("username") String username)
 	{
-		return userService.editUser(editRequest, email);
+		return userService.editUser(editRequest, email, username);
 	}
 	
 	@PostMapping("/deleteuser")

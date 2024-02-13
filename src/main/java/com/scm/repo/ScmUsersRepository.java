@@ -15,4 +15,5 @@ public interface ScmUsersRepository extends MongoRepository<ScmUsers, String>
 	  Optional<ScmUsers> findByEmail(String email);
 	  Boolean existsByUsername(String username);
 	  Boolean existsByEmail(String email);
+	  long countByRolesContaining(String string);
 }
