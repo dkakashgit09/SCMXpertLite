@@ -1,256 +1,260 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <title>SCMXpertLite</title>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous" />
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <style>
-        .image-container {
-            position: relative;
-            max-height: 80vh; /* Set maximum height */
-            overflow: hidden; /* Hide overflowing content */
-        }
+    <head>
+        <title>SCMXpertLite</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous" />
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <style>
+            .image-container {
+                position: relative;
+                max-height: 80vh; /* Set maximum height */
+                overflow: hidden; /* Hide overflowing content */
+            }
+        
+            .image-container img {
+                width: 100%; /* Ensure image fills container width */
+                height: auto; /* Maintain aspect ratio */
+            }
+        
+            .overlay {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.5); /* Adjust the transparency here */
+            }
+        
+            .form-container {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                z-index: 1; /* Ensure form is on top of overlay */
+                color: white; /* Adjust text color */
+            }
+        
+            /* Make table semi-transparent */
+            .table {
+                background-color: rgba(0, 0, 0, 0.5) !important;
+            }
+        
+            /* Make table cells semi-transparent */
+            .table td {
+                background-color: rgba(0, 0, 0, 0.5) !important;
+            }
+        
+            /* Optional: Style submit and clear buttons */
+            .form-control.bg-success {
+                background-color: #28a745; /* Adjust button color */
+                border-color: #28a745; /* Adjust button border color */
+            }
+        
+            .form-control.bg-danger {
+                background-color: #dc3545; /* Adjust button color */
+                border-color: #dc3545; /* Adjust button border color */
+            }
+        
+            .form-control.bg-success:hover,
+            .form-control.bg-danger:hover {
+                background-color: #218838; /* Adjust button hover color */
+                border-color: #1e7e34; /* Adjust button border hover color */
+            }
+        </style>
+    </head>
+    <body>
+        <!-- Navigation Links -->
+        <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+            <a class="navbar-brand text-danger" href="/dashboard.html"><strong>SCMXpertLite</strong></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-center" id="collapsibleNavbar">
+              <ul class="navbar-nav" style="margin-left: -7%;">
+                <li class="nav-item">
+                  <a class="nav-link text-warning fa-md" href="./account.html"><strong><i class="fas fa-user-tie text-danger">&nbsp;&nbsp;&nbsp;</i>My Account</strong></a>
+                </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <li class="nav-item">
+                    <a class="nav-link text-warning fa-md" href="./shipment.html"><strong><i class="fas fa-shipping-fast text-danger">&nbsp;&nbsp;&nbsp;</i>Create Shipment</strong></a>
+                  </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <li class="nav-item">
+                  <a class="nav-link text-warning fa-md" href="./home.html"><strong><i class="fas fa-sign-out-alt text-danger">&nbsp;&nbsp;&nbsp;</i>Logout</strong></a>
+                </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+             
+              </ul>
+            </div>  
+        </nav>
+        
+        <div class="container-fluid bg-dark">
+            <div class="row">
+                <div class="col-sm-12 position-relative">
+                    <div class="image-container">
+                        <img src="./shipments.jpg" alt="User Dashboard" class="img-fluid" />
+                        <div class="overlay"></div>
+                        <!-- Shipments Table -->
+                        <div class="form-container">
+                            <div id="error-message" class="alert alert-danger" style="display: none;"></div>
+                            <div class="search-container">
+                                <input type="text" id="searchInput" class="form-control bg-dark text-danger font-weight-bold" placeholder="Enter Shipment Number / Associated Email">
+                            </div>
+                            <table id="shipmentTable" class="table table-dark">
+                                <thead class="text-warning">
+                                    <tr>
+                                      <th>ShipmentNumber</th>
+                                      <th>ContainerNumber</th>
+                                      <th>RouteDetails</th>
+                                      <th>GoodsType</th>
+                                      <th>Device</th>
+                                      <th>DeliveryDate</th>
+                                      <th>PoNumber</th>
+                                      <th>DeliveryNumber</th>
+                                      <th>NdcNumber</th>
+                                      <th>BatchID</th>
+                                      <th>TotalGoods</th>
+                                      <th>Description</th>
+                                    </tr>
+                                </thead id="shipmentTableBody">
+                                <tbody>
     
-        .image-container img {
-            width: 100%; /* Ensure image fills container width */
-            height: auto; /* Maintain aspect ratio */
-        }
-    
-        .overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5); /* Adjust the transparency here */
-        }
-    
-        .form-container {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 1; /* Ensure form is on top of overlay */
-            color: white; /* Adjust text color */
-        }
-    
-        /* Make table semi-transparent */
-        .table {
-            background-color: rgba(0, 0, 0, 0.5) !important;
-        }
-    
-        /* Make table cells semi-transparent */
-        .table td {
-            background-color: rgba(0, 0, 0, 0.5) !important;
-        }
-    
-        /* Optional: Style submit and clear buttons */
-        .form-control.bg-success {
-            background-color: #28a745; /* Adjust button color */
-            border-color: #28a745; /* Adjust button border color */
-        }
-    
-        .form-control.bg-danger {
-            background-color: #dc3545; /* Adjust button color */
-            border-color: #dc3545; /* Adjust button border color */
-        }
-    
-        .form-control.bg-success:hover,
-        .form-control.bg-danger:hover {
-            background-color: #218838; /* Adjust button hover color */
-            border-color: #1e7e34; /* Adjust button border hover color */
-        }
-    </style>
-</head>
-<body>
-    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-        <a class="navbar-brand text-danger" href="/dashboard.html"><strong>SCMXpertLite</strong></a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse justify-content-center" id="collapsibleNavbar">
-          <ul class="navbar-nav" style="margin-left: -7%;">
-            <li class="nav-item">
-              <a class="nav-link text-warning fa-md" href="./account.html"><strong><i class="fas fa-user-tie text-danger">&nbsp;&nbsp;&nbsp;</i>My Account</strong></a>
-            </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <li class="nav-item">
-                <a class="nav-link text-warning fa-md" href="./shipment.html"><strong><i class="fas fa-shipping-fast text-danger">&nbsp;&nbsp;&nbsp;</i>Create Shipment</strong></a>
-              </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <li class="nav-item">
-              <a class="nav-link text-warning fa-md" href="./home.html"><strong><i class="fas fa-sign-out-alt text-danger">&nbsp;&nbsp;&nbsp;</i>Logout</strong></a>
-            </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-         
-          </ul>
-        </div>  
-      </nav>
-    <div class="container-fluid bg-dark">
-        <div class="row">
-            <div class="col-sm-12 position-relative">
-                <div class="image-container">
-                    <!-- Replace the src attribute with your image path -->
-                    <img src="./shipments.jpg" alt="User Dashboard" class="img-fluid" />
-                    <div class="overlay"></div>
-                    <div class="form-container">
-                        <div id="error-message" class="alert alert-danger" style="display: none;"></div>
-                        <table id="shipmentTable" class="table table-dark">
-                            <thead class="text-warning">
-                                <tr>
-                                  <th>ShipmentNumber</th>
-                                  <th>ContainerNumber</th>
-                                  <th>RouteDetails</th>
-                                  <th>GoodsType</th>
-                                  <th>Device</th>
-                                  <th>DeliveryDate</th>
-                                  <th>PoNumber</th>
-                                  <th>DeliveryNumber</th>
-                                  <th>NdcNumber</th>
-                                  <th>BatchID</th>
-                                  <th>TotalGoods</th>
-                                  <th>Description</th>
-                                </tr>
-                              </thead>
-                              <tbody>
+                                </tbody>
+                            </table>
 
-                              </tbody>
-                        </table>
+                            <!-- Pagination Links -->
+                            <nav aria-label="Page navigation">
+                                <ul class="pagination justify-content-center">
+                                  <li class="page-item" id="prevPage">
+                                    <a class="page-link bg-info font-weight-bold" href="#" aria-label="Previous">
+                                      <span aria-hidden="true" class="text-dark">&laquo; Previous Page</span>
+                                    </a>
+                                  </li>
+                                  <li class="page-item" id="nextPage">
+                                    <a class="page-link bg-info font-weight-bold" href="#" aria-label="Next">
+                                      <span aria-hidden="true" class="text-dark">Next Page &raquo;</span>
+                                    </a>
+                                  </li>
+                                </ul>
+                            </nav>
+                        </div>
                     </div>
-                    <nav aria-label="Page navigation">
-                        <ul id="pagination" class="pagination justify-content-center">
-                            <!-- Pagination links will be dynamically added here -->
-                        </ul>
-                    </nav>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="jumbotron text-center bg-dark" style="margin-bottom: 0">
-        <div class="container footer text-danger">
-           <h3> <strong>&copy; 2024 SCMXpertLite</strong></h3>
+
+        <!-- Footer -->
+        <div class="jumbotron text-center bg-dark" style="margin-bottom: 0">
+            <div class="container footer text-danger">
+               <h3> <strong>&copy; 2024 SCMXpertLite</strong></h3>
+            </div>
         </div>
-    </div>
-    <script>
-        $(document).ready(function() {
 
-            var currentPage = 1;
-            var itemsPerPage = 5;
-            // Function to fetch shipments by email
-            function fetchShipmentsByEmail() {
-                var email = localStorage.getItem('email');
-                if (!email) {
-                    console.error('User email not found in localStorage.');
-                    return;
-                }
-                
-                $.ajax({
-                    url: 'http://localhost:7077/shipment/find?email=' + email,
-                    type: 'POST',
-                    success: function(response) {
-                        // Clear existing table data
-                        $('#shipmentTable tbody').empty();
-
-                        var startIndex = (currentPage - 1) * itemsPerPage;
-                        var endIndex = startIndex + itemsPerPage;
-                        var shipmentsToShow = response.slice(startIndex, endIndex);
-                        // Populate table with shipment data
-                        shipmentsToShow.forEach(function(shipment) {
-                            $('#shipmentTable tbody').append('<tr class="text-white font-weight-bold">' +
-                                '<td>' + shipment.shipmentNumber + '</td>' +
-                                '<td>' + shipment.containerNumber + '</td>' +
-                                '<td>' + shipment.route + '</td>' +
-                                '<td>' + shipment.goods + '</td>' +
-                                '<td>' + shipment.device + '</td>' +
-                                '<td>' + shipment.deliveryDate + '</td>' +
-                                '<td>' + shipment.poNumber + '</td>' +
-                                '<td>' + shipment.deliveryNumber + '</td>' +
-                                '<td>' + shipment.ndcNumber + '</td>' +
-                                '<td>' + shipment.batchId + '</td>' +
-                                '<td>' + shipment.serialNumberOfGoods + '</td>' +
-                                '<td>' + shipment.description + '</td>' +
-                                '</tr>');
-                        });
-                    },
-                    error: function(xhr, status, error) {
-                        // Handle error
-                        console.error(xhr.responseText);
-                        $('#error-message').text(xhr.responseText).show();
-                        // Hide error message after 5 seconds
-                        setTimeout(function() {
-                            $('#error-message').hide();
-                        }, 5000);
-                    }
-                });
-            }
-            // Function to handle pagination
-            function handlePagination() {
-                // Calculate total number of pages
-                var totalItems = $('#shipmentTable tbody tr').length;
-                var totalPages = Math.ceil(totalItems / itemsPerPage);
-
-                // Update pagination UI
-                $('#pagination').html('');
-                
-                // Previous button
-                $('#pagination').append('<li class="page-item" id="prevPage"><a class="page-link" href="#">Previous</a></li>');
-
-
-                for (var i = 1; i <= totalPages; i++) {
-                    $('#pagination').append('<li class="page-item"><a class="page-link" href="#">' + i + '</a></li>');
+        <!-- Shipment API, Search, Paginations -->
+        <script>
+            $(document).ready(function() {
+                let currentPage = 1;
+                const rowsPerPage = 4;
+                let totalPages;
+                let allShipmentsData;
+    
+                // Function to fetch shipments, manage pagination, and display data
+                function fetchShipmentsAndDisplay() {
+                    fetch('http://localhost:7077/shipment/find?email=' + localStorage.getItem('email'))
+                    .then(response => response.json())
+                    .then(data => {
+                        // Calculate total pages
+                        totalPages = Math.ceil(data.length / rowsPerPage);
+                        allShipmentsData = data;
+                        displayPage(currentPage, data);
+                        addPaginationListeners();
+                    })
+                    .catch(error => {
+                        console.error('Error fetching data:', error);   
+                    });
                 }
 
-                // Next button
-                $('#pagination').append('<li class="page-item" id="nextPage"><a class="page-link" href="#">Next</a></li>');
-
-                // Add click event handler for pagination links
-                $('#pagination li').on('click', function() 
+                // Function to add event listeners for pagination buttons
+                function addPaginationListeners()
                 {
-                    if (pageClicked === "Previous")
-                    {
-                        if (currentPage > 1) 
-                        {
+                    // Add event listeners for pagination buttons
+                    $("#prevPage").click(function() {
+                        if (currentPage > 1) {
                             currentPage--;
-                            fetchShipmentsByEmail();
-                            handlePagination();
+                            displayPage(currentPage, allShipmentsData);
                         }
-                    }
-                    else if (pageClicked === "Next")
-                    {
-                        if (currentPage < totalPages)
-                        {
+                    });
+    
+                    $("#nextPage").click(function() {
+                        if (currentPage < totalPages) {
                             currentPage++;
-                            fetchShipmentsByEmail();
-                            handlePagination();
+                            displayPage(currentPage, allShipmentsData);
                         }
-                    }
-                    else
-                    {
-                        currentPage = parseInt(pageClicked);
-                        fetchShipmentsByEmail();
-                        handlePagination();
-                    }
-                    // Disable Next button if on the last page
-                    if (currentPage === totalPages) 
-                    {
-                        $('#nextPage').addClass('disabled');
-                    } else 
-                    {
-                        $('#nextPage').removeClass('disabled');
-                    }
+                    });
+                }
 
-                    // fetchShipmentsByEmail();
-                    // // handlePagination();
+                // Function to display the specified page of shipments
+                function displayPage(pageNumber, data) {
+                    const startIndex = (pageNumber - 1) * rowsPerPage;
+                    const endIndex = Math.min(startIndex + rowsPerPage, data.length);
+    
+                        // Clear the table body
+                    const tableBody = document.querySelector('#shipmentTable tbody');
+                    tableBody.innerHTML = '';
+    
+                    // Add rows for the current page data
+                    for (let i = startIndex; i < endIndex; i++) {
+                        const row = data[i];
+                        appendShipmentRow(row);
+                    }
+    
+                    // Update active page indicator in pagination
+                    $(".page-item").removeClass("active");
+                    $(`#page-${pageNumber}`).addClass("active");
+                }
+    
+                // Function to append a shipment row to the table
+                function appendShipmentRow(shipment) {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${shipment.shipmentNumber}</td>
+                        <td>${shipment.containerNumber}</td>
+                        <td>${shipment.route}</td>
+                        <td>${shipment.goods}</td>
+                        <td>${shipment.device}</td>
+                        <td>${shipment.deliveryDate}</td>
+                        <td>${shipment.poNumber}</td>
+                        <td>${shipment.deliveryNumber}</td>
+                        <td>${shipment.ndcNumber}</td>
+                        <td>${shipment.batchId}</td>
+                        <td>${shipment.serialNumberOfGoods}</td>
+                        <td>${shipment.description}</td>`;
+                    $('#shipmentTable tbody').append(tr);
+                }
+    
+                // Call the function to fetch and display data
+                fetchShipmentsAndDisplay();
+
+                // Add event listener for the search input field
+                $('#searchInput').on('input', function() {
+                    const searchTerm = $(this).val().trim();
+                    if (searchTerm === '') {
+                        displayPage(currentPage, allShipmentsData);
+                        return;
+                    }
+                    const filteredData = allShipmentsData.filter(shipment => {
+                        return (
+                            shipment.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                            shipment.shipmentNumber.toString().includes(searchTerm)
+                        );
+                    });
+                    displayPage(1, filteredData); // Always display the first page when searching
+                    currentPage = 1; // Reset current page to 1 when searching
                 });
-            }
-
-            // Call fetchShipmentsByEmail when the document is ready
-            fetchShipmentsByEmail();
-            handlePagination();
-        });
-    </script>
-</body>
+            });
+        </script>
+    </body>
 </html>

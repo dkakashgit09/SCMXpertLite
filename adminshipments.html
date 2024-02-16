@@ -1,187 +1,536 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <title>SCMXpertLite</title>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous" />
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <style>
-        .image-container {
-            position: relative;
-            max-height: 80vh; /* Set maximum height */
-            overflow: hidden; /* Hide overflowing content */
-        }
+    <head>
+        <title>SCMXpertLite</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous" />
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <style>
+            .image-container {
+                position: relative;
+                max-height: 80vh; /* Set maximum height */
+                overflow: hidden; /* Hide overflowing content */
+            }
     
-        .image-container img {
-            width: 100%; /* Ensure image fills container width */
-            height: auto; /* Maintain aspect ratio */
-        }
+            .image-container img {
+                width: 100%; /* Ensure image fills container width */
+                height: auto; /* Maintain aspect ratio */
+            }
     
-        .overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5); /* Adjust the transparency here */
-        }
+            .overlay {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.5); /* Adjust the transparency here */
+            }
     
-        .form-container {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 1; /* Ensure form is on top of overlay */
-            color: white; /* Adjust text color */
-        }
+            .form-container {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                z-index: 1; /* Ensure form is on top of overlay */
+                color: white; /* Adjust text color */
+            }
     
-        /* Make table semi-transparent */
-        .table {
-            background-color: rgba(0, 0, 0, 0.5) !important;
-        }
+            /* Make table semi-transparent */
+            .table {
+                background-color: rgba(0, 0, 0, 0.5) !important;
+            }
     
-        /* Make table cells semi-transparent */
-        .table td {
-            background-color: rgba(0, 0, 0, 0.5) !important;
-        }
+            /* Make table cells semi-transparent */
+            .table td {
+                background-color: rgba(0, 0, 0, 0.5) !important;
+            }
     
-        /* Optional: Style submit and clear buttons */
-        .form-control.bg-success {
-            background-color: #28a745; /* Adjust button color */
-            border-color: #28a745; /* Adjust button border color */
-        }
+            /* Optional: Style submit and clear buttons */
+            .form-control.bg-success {
+                background-color: #28a745; /* Adjust button color */
+                border-color: #28a745; /* Adjust button border color */
+            }
     
-        .form-control.bg-danger {
-            background-color: #dc3545; /* Adjust button color */
-            border-color: #dc3545; /* Adjust button border color */
-        }
+            .form-control.bg-danger {
+                background-color: #dc3545; /* Adjust button color */
+                border-color: #dc3545; /* Adjust button border color */
+            }
     
-        .form-control.bg-success:hover,
-        .form-control.bg-danger:hover {
-            background-color: #218838; /* Adjust button hover color */
-            border-color: #1e7e34; /* Adjust button border hover color */
-        }
-    </style>
-</head>
-<body>
-    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-        <a class="navbar-brand text-danger" href="/admindashboard.html"><strong>SCMXpertLite</strong></a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse justify-content-center" id="collapsibleNavbar">
-          <ul class="navbar-nav" style="margin-left: -7%;">
-            <li class="nav-item">
-                <a class="nav-link text-warning fa-md" href="./adminaccount.html"><strong><i class="fas fa-user-tie text-danger">&nbsp;&nbsp;&nbsp;</i>My Account</strong></a>
-            </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <li class="nav-item">
-                <a class="nav-link text-warning fa-md" href="./admincreateshipments.html"><strong><i class="fas fa-shipping-fast text-danger">&nbsp;&nbsp;&nbsp;</i>Create Shipment</strong></a>
-            </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <li class="nav-item">
-                <a class="nav-link text-warning fa-md" href="./datastream.html"><strong><i class="fa fa-database text-danger">&nbsp;&nbsp;&nbsp;</i>Data Stream</strong></a>
-            </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <li class="nav-item">
-              <a class="nav-link text-warning fa-md" href="./home.html"><strong><i class="fas fa-sign-out-alt text-danger">&nbsp;&nbsp;&nbsp;</i>Logout</strong></a>
-            </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-         
-          </ul>
-        </div>  
-      </nav>
-    <div class="container-fluid bg-dark">
-        <div class="row">
-            <div class="col-sm-12 position-relative">
-                <div class="image-container">
-                    <!-- Replace the src attribute with your image path -->
-                    <img src="./shipments.jpg" alt="User Dashboard" class="img-fluid" />
-                    <div class="overlay"></div>
-                    <div class="form-container">
-                        <div id="error-message" class="alert alert-danger" style="display: none;"></div>
-                        <table id="shipmentTable" class="table table-dark">
-                            <thead class="text-warning">
-                                <tr>
-                                  <th>ShipmentNumber</th>
-                                  <th>ContainerNumber</th>
-                                  <th>RouteDetails</th>
-                                  <th>GoodsType</th>
-                                  <th>Device</th>
-                                  <th>DeliveryDate</th>
-                                  <th>PoNumber</th>
-                                  <th>DeliveryNumber</th>
-                                  <th>NdcNumber</th>
-                                  <th>BatchID</th>
-                                  <th>TotalGoods</th>
-                                  <th>Description</th>
-                                </tr>
-                              </thead>
-                              <tbody>
+            .form-control.bg-success:hover,
+            .form-control.bg-danger:hover {
+                background-color: #218838; /* Adjust button hover color */
+                border-color: #1e7e34; /* Adjust button border hover color */
+            }
+        </style>
+    </head>
+    <body>
+        <!-- Navigation Links -->
+        <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+            <a class="navbar-brand text-danger" href="/admindashboard.html"><strong>SCMXpertLite</strong></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-center" id="collapsibleNavbar">
+              <ul class="navbar-nav" style="margin-left: -7%;">
+                <li class="nav-item">
+                    <a class="nav-link text-warning fa-md" href="./adminaccount.html"><strong><i class="fas fa-user-tie text-danger">&nbsp;&nbsp;&nbsp;</i>Accounts</strong></a>
+                </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <li class="nav-item">
+                    <a class="nav-link text-warning fa-md" href="./admincreateshipments.html"><strong><i class="fas fa-shipping-fast text-danger">&nbsp;&nbsp;&nbsp;</i>Create Shipment</strong></a>
+                </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <li class="nav-item">
+                    <a class="nav-link text-warning fa-md" href="./datastream.html"><strong><i class="fa fa-database text-danger">&nbsp;&nbsp;&nbsp;</i>Data Stream</strong></a>
+                </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <li class="nav-item">
+                  <a class="nav-link text-warning fa-md" href="./home.html"><strong><i class="fas fa-sign-out-alt text-danger">&nbsp;&nbsp;&nbsp;</i>Logout</strong></a>
+                </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              </ul>
+            </div>  
+        </nav>
 
-                              </tbody>
-                        </table>
+        <div class="container-fluid bg-dark">
+            <div class="row">
+                <div class="col-sm-12 position-relative">
+                    <div class="image-container">
+                        <img src="./shipments.jpg" alt="User Dashboard" class="img-fluid" />
+                        <div class="overlay"></div>
+
+                        <!-- Shipment Table -->
+                        <div class="form-container">
+                            <div id="error-message" class="alert alert-danger" style="display: none;"></div>
+                            <div class="search-container">
+                                <input type="text" id="searchInput" class="form-control bg-dark text-danger font-weight-bold" placeholder="Enter Shipment Number / Associated Email">
+                            </div>
+                            <table id="shipmentTable" class="table table-dark">
+                                <thead class="text-warning">
+                                    <tr>
+                                        <th>Associated_Email</th>
+                                        <th>Shipment_Number</th>
+                                        <th>Container_Number</th>
+                                        <th>Route_Details</th>
+                                        <th>Goods_Type</th>
+                                        <th>Device</th>
+                                        <th>Delivery_Date</th>
+                                        <th>Po_Number</th>
+                                        <th>Delivery_Number</th>
+                                        <th>Ndc_Number</th>
+                                        <th>Batch_ID</th>
+                                        <th>Total_Goods</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="shipmentTableBody">
+
+                                </tbody>
+                            </table>
+
+                            <!-- Pagination Links -->
+                            <nav aria-label="Page navigation">
+                                <ul class="pagination justify-content-center">
+                                  <li class="page-item" id="prevPage">
+                                    <a class="page-link bg-info font-weight-bold" href="#" aria-label="Previous">
+                                      <span aria-hidden="true" class="text-dark">&laquo; Previous Page</span>
+                                    </a>
+                                  </li>
+                                  <li class="page-item" id="nextPage">
+                                    <a class="page-link bg-info font-weight-bold" href="#" aria-label="Next">
+                                      <span aria-hidden="true" class="text-dark">Next Page &raquo;</span>
+                                    </a>
+                                  </li>
+                                </ul>
+                            </nav>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="jumbotron text-center bg-dark" style="margin-bottom: 0">
-        <div class="container footer text-danger">
-           <h3> <strong>&copy; 2024 SCMXpertLite</strong></h3>
-        </div>
-    </div>
-    <script>
-        $(document).ready(function() {
-            // Function to fetch shipments by email
-            function fetchShipmentsByEmail() {
-                var email = localStorage.getItem('email');
-                if (!email) {
-                    console.error('User email not found in localStorage.');
-                    return;
-                }
-                
-                $.ajax({
-                    url: 'http://localhost:7077/shipment/find?email=' + email,
-                    type: 'POST',
-                    success: function(response) {
-                        // Clear existing table data
-                        $('#shipmentTable tbody').empty();
 
-                        // Populate table with shipment data
-                        response.forEach(function(shipment) {
-                            $('#shipmentTable tbody').append('<tr class="text-white font-weight-bold">' +
-                                '<td>' + shipment.shipmentNumber + '</td>' +
-                                '<td>' + shipment.containerNumber + '</td>' +
-                                '<td>' + shipment.route + '</td>' +
-                                '<td>' + shipment.goods + '</td>' +
-                                '<td>' + shipment.device + '</td>' +
-                                '<td>' + shipment.deliveryDate + '</td>' +
-                                '<td>' + shipment.poNumber + '</td>' +
-                                '<td>' + shipment.deliveryNumber + '</td>' +
-                                '<td>' + shipment.ndcNumber + '</td>' +
-                                '<td>' + shipment.batchId + '</td>' +
-                                '<td>' + shipment.serialNumberOfGoods + '</td>' +
-                                '<td>' + shipment.description + '</td>' +
-                                '</tr>');
-                        });
-                    },
-                    error: function(xhr, status, error) {
-                        // Handle error
-                        console.error(xhr.responseText);
-                        $('#error-message').text(xhr.responseText).show();
-                        // Hide error message after 5 seconds
-                        setTimeout(function() {
-                            $('#error-message').hide();
-                        }, 5000);
+        <!-- Edit Modal -->
+        <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content" style="background-color: rgba(255, 255, 255, 0.8);">
+                    <div class="modal-header">
+                        <h5 class="modal-title justify-content-center" id="editModalLabel">Edit Shipment</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="editForm" class="justify-content">
+                            <table>
+                                <tr>
+                                    <th>Shipment Number</th>
+                                    <th>Associated Email</th>
+                                </tr>
+                                <tr>
+                                    <th><input type="text" class="form-control" id="editShipmentNumber" name="shipmentNumber" disabled></th>
+                                    <th><input type="email" class="form-control" id="editEmail" name="email" disabled></th>
+                                </tr>
+                                <tr>
+                                    <th>Conatiner Number</th>
+                                    <th>Route Details</th>
+                                </tr>
+                                <tr>
+                                    <th><input type="text" class="form-control" id="editContainerNumber" name="containerNumber" required pattern="[0-9]+" placeholder="Enter Container Number"/></th>
+                                    <th>
+                                        <select class="form-control" name="route" id="editRoute" required>
+                                            <option value="" disabled selected hidden>Select Route</option>
+                                            <option>Australia-England</option>
+                                            <option>Canada-Japan</option>
+                                            <option>USA-SriLanka</option>
+                                            <option>Italy-Canada</option>
+                                            <option>Canada-India</option>
+                                            <option>USA-India</option>
+                                       </select>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th>Goods Type</th>
+                                    <th>Device</th>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        <select class="form-control" name="goods" id="editGoods" required>
+                                            <option value="" disabled selected hidden>Select Goods Type</option>
+                                            <option>Groceries</option>
+                                            <option>Electronics</option>
+                                            <option>Automobiles</option>
+                                            <option>Pharmaceuticals</option>
+                                            <option>Industrial Goods</option>
+                                            <option>Luxury Goods</option>
+                                        </select>
+                                    </th>
+                                    <th>
+                                        <select class="form-control" name="device" id="editDevice" required>
+                                            <option value="" disabled selected hidden>Select Device</option>
+                                            <option >202351</option>
+                                            <option >202362</option>
+                                            <option >202373</option>
+                                            <option >202384</option>
+                                            <option >202395</option>
+                                            <option >202406</option>
+                                        </select>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>PO Number</th>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        <input type="date" class="form-control" id="editDeliveryDate" name="deliveryDate" required placeholder="choose date"/>
+                                    </th>
+                                    <th>
+                                        <input type="text" class="form-control" id="editPoNumber" name="poNumber" required pattern="[0-9]+" placeholder="Enter PO Number"/>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th>Delivery Number</th>
+                                    <th>NDC Number</th>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        <input type="text" class="form-control" id="editDeliveryNumber" name="deliveryNumber" required pattern="[0-9]+" placeholder="Enter Delivery Number"/>
+                                    </th>
+                                    <th>
+                                        <input type="number" class="form-control" id="editNdcNumber" name="ndcNumber" required pattern="[0-9]+" placeholder="Enter NDC Number"/>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th>Batch ID</th>
+                                    <th>Number of Goods</th>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        <input type="number" class="form-control" id="editBatchId" name="batchId" required pattern="[0-9]+" placeholder="Enter Batch ID"/>
+                                    </th>
+                                    <th>
+                                        <input type="number" class="form-control" id="editSerialNumberOfGoods" name="serialNumberOfGoods" required placeholder="Number of Goods"/>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th colspan="2">Shipment Description</th>
+                                    <th></th>
+                                </tr>
+                                <tr>
+                                    <th colspan="2">
+                                        <textarea class="form-control" id="editDescription" name="description" placeholder="Enter Your Description" onkeypress="return blockSpecialChar(event)" required="required"></textarea>
+                                    </th>
+                                    <th></th>
+                                </tr>
+                                <tr>
+                                    <th colspan="2" style="left: 50%;">
+                                        <button type="submit" form="editForm" class="btn btn-primary">Save changes</button>
+                                    </th>
+                                </tr>
+                            </table>
+                            <!-- Add input fields for other shipment details here -->
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Delete Modal -->
+        <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content" style="background-color: rgba(255, 255, 255, 0.8); /* Adjust opacity as needed */">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="deleteModalLabel">Delete Shipment</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <form id="deleteForm">
+                    <div class="mb-3">
+                      <label for="deleteShipmentNumber" class="form-label">Shipment Number</label>
+                      <input type="text" class="form-control" id="deleteShipmentNumber" name="shipmentNumber" readonly>
+                    </div>
+                    <div class="mb-3">
+                      <label for="deleteEmail" class="form-label">Email</label>
+                      <input type="email" class="form-control" id="deleteEmail" name="email" placeholder="Enter Admin Email ID">
+                    </div>
+                    <div class="mb-3">
+                      <label for="deletePassword" class="form-label">Password</label>
+                      <input type="password" class="form-control" id="deletePassword" name="password" placeholder="Enter Admin Password">
+                    </div>
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  <button type="submit" form="deleteForm" class="btn btn-danger">Delete</button>
+                </div>
+              </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="jumbotron text-center bg-dark" style="margin-bottom: 0">
+            <div class="container footer text-danger">
+                <h3> <strong>&copy; 2024 SCMXpertLite</strong></h3>
+            </div>
+        </div>
+
+        <!-- Shipment API, Edit API, Delete API Search, Paginations -->
+        <script>
+            $(document).ready(function() {
+                let currentPage = 1;
+                const rowsPerPage = 4;
+                let totalPages;
+                let allShipmentsData; // Store all shipments data for searching
+
+                // Function to fetch shipments, manage pagination, and display data
+                function fetchShipmentsAndDisplay() {
+                fetch('http://localhost:7077/shipment/findall')
+                    .then(response => response.json())
+                    .then(data => {
+                        allShipmentsData = data; // Store all shipments data
+                        totalPages = Math.ceil(data.length / rowsPerPage);
+                        displayPage(currentPage, data);
+                        addPaginationListeners();
+                    })
+                    .catch(error => {
+                        console.error('Error fetching data:', error);   
+                    });
+                }   
+
+                // Function to add event listeners for pagination buttons
+                function addPaginationListeners() {
+                    $("#prevPage").click(function() {
+                        if (currentPage > 1) {
+                            currentPage--;
+                            displayPage(currentPage, allShipmentsData);
+                        }
+                    });
+
+                    $("#nextPage").click(function() {
+                        if (currentPage < totalPages) {
+                            currentPage++;
+                            displayPage(currentPage, allShipmentsData);
+                        }
+                    });
+                }
+
+                // Function to display the specified page of shipments
+                function displayPage(pageNumber, data) {
+                    const startIndex = (pageNumber - 1) * rowsPerPage;
+                    const endIndex = Math.min(startIndex + rowsPerPage, data.length);
+                    const tableBody = document.querySelector('#shipmentTableBody');
+                    tableBody.innerHTML = '';
+
+                    for (let i = startIndex; i < endIndex; i++) {
+                        const row = data[i];
+                        appendShipmentRow(row);
+                    }
+                }
+
+                // Function to append a shipment row to the table
+                function appendShipmentRow(shipment) {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${shipment.email}</td>
+                        <td>${shipment.shipmentNumber}</td>
+                        <td>${shipment.containerNumber}</td>
+                        <td>${shipment.route}</td>
+                        <td>${shipment.goods}</td>
+                        <td>${shipment.device}</td>
+                        <td>${shipment.deliveryDate}</td>
+                        <td>${shipment.poNumber}</td>
+                        <td>${shipment.deliveryNumber}</td>
+                        <td>${shipment.ndcNumber}</td>
+                        <td>${shipment.batchId}</td>
+                        <td>${shipment.serialNumberOfGoods}</td>
+                        <td>${shipment.description}</td>
+                        <td><button class="btn btn-primary btn-sm edit-btn" data-shipment-number="${shipment.shipmentNumber}">Edit</button></td>
+                        <td><button class="btn btn-danger btn-sm delete-btn" data-shipment-number="${shipment.shipmentNumber}">Delete</button></td>`;
+                    $('#shipmentTableBody').append(tr);
+                }
+
+                // Call the function to fetch and display data
+                fetchShipmentsAndDisplay();
+
+                // Add event listener for the search input field
+                $('#searchInput').on('input', function() {
+                    const searchTerm = $(this).val().trim();
+                    if (searchTerm === '') {
+                        displayPage(currentPage, allShipmentsData);
+                        return;
+                    }
+                    const filteredData = allShipmentsData.filter(shipment => {
+                        return (
+                            shipment.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                            shipment.shipmentNumber.toString().includes(searchTerm)
+                        );
+                    });
+                    displayPage(1, filteredData); // Always display the first page when searching
+                    currentPage = 1; // Reset current page to 1 when searching
+                });
+
+                // Event listener for edit button
+                $('#shipmentTableBody').on('click', '.edit-btn', function() {
+                    const shipmentNumber = $(this).data('shipment-number');
+                    const shipment = allShipmentsData.find(s => s.shipmentNumber === shipmentNumber);
+                    if (shipment) {
+                        populateEditModal(shipment);
+                        $('#editModal').modal('show');
                     }
                 });
-            }
 
-            // Call fetchShipmentsByEmail when the document is ready
-            fetchShipmentsByEmail();
-        });
-    </script>
-</body>
+                // Function to populate edit modal form with shipment details
+                function populateEditModal(shipment) {
+                    // Populate the input fields in the edit modal with shipment details
+                    $('#editShipmentNumber').val(shipment.shipmentNumber);
+                    $('#editEmail').val(shipment.email); // Populate email field
+                    $('#editContainerNumber').val(shipment.containerNumber);
+                    $('#editRoute').val(shipment.route);
+                    $('#editGoods').val(shipment.goods);
+                    $('#editDevice').val(shipment.device);
+                    $('#editDeliveryDate').val(shipment.deliveryDate);
+                    $('#editPoNumber').val(shipment.poNumber);
+                    $('#editDeliveryNumber').val(shipment.deliveryNumber);
+                    $('#editNdcNumber').val(shipment.ndcNumber);
+                    $('#editBatchId').val(shipment.batchId);
+                    $('#editSerialNumberOfGoods').val(shipment.serialNumberOfGoods);
+                    $('#editDescription').val(shipment.description);
+                }
+
+                // Event listener for edit form submission
+                $('#editForm').submit(function(event) {
+                    event.preventDefault(); // Prevent the default form submission
+
+                    // Extract updated shipment details from the form fields
+                    const editedShipment = {
+                        shipmentNumber: $('#editShipmentNumber').val(),
+                        containerNumber: $('#editContainerNumber').val(),
+                        email: $('#editEmail').val(),
+                        route: $('#editRoute').val(),
+                        goods: $('#editGoods').val(),
+                        device: $('#editDevice').val(),
+                        deliveryDate: $('#editDeliveryDate').val(),
+                        poNumber: $('#editPoNumber').val(),
+                        deliveryNumber: $('#editDeliveryNumber').val(),
+                        ndcNumber: $('#editNdcNumber').val(),
+                        batchId: $('#editBatchId').val(),
+                        serialNumberOfGoods: $('#editSerialNumberOfGoods').val(),
+                        description: $('#editDescription').val()
+                    };
+
+                    // Make an API call to update the shipment
+                    const email = localStorage.getItem('email'); // Get email from localStorage or wherever it is stored
+                    fetch('http://localhost:7077/shipment/edit?email=' + email, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(editedShipment),
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            // Handle successful edit, e.g., show a success message
+                            console.log('Shipment edited successfully');
+                            $('#editModal').modal('hide'); // Hide the edit modal
+                            location.reload();
+                        } else {
+                            // Handle edit failure, e.g., show an error message
+                            console.error('Failed to edit shipment');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error editing shipment:', error);
+                    });
+                });
+
+                // Event listener for delete button
+                $('#shipmentTableBody').on('click', '.delete-btn', function() {
+                    const shipmentNumber = $(this).data('shipment-number');
+                    $('#deleteShipmentNumber').val(shipmentNumber);
+                    $('#deleteModal').modal('show');
+                });
+
+                // Event listener for delete form submission
+                $('#deleteForm').submit(function(event) {
+                    event.preventDefault(); // Prevent the default form submission
+
+                    // Extract delete request details from the form fields
+                    const deleteRequest = {
+                        shipmentNumber: $('#deleteShipmentNumber').val(),
+                        email: $('#deleteEmail').val(),
+                    password: $('#deletePassword').val()
+                    };
+
+                    // Make an API call to delete the shipment
+                    const email = localStorage.getItem('email'); // Get email from localStorage or wherever it is stored
+                    fetch('http://localhost:7077/shipment/delete?email=' + email, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(deleteRequest),
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            // Handle successful deletion, e.g., show a success message
+                            console.log('Shipment deleted successfully');
+                            $('#deleteModal').modal('hide'); // Hide the delete modal
+                            location.reload(); // Reload the page
+                        } else {
+                            // Handle deletion failure, e.g., show an error message
+                            console.error('Failed to delete shipment');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error deleting shipment:', error);
+                    }); 
+                });
+
+                $.noConflict();
+                jQuery(document).ready(function($) {
+                    // Your jQuery code using $ alias
+                });
+
+            });
+        </script>
+    </body>
 </html>

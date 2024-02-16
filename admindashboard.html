@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en"dir="ltr" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
-<head>
+  <head>
     <title>SCMXpertLite</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -52,140 +52,145 @@
         color: #54B4D3 !important;
       }
    </style>
-</head>
-<body>
+  </head>
+  <body>
+    <!-- Navigation Links -->
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+      <a class="navbar-brand text-danger" href="./admindashboard.html"><strong>SCMXpertLite</strong></a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-center" id="collapsibleNavbar">
+        <ul class="navbar-nav" style="margin-left: -7%;">
+          <li class="nav-item">
+            <a class="nav-link text-warning fa-md" href="./adminaccount.html"><strong><i class="fas fa-user-tie text-danger">&nbsp;&nbsp;&nbsp;</i>Accounts</strong></a>
+          </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <li class="nav-item">
+            <a class="nav-link text-warning fa-md" href="./adminshipments.html"><strong><i class="fas fa-box text-danger">&nbsp;&nbsp;&nbsp;</i>My Shipments</strong></a>
+          </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <li class="nav-item">
+            <a class="nav-link text-warning fa-md" href="./admincreateshipments.html"><strong><i class="fas fa-shipping-fast text-danger">&nbsp;&nbsp;&nbsp;</i>Create Shipment</strong></a>
+          </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <li class="nav-item">
+            <a class="nav-link text-warning fa-md" href="./datastream.html"><strong><i class="fa fa-database text-danger">&nbsp;&nbsp;&nbsp;</i>Data Stream</strong></a>
+          </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <li class="nav-item">
+            <a class="nav-link text-warning fa-md" href="./home.html"><strong><i class="fas fa-sign-out-alt text-danger">&nbsp;&nbsp;&nbsp;</i>Logout</strong></a>
+          </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+       
+        </ul>
+      </div>  
+    </nav>
 
-<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-  <a class="navbar-brand text-danger" href="./admindashboard.html"><strong>SCMXpertLite</strong></a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse justify-content-center" id="collapsibleNavbar">
-    <ul class="navbar-nav" style="margin-left: -7%;">
-      <li class="nav-item">
-        <a class="nav-link text-warning fa-md" href="./adminaccount.html"><strong><i class="fas fa-user-tie text-danger">&nbsp;&nbsp;&nbsp;</i>My Account</strong></a>
-      </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      <li class="nav-item">
-        <a class="nav-link text-warning fa-md" href="./adminshipments.html"><strong><i class="fas fa-box text-danger">&nbsp;&nbsp;&nbsp;</i>My Shipments</strong></a>
-      </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      <li class="nav-item">
-        <a class="nav-link text-warning fa-md" href="./admincreateshipments.html"><strong><i class="fas fa-shipping-fast text-danger">&nbsp;&nbsp;&nbsp;</i>Create Shipment</strong></a>
-      </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      <li class="nav-item">
-        <a class="nav-link text-warning fa-md" href="./datastream.html"><strong><i class="fa fa-database text-danger">&nbsp;&nbsp;&nbsp;</i>Data Stream</strong></a>
-      </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      <li class="nav-item">
-        <a class="nav-link text-warning fa-md" href="./home.html"><strong><i class="fas fa-sign-out-alt text-danger">&nbsp;&nbsp;&nbsp;</i>Logout</strong></a>
-      </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-   
-    </ul>
-  </div>  
-</nav>
-<div class="image-container"> 
-  <img class="image img-fluid" src="./shipments.jpg" alt="Image" />
-  <div class="content-over-image">
-
-    <div class="container-fluid transparent-bg" style="margin-top:-10px">
-      <div class="row">
-        <div class="col-sm-4">
-          <h2 class="text-info"><i class="fa fa-bars fa-sm"></i>&nbsp;<strong>SCMXpertLite Services</strong></h2>
-          <ul class="text-warning">
-              <li>Inventory Management</li>
-              <li>Procurement</li>
-              <li>Warehouse Management</li>
-              <li>Logistics</li>
-              <li>Supplier Relationship Management</li>
-              <li>Order Fulfillment</li>
-              <li>Demand Forecasting</li>
-              <li>Transportation Management</li>
-              <li>Supply Chain Analytics</li>
-              <li>Reverse Logistics</li>
-              <li>Product Lifecycle Management</li>
-              <li>Quality Control</li>
-              <li>Customs Compliance</li>
-              <li>Supplier Diversity Programs</li>
-              <li>Risk Management</li>
-              <li>Strategic Sourcing</li>
-              <li>Ethical Sourcing</li>
-              <li>Supplier Audits</li>
-              <li>Supply Chain Sustainability</li>
-              <li>EDI (Electronic Data Interchange)</li>
-              <li>Performance Management</li>
-          </ul>
-          <hr class="d-sm-none">
-        </div>
-        <div class="col-sm-8">
-          <h1 id="welcomeMessage" class="font-weight-bold " style="margin-left: 30%; letter-spacing: 3px; color: rgb(0, 255, 179); text-shadow: 1px 1px 2px black, 0 0 25px rgb(0, 182, 106), 0 0 5px rgb(0, 103, 187);"></h1>
-          <h2 class="text-info"><strong>SCMXpertLite</strong></h2>
-          <h5 class="text-warning"><strong>Revolutionizing Supply Chain Management</strong></h5>
-          <p class="text-white">
-            SCMXpertLite is at the forefront of revolutionizing supply chain management (SCM) in today's dynamic business landscape. As a pioneering company, we understand the pivotal role that SCM plays as the backbone of global commerce. Our mission is to streamline and optimize every facet of the supply chain process, from inception to customer delivery, ensuring seamless operations and unparalleled customer satisfaction. At the heart of SCMXpertLite's approach lies a comprehensive suite of solutions designed to address the core components of SCM. Our integrated platform facilitates efficient planning, precise execution, rigorous control, and real-time monitoring of all activities involved in the flow of goods and services. From procurement to manufacturing, transportation, warehousing, and distribution, SCMXpertLite empowers businesses to navigate the complexities of supply chain management with ease and precision.
-          </p>
-          <br>
-          <div id="accordion">
-            <div class="card bg-transparent">
-                <div class="card-header" role="tab" id="albertohead1">
-                    <h3 class="mb-0 text-danger">
-                        <a href="#" class="collapsed" data-toggle="collapse" data-target="#alberto1" aria-expanded="false" aria-controls="alberto1">
-                            <strong>Key Features of SCMXpertLite:</strong>
-                        </a>
-                    </h3>
-                </div>
-                <div class="collapse" id="alberto1" data-parent="#accordion">
-                    <div class="card-body">
-                        <p class="d-none d-sm-block text-warning">
-                           <strong class="text-danger">1. End-to-End Visibility:</strong>SCMXpertLite provides unparalleled visibility across the entire supply chain, enabling businesses to track the movement of goods and services at every stage of the process. With real-time insights and analytics, stakeholders can make informed decisions to optimize efficiency and mitigate risks.<br>
-                           <strong class="text-danger">2. Streamlined Procurement:</strong>Our platform simplifies the procurement process, allowing businesses to source materials and services with ease. Through automated workflows and supplier management tools, SCMXpertLite helps organizations streamline purchasing processes, negotiate favorable terms, and maintain robust supplier relationships.<br>
-                           <strong class="text-danger">3. Efficient Manufacturing:</strong>SCMXpertLite optimizes manufacturing operations by streamlining production processes, minimizing downtime, and maximizing resource utilization. With advanced planning and scheduling capabilities, businesses can achieve higher levels of productivity and meet evolving customer demands with agility.    
-                        </p>    
+    <!-- Dashboard -->
+    <div class="image-container"> 
+      <img class="image img-fluid" src="./shipments.jpg" alt="Image" />
+      <div class="content-over-image">
+        <div class="container-fluid transparent-bg" style="margin-top:-10px">
+          <div class="row">
+            <div class="col-sm-4">
+              <h2 class="text-info"><i class="fa fa-bars fa-sm"></i>&nbsp;<strong>SCMXpertLite Services</strong></h2>
+              <ul class="text-warning">
+                  <li>Inventory Management</li>
+                  <li>Procurement</li>
+                  <li>Warehouse Management</li>
+                  <li>Logistics</li>
+                  <li>Supplier Relationship Management</li>
+                  <li>Order Fulfillment</li>
+                  <li>Demand Forecasting</li>
+                  <li>Transportation Management</li>
+                  <li>Supply Chain Analytics</li>
+                  <li>Reverse Logistics</li>
+                  <li>Product Lifecycle Management</li>
+                  <li>Quality Control</li>
+                  <li>Customs Compliance</li>
+                  <li>Supplier Diversity Programs</li>
+                  <li>Risk Management</li>
+                  <li>Strategic Sourcing</li>
+                  <li>Ethical Sourcing</li>
+                  <li>Supplier Audits</li>
+                  <li>Supply Chain Sustainability</li>
+                  <li>EDI (Electronic Data Interchange)</li>
+                  <li>Performance Management</li>
+              </ul>
+              <hr class="d-sm-none">
+            </div>
+            <div class="col-sm-8">
+              <h1 id="welcomeMessage" class="font-weight-bold " style="margin-left: 30%; letter-spacing: 3px; color: rgb(0, 255, 179); text-shadow: 1px 1px 2px black, 0 0 25px rgb(0, 182, 106), 0 0 5px rgb(0, 103, 187);"></h1>
+              <h2 class="text-info"><strong>SCMXpertLite</strong></h2>
+              <h5 class="text-warning"><strong>Revolutionizing Supply Chain Management</strong></h5>
+              <p class="text-white">
+                SCMXpertLite is at the forefront of revolutionizing supply chain management (SCM) in today's dynamic business landscape. As a pioneering company, we understand the pivotal role that SCM plays as the backbone of global commerce. Our mission is to streamline and optimize every facet of the supply chain process, from inception to customer delivery, ensuring seamless operations and unparalleled customer satisfaction. At the heart of SCMXpertLite's approach lies a comprehensive suite of solutions designed to address the core components of SCM. Our integrated platform facilitates efficient planning, precise execution, rigorous control, and real-time monitoring of all activities involved in the flow of goods and services. From procurement to manufacturing, transportation, warehousing, and distribution, SCMXpertLite empowers businesses to navigate the complexities of supply chain management with ease and precision.
+              </p>
+              <br>
+              <div id="accordion">
+                <div class="card bg-transparent">
+                    <div class="card-header" role="tab" id="albertohead1">
+                        <h3 class="mb-0 text-danger">
+                            <a href="#" class="collapsed" data-toggle="collapse" data-target="#alberto1" aria-expanded="false" aria-controls="alberto1">
+                                <strong>Key Features of SCMXpertLite:</strong>
+                            </a>
+                        </h3>
+                    </div>
+                    <div class="collapse" id="alberto1" data-parent="#accordion">
+                        <div class="card-body">
+                            <p class="d-none d-sm-block text-warning">
+                               <strong class="text-danger">1. End-to-End Visibility:</strong>SCMXpertLite provides unparalleled visibility across the entire supply chain, enabling businesses to track the movement of goods and services at every stage of the process. With real-time insights and analytics, stakeholders can make informed decisions to optimize efficiency and mitigate risks.<br>
+                               <strong class="text-danger">2. Streamlined Procurement:</strong>Our platform simplifies the procurement process, allowing businesses to source materials and services with ease. Through automated workflows and supplier management tools, SCMXpertLite helps organizations streamline purchasing processes, negotiate favorable terms, and maintain robust supplier relationships.<br>
+                               <strong class="text-danger">3. Efficient Manufacturing:</strong>SCMXpertLite optimizes manufacturing operations by streamlining production processes, minimizing downtime, and maximizing resource utilization. With advanced planning and scheduling capabilities, businesses can achieve higher levels of productivity and meet evolving customer demands with agility.    
+                            </p>    
+                        </div>
                     </div>
                 </div>
+            </div>           
             </div>
-        </div>           
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</div>
-<div class="jumbotron text-center bg-dark" style="margin-bottom: 0">
-    <div class="container footer text-danger">
-        <strong class="fa-lg">&copy; 2024 SCMXperLite</strong>
+
+    <!-- Footer -->
+    <div class="jumbotron text-center bg-dark" style="margin-bottom: 0">
+        <div class="container footer text-danger">
+            <strong class="fa-lg">&copy; 2024 SCMXperLite</strong>
+        </div>
     </div>
-</div>
-<script>
-    // Prevent default action on accordion header click
-    $(document).ready(function() {
-        $('.card-header').on('click', function(event) {
-            event.preventDefault();
+
+    <!-- Accordion -->
+    <script>
+        $(document).ready(function() {
+            $('.card-header').on('click', function(event) {
+                event.preventDefault();
+            });
         });
-    });
-</script>
-<script>
-  // Retrieve username from local storage
-  var username = localStorage.getItem('username');
+    </script>
 
-  // Display welcome message
-  var welcomeMessageElement = document.getElementById('welcomeMessage');
-  if (username) {
-    welcomeMessageElement.innerHTML = '<div class="row align-items-center">' +
-                                         '<div class="col-auto">' +
-                                             '<i class="fas fa-user-tie"></i>' +
-                                         '</div>' +
-                                         '<div class="col">' +
-                                             'Welcome ' + username +
-                                         '</div>' +
-                                     '</div>';
-  } else {
-    welcomeMessageElement.innerHTML = '<div class="row align-items-center">' +
-                                         '<div class="col-auto">' +
-                                             '<i class="fas fa-user-tie"></i>' +
-                                         '</div>' +
-                                         '<div class="col">' +
-                                             'Welcome' +
-                                         '</div>' +
-                                     '</div>';
-  }
-</script>
-
-</body>
+    <!-- Diaplay User Name -->
+    <script>
+      // Retrieve username from local storage
+      var username = localStorage.getItem('username');
+    
+      // Display welcome message
+      var welcomeMessageElement = document.getElementById('welcomeMessage');
+      if (username) {
+        welcomeMessageElement.innerHTML = '<div class="row align-items-center">' +
+                                             '<div class="col-auto">' +
+                                                 '<i class="fas fa-user-tie"></i>' +
+                                             '</div>' +
+                                             '<div class="col">' +
+                                                 'Welcome ' + username +
+                                             '</div>' +
+                                         '</div>';
+      } else {
+        welcomeMessageElement.innerHTML = '<div class="row align-items-center">' +
+                                             '<div class="col-auto">' +
+                                                 '<i class="fas fa-user-tie"></i>' +
+                                             '</div>' +
+                                             '<div class="col">' +
+                                                 'Welcome' +
+                                             '</div>' +
+                                         '</div>';
+      }
+    </script>
+  </body>
 </html>

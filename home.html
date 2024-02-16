@@ -1,613 +1,689 @@
 <!DOCTYPE html>
 <html lang="en"dir="ltr" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
-<head>
-    <title>SCMXpertLite</title>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous" />
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <style>
-    @import url('https://fonts.googleapis.com/css?family=Montserrat:400,800');
-    * {
-    	box-sizing: border-box;
-    }
-    h1 {
-        font-weight: bold;
-        margin: 0;
-    }
-    h2 {
-	    text-align: center;
-    }
+    <head>
+        <title>SCMXpertLite</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous" />
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <style>
+            @import url('https://fonts.googleapis.com/css?family=Montserrat:400,800');
+            * 
+            {
+    	        box-sizing: border-box;
+            }
+            h1 
+            {
+                font-weight: bold;
+                margin: 0;
+            }
+            h2 
+            {
+	            text-align: center;
+            }
 
-    p {
-	    font-size: 14px;
-	    font-weight: 100;
-	    line-height: 20px;
-	    letter-spacing: 0.5px;
-	    margin: 20px 0 30px;
-    }
+            p 
+            {
+	            font-size: 14px;
+	            font-weight: 100;
+	            line-height: 20px;
+	            letter-spacing: 0.5px;
+	            margin: 20px 0 30px;
+            }
 
-    span {
-	    font-size: 12px;
-    }
+            span 
+            {
+	            font-size: 12px;
+            }
 
-    a {
-	    color: #333;
-	    font-size: 14px;
-	    text-decoration: none;
-	    margin: 15px 0;
-    }
+            a 
+            {
+	            color: #333;
+	            font-size: 14px;
+	            text-decoration: none;
+	            margin: 15px 0;
+            }
 
-    button {
-	    border-radius: 20px;
-	    border: 1px solid #f0ad4e;
-	    background-color: #f0ad4e;
-	    color: #FFFFFF;
-	    font-size: 12px;
-	    font-weight: bold;
-	    padding: 12px 45px;
-	    letter-spacing: 1px;
-	    text-transform: uppercase;
-	    transition: transform 80ms ease-in;
-    }
+            button 
+            {
+	            border-radius: 20px;
+	            border: 1px solid #f0ad4e;
+	            background-color: #f0ad4e;
+	            color: #FFFFFF;
+	            font-size: 12px;
+	            font-weight: bold;
+	            padding: 12px 45px;
+	            letter-spacing: 1px;
+	            text-transform: uppercase;
+	            transition: transform 80ms ease-in;
+            }
 
-    button:active {
-	    transform: scale(0.95);
-    }   
+            button:active 
+            {
+	            transform: scale(0.95);
+            }   
 
-    button:focus {
-	    outline: none;
-    }
+            button:focus 
+            {
+	            outline: none;
+            }
 
-    button.ghost {
-	    background-color: transparent;
-	    border-color: #FFFFFF;
-    }
+            button.ghost 
+            {
+	            background-color: transparent;
+	            border-color: #FFFFFF;
+            }
 
-    form {
-    	background-color: #FFFFFF;
-	    display: flex;
-	    align-items: center;
-	    justify-content: center;
-	    flex-direction: column;
-	    padding: 0 50px;
-	    height: 100%;
-	    text-align: center;
-    }
+            form 
+            {
+    	        background-color: #FFFFFF;
+	            display: flex;
+	            align-items: center;
+	            justify-content: center;
+	            flex-direction: column;
+	            padding: 0 50px;
+	            height: 100%;
+	            text-align: center;
+            }
 
-    input {
-	    background-color: #eee;
-	    border: none;
-	    padding: 12px 15px;
-	    margin: 8px 0;
-	    width: 100%;
-    }
+            input 
+            {
+	            background-color: #eee;
+	            border: none;
+	            padding: 12px 15px;
+	            margin: 8px 0;
+	            width: 100%;
+            }
 
-    .container.form {
-	    background-color: #fff;
-	    border-radius: 10px;
-  	    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 
-			0 10px 10px rgba(0,0,0,0.22);
-	    position: relative;
-	    overflow: hidden;
-	    width: 768px;
-	    max-width: 100%;
-	    min-height: 480px;
-    }
+            .container.form 
+            {
+	            background-color: #fff;
+	            border-radius: 10px;
+  	            box-shadow: 0 14px 28px rgba(0,0,0,0.25), 
+			        0 10px 10px rgba(0,0,0,0.22);
+	            position: relative;
+	            overflow: hidden;
+	            width: 768px;
+	            max-width: 100%;
+	            min-height: 480px;
+            }
 
-    .form-container {
-	    position: absolute;
-	    top: 0;
-	    height: 100%;
-	    transition: all 0.6s ease-in-out;
-    }
+            .form-container 
+            {
+	            position: absolute;
+	            top: 0;
+	            height: 100%;
+	            transition: all 0.6s ease-in-out;
+            }
 
-    .sign-in-container {
-	    left: 0;
-	    width: 50%;
-	    z-index: 2;
-    }
+            .sign-in-container 
+            {
+	            left: 0;
+	            width: 50%;
+	            z-index: 2;
+            }
 
-    .container.right-panel-active .sign-in-container {
-	    transform: translateX(100%);
-    }
+            .container.right-panel-active .sign-in-container 
+            {
+	            transform: translateX(100%);
+            }
 
-    .sign-up-container {
-	    left: 0;
-	    width: 50%;
-	    opacity: 0;
-	    z-index: 1;
-    }
+            .sign-up-container 
+            {
+	            left: 0;
+	            width: 50%;
+	            opacity: 0;
+	            z-index: 1;
+            }
 
-    .container.right-panel-active .sign-up-container {
-	    transform: translateX(100%);
-	    opacity: 1;
-	    z-index: 5;
-	    animation: show 0.6s;
-    }
+            .container.right-panel-active .sign-up-container 
+            {
+	            transform: translateX(100%);
+	            opacity: 1;
+	            z-index: 5;
+	            animation: show 0.6s;
+            }
 
-    @keyframes show {
-	    0%, 49.99% {
-		    opacity: 0;
-		    z-index: 1;
-	    }
+            @keyframes show 
+            {
+	            0%, 49.99% 
+                {
+		            opacity: 0;
+		            z-index: 1;
+	            }
 	
-	    50%, 100% {
-		    opacity: 1;
-		    z-index: 5;
-	    }
-    }
+	            50%, 100% 
+                {
+		            opacity: 1;
+		            z-index: 5;
+	            }
+            }
 
-    .overlay-container {
-	    position: absolute;
-	    top: 0;
-	    left: 50%;
-	    width: 50%;
-	    height: 100%;
-	    overflow: hidden;
-	    transition: transform 0.6s ease-in-out;
-	    z-index: 100;
-    }
+            .overlay-container 
+            {
+	            position: absolute;
+	            top: 0;
+	            left: 50%;
+	            width: 50%;
+	            height: 100%;
+	            overflow: hidden;
+	            transition: transform 0.6s ease-in-out;
+	            z-index: 100;
+            }
 
-    .container.right-panel-active .overlay-container{
-	    transform: translateX(-100%);
-    }
+            .container.right-panel-active .overlay-container
+            {
+	            transform: translateX(-100%);
+            }
 
-    .overlay {
-	    background: #4d0300;
-	    background: -webkit-linear-gradient(to right, #360800, #3d000e);
-	    background: linear-gradient(to right, #DC3545, #DC3545);
-	    background-repeat: no-repeat;
-	    background-size: cover;
-	    background-position: 0 0;
-	    color: #FFFFFF;
-	    position: relative;
-	    left: -100%;
-	    height: 100%;
-	    width: 200%;
-  	    transform: translateX(0);
-	    transition: transform 0.6s ease-in-out;
-    }
+            .overlay 
+            {
+	            background: #4d0300;
+	            background: -webkit-linear-gradient(to right, #360800, #3d000e);
+	            background: linear-gradient(to right, #DC3545, #DC3545);
+	            background-repeat: no-repeat;
+	            background-size: cover;
+	            background-position: 0 0;
+	            color: #FFFFFF;
+	            position: relative;
+	            left: -100%;
+	            height: 100%;
+	            width: 200%;
+  	            transform: translateX(0);
+	            transition: transform 0.6s ease-in-out;
+            }
 
-    .container.right-panel-active .overlay {
-  	    transform: translateX(50%);
-    }
+            .container.right-panel-active .overlay 
+            {
+  	            transform: translateX(50%);
+            }
 
-    .overlay-panel {
-	    position: absolute;
-	    display: flex;
-	    align-items: center;
-	    justify-content: center;
-	    flex-direction: column;
-	    padding: 0 40px;
-	    text-align: center;
-	    top: 0;
-	    height: 100%;
-	    width: 50%;
-	    transform: translateX(0);
-	    transition: transform 0.6s ease-in-out;
-    }
+            .overlay-panel 
+            {
+	            position: absolute;
+	            display: flex;
+	            align-items: center;
+	            justify-content: center;
+	            flex-direction: column;
+	            padding: 0 40px;
+	            text-align: center;
+	            top: 0;
+	            height: 100%;
+	            width: 50%;
+	            transform: translateX(0);
+	            transition: transform 0.6s ease-in-out;
+            }
 
-    .overlay-left {
-	    transform: translateX(-20%);
-    }
+            .overlay-left 
+            {
+	            transform: translateX(-20%);
+            }
 
-    .container.right-panel-active .overlay-left {
-	    transform: translateX(0);
-    }
+            .container.right-panel-active .overlay-left 
+            {
+	            transform: translateX(0);
+            }
 
-    .overlay-right {
-	    right: 0;
-	    transform: translateX(0);
-    }
+            .overlay-right 
+            {
+	            right: 0;
+	            transform: translateX(0);
+            }
 
-    .container.right-panel-active .overlay-right {
-	    transform: translateX(20%);
-    }
-    .modal-content {
-        background-color: transparent;
-        border: none;
-        box-shadow: none;
-    }
-    .modal-dialog {
-        margin: 10% auto;
-        width: 25%;
-    }
-    .modal-header,
-    .modal-footer {
-        border: none;
-    }
-    .modal-body {
-        background-color: rgba(0, 0, 0, 0.5); /* Change the opacity value as needed */
-        border-radius: 10px;
-        padding: 15px;
-    }
-    .modal-body form {
-        background-color: transparent;
-        border: none;
-    }
+            .container.right-panel-active .overlay-right 
+            {
+	            transform: translateX(20%);
+            }
 
+            .modal-content 
+            {
+                background-color: transparent;
+                border: none;
+                box-shadow: none;
+            }
 
-    </style>
-</head>
-<body>
-    <div class="jumbotron text-center bg-dark"
-         style="margin-bottom: -20px; margin-top: -10px; text-align: center">
-        <h1 class="text-white">SCMXpertLite</h1>
-        <h2 class="text-danger">The Better Way to Shipments</h2>
-    </div>
-    <nav class="navbar navbar-expand-sm  sticky-top"
-         style="box-shadow: 0.3em 0.3em 5em rgb(0, 0, 0); background: rgb(58, 58, 58);">
-        <a class="navbar-brand text-danger" href="/home.html"><strong>SCMXpertLite</strong></a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-    </nav>
-    <div class="container-fluid" style="background: rgb(0, 0, 0);">
-        <div class="row">
-            <div class="col-sm-3" style="margin-top: 17px;">
-                <h2 class="text-info"><i class="fa fa-bars fa-sm"></i>&nbsp;<strong>SCMXpertLite Services</strong></h2>
-                <ul class="text-white" style="margin-left: 25px;">
-                    <li>Inventory Management</li>
-                    <li>Procurement</li>
-                    <li>Warehouse Management</li>
-                    <li>Logistics</li>
-                    <li>Supplier Relationship Management</li>
-                    <li>Order Fulfillment</li>
-                    <li>Demand Forecasting</li>
-                    <li>Transportation Management</li>
-                    <li>Supply Chain Analytics</li>
-                    <li>Reverse Logistics</li>
-                    <li>Product Lifecycle Management</li>
-                    <li>Quality Control</li>
-                    <li>Customs Compliance</li>
-                    <li>Supplier Diversity Programs</li>
-                    <li>Risk Management</li>
-                    <li>Strategic Sourcing</li>
-                    <li>Ethical Sourcing</li>
-                    <li>Supplier Audits</li>
-                    <li>Supply Chain Sustainability</li>
-                    <li>EDI (Electronic Data Interchange)</li>
-                    <li>Performance Management</li>
-                </ul>
-            </div>
+            .modal-dialog 
+            {
+                margin: 10% auto;
+                width: 25%;
+            }
+
+            .modal-header,
+            .modal-footer 
+            {
+                border: none;
+            }
+
+            .modal-body 
+            {
+                background-color: rgba(0, 0, 0, 0.5); /* Change the opacity value as needed */
+                border-radius: 10px;
+                padding: 15px;
+            }
+
+            .modal-body form 
+            {
+                background-color: transparent;
+                border: none;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="jumbotron text-center bg-dark" style="margin-bottom: -20px; margin-top: -10px; text-align: center">
+            <h1 class="text-white">SCMXpertLite</h1>
+            <h2 class="text-danger">The Better Way to Shipments</h2>
+        </div>
+
+        <!-- Navigation bars -->
+        <nav class="navbar navbar-expand-sm  sticky-top" style="box-shadow: 0.3em 0.3em 5em rgb(0, 0, 0); background: rgb(58, 58, 58);">
+            <a class="navbar-brand text-danger" href="/home.html"><strong>SCMXpertLite</strong></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </nav>
+
+        <!-- content and forms -->
+        <div class="container-fluid" style="background: rgb(0, 0, 0);">
+            <div class="row">
+                <div class="col-sm-3" style="margin-top: 17px;">
+                    <h2 class="text-info"><i class="fa fa-bars fa-sm"></i>&nbsp;<strong>SCMXpertLite Services</strong></h2>
+                    <ul class="text-white" style="margin-left: 25px;">
+                        <li>Inventory Management</li>
+                        <li>Procurement</li>
+                        <li>Warehouse Management</li>
+                        <li>Logistics</li>
+                        <li>Supplier Relationship Management</li>
+                        <li>Order Fulfillment</li>
+                        <li>Demand Forecasting</li>
+                        <li>Transportation Management</li>
+                        <li>Supply Chain Analytics</li>
+                        <li>Reverse Logistics</li>
+                        <li>Product Lifecycle Management</li>
+                        <li>Quality Control</li>
+                        <li>Customs Compliance</li>
+                        <li>Supplier Diversity Programs</li>
+                        <li>Risk Management</li>
+                        <li>Strategic Sourcing</li>
+                        <li>Ethical Sourcing</li>
+                        <li>Supplier Audits</li>
+                        <li>Supply Chain Sustainability</li>
+                        <li>EDI (Electronic Data Interchange)</li>
+                        <li>Performance Management</li>
+                    </ul>
+                </div>
     
-            <div class="col-sm-9" style="margin-top: 35px;">
-                <div class="container form" id="container">
-                    <div class="form-container sign-up-container">
-                        <form id="registerForm">
-                                <h2 class="font-weight-bold" style="font-size: 39px;">Create Account</h2>
-                                <span class="text-dark font-weight-bold">or use your email for registration</span><br>
-                                <input type="text" id="username" name="username" placeholder="Enter Your Username" required/>
-                                <input type="email" id="regEmail" name="email" placeholder="Enter Your Email" required/>
+                <div class="col-sm-9" style="margin-top: 35px;">
+                    <div class="container form" id="container">
+                        <div class="form-container sign-up-container">
+                            <form id="registerForm">
+                                    <h2 class="font-weight-bold" style="font-size: 39px;">Create Account</h2>
+                                    <span class="text-dark font-weight-bold">or use your email for registration</span><br>
+                                    <input type="text" id="username" name="username" placeholder="Enter Your Username" required/>
+                                    <input type="email" id="regEmail" name="email" placeholder="Enter Your Email" required/>
+                                    <div class="input-group">
+                                        <input type="password" id="regPassword" name="password" class="form-control" placeholder="Enter Your Password"  required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"title="Password must contain at least one number, one uppercase and lowercase letter, and at least 8 or more characters"/>
+                                        <div class="input-group-append">
+                                            <button style="margin-top: 18%;" class="btn btn-outline-warning" type="button" id="toggleRegPassword">
+                                                <i class="fa fa-eye"></i>
+                                            </button>
+                                        </div>
+                                    </div> <br>
+                                    <button type="submit">Sign Up</button>
+                                    <!-- Error message placeholder -->
+                                    <div id="errorMessage" style="display: none;" class="alert alert-danger" role="alert">Registration failed. User Exists!</div>
+                                    <!-- Success message placeholder -->
+                                    <div id="successMessage" style="display: none;" class="alert alert-success" role="alert">Account created successfully!</div>
+                            </form>
+                        </div>
+                        <div class="form-container sign-in-container form-group">
+                            <form id="loginForm">
+                                <h2 class="font-weight-bold" style="font-size: 39px;">Login</h2>
+                                <span class="text-dark font-weight-bold">or use your account</span><br>
+                                <input type="email" id="email" name="email" placeholder="Enter Your Email" required/>
                                 <div class="input-group">
-                                    <input type="password" id="regPassword" name="password" class="form-control" placeholder="Enter Your Password"  required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"title="Password must contain at least one number, one uppercase and lowercase letter, and at least 8 or more characters"/>
+                                    <input style="padding: 15px;" type="password" id="password" name="password" class="form-control" placeholder="Enter Your Password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"title="Password must contain at least one number, one uppercase and lowercase letter, and at least 8 or more characters"/>
                                     <div class="input-group-append">
-                                        <button style="margin-top: 18%;" class="btn btn-outline-warning" type="button" id="toggleRegPassword">
+                                        <button style="margin-top: 18%;" class="btn btn-outline-warning" type="button" id="togglePassword">
                                             <i class="fa fa-eye"></i>
                                         </button>
                                     </div>
-                                </div> <br>
-                                <button type="submit">Sign Up</button>
-                                <!-- Error message placeholder -->
-                                <div id="errorMessage" style="display: none;" class="alert alert-danger" role="alert">Registration failed. User Exists!</div>
-                                <!-- Success message placeholder -->
-                                <div id="successMessage" style="display: none;" class="alert alert-success" role="alert">Account created successfully!</div>
-                        </form>
+                                </div>
+                                <div id="captchaContainer">
+                                    <label for="captchaInput">Enter the characters below:</label><br>
+                                    <span id="captchaCharacters" class="text-dark font-weight-bold" style="font-size: 22px;"></span><br>
+                                    <div class="input-group">
+                                        <input style="padding: 15px;" type="text" id="captchaInput" name="captchaInput" class="form-control" placeholder="Enter Characters" required/>
+                                        <div class="input-group-append">
+                                            <button style="margin-top: 18%;" class="btn btn-outline-warning" type="button" id="refreshCaptcha">
+                                                <i class="fas fa-sync"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <a id="forgotPasswordLink" class="text-danger font-weight-bold">Forgot your password?</a>
+                                <button type="submit">login In</button>
+                                <div id="errorMessage1" style="display: none;" class="alert alert-danger" role="alert"></div>
+                            </form>
+                        </div>
+                        <div class="overlay-container">
+                            <div class="overlay">
+                                <div class="overlay-panel overlay-left">
+                                    <h1>Welcome Back!</h1>
+                                    <p class="text-dark font-weight-bold">To keep connected with us please login with your personal info</p>
+                                    <button class="ghost" id="signIn">Sign In</button>
+                                </div>
+                                <div class="overlay-panel overlay-right">
+                                    <h1>Hello, Friend!</h1>
+                                    <p class="text-dark font-weight-bold">Enter your personal details and start Shipments with us</p>
+                                    <button class="ghost" id="signUp">Sign Up</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-container sign-in-container form-group">
-                        <form id="loginForm">
-                            <h2 class="font-weight-bold" style="font-size: 39px;">Login</h2>
-                            <span class="text-dark font-weight-bold">or use your account</span><br>
-                            <input type="email" id="email" name="email" placeholder="Enter Your Email" required/>
-                            <div class="input-group">
-                                <input style="padding: 15px;" type="password" id="password" name="password" class="form-control" placeholder="Enter Your Password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"title="Password must contain at least one number, one uppercase and lowercase letter, and at least 8 or more characters"/>
-                                <div class="input-group-append">
-                                    <button style="margin-top: 18%;" class="btn btn-outline-warning" type="button" id="togglePassword">
-                                        <i class="fa fa-eye"></i>
+                    <div class="modal fade" id="forgotPasswordModal" tabindex="-1" aria-labelledby="forgotPasswordModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title text-warning font-weight-bold" id="forgotPasswordModalLabel">Forgot Password ?</h5>
+                                    <button type="button" class="close text-danger" data-dismiss="modal" aria-label="Close">
+                                        <span style="font-size: 30px; color: rgb(245, 0, 0);" aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
-                            </div>
-                            <div id="captchaContainer">
-                                <label for="captchaInput">Enter the characters below:</label><br>
-                                <span id="captchaCharacters" class="text-dark font-weight-bold" style="font-size: 22px;"></span><br>
-                                <div class="input-group">
-                                    <input style="padding: 15px;" type="text" id="captchaInput" name="captchaInput" class="form-control" placeholder="Enter Characters" required/>
-                                    <div class="input-group-append">
-                                        <button style="margin-top: 18%;" class="btn btn-outline-warning" type="button" id="refreshCaptcha">
-                                            <i class="fas fa-sync"></i>
-                                        </button>
-                                    </div>
+                                <div class="modal-body">
+                                    <form id="forgotPasswordForm">
+                                        <div class="form-group">
+                                            <input type="email" class="form-control" id="forgotPasswordEmail" placeholder="Enter email" required>
+                                        </div>
+                                        <button type="button" class="btn btn-warning font-weight-bold" onclick="Forgot(document.getElementById('forgotPasswordEmail').value)">Reset Password</button>
+                                    </form>
                                 </div>
                             </div>
-                            <a id="forgotPasswordLink" class="text-danger font-weight-bold">Forgot your password?</a>
-                            <button type="submit">login In</button>
-                            <div id="errorMessage1" style="display: none;" class="alert alert-danger" role="alert"></div>
-                        </form>
-                    </div>
-                    <div class="overlay-container">
-                        <div class="overlay">
-                            <div class="overlay-panel overlay-left">
-                                <h1>Welcome Back!</h1>
-                                <p class="text-dark font-weight-bold">To keep connected with us please login with your personal info</p>
-                                <button class="ghost" id="signIn">Sign In</button>
-                            </div>
-                            <div class="overlay-panel overlay-right">
-                                <h1>Hello, Friend!</h1>
-                                <p class="text-dark font-weight-bold">Enter your personal details and start Shipments with us</p>
-                                <button class="ghost" id="signUp">Sign Up</button>
-                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="modal fade" id="forgotPasswordModal" tabindex="-1" aria-labelledby="forgotPasswordModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title text-warning font-weight-bold" id="forgotPasswordModalLabel">Forgot Password ?</h5>
-                                <button type="button" class="close text-danger" data-dismiss="modal" aria-label="Close">
-                                    <span style="font-size: 30px; color: rgb(245, 0, 0);" aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <form id="forgotPasswordForm">
-                                    <div class="form-group">
-                                        <input type="email" class="form-control" id="forgotPasswordEmail" placeholder="Enter email" required>
-                                    </div>
-                                    <button type="button" class="btn btn-warning font-weight-bold" onclick="Forgot(document.getElementById('forgotPasswordEmail').value)">Reset Password</button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
             </div>
         </div>
-    </div>
 
-    <div class="jumbotron text-center bg-dark" style="margin-bottom: 0">
-        <div class="container footer text-danger">
-            <strong class="fa-lg">&copy; 2024 SCMXperLite</strong>
+        <!--jumbotron footer -->
+        <div class="jumbotron text-center bg-dark" style="margin-bottom: 0">
+            <div class="container footer text-danger">
+                <strong class="fa-lg">&copy; 2024 SCMXperLite</strong>
+            </div>
         </div>
-    </div>
 
-    <!-- To Handle Forgot Password Modal Functionality -->
-    <script>
-        // JavaScript to handle Forgot Password modal
-        document.getElementById('forgotPasswordLink').addEventListener('click', function() {
-            $('#forgotPasswordModal').modal('show');
-        });
+        <!-- To Handle Forgot Password Modal Functionality -->
+        <script>
+            // JavaScript to handle Forgot Password modal
+            document.getElementById('forgotPasswordLink').addEventListener('click', function() 
+            {
+                $('#forgotPasswordModal').modal('show');
+            });
 
-        // JavaScript for handling Forgot Password form submission
-        document.getElementById('forgotPasswordForm').addEventListener('submit', function(event) {
-            event.preventDefault();
+            // JavaScript for handling Forgot Password form submission
+            document.getElementById('forgotPasswordForm').addEventListener('submit', function(event) 
+            {
+                event.preventDefault();
             // Implement logic to handle Forgot Password form submission
             // For example, you can send a request to your backend API to reset the password
-        });
-    </script>
-
-    <!-- Password Visibility Functionality -->
-    <script>
-        let contactForm = document.getElementById("registerForm");
-        contactForm.addEventListener("submit", function (e) {
-      
-        });
-        const togglePasswordBtn = document.getElementById('togglePassword');
-        const passwordInput = document.getElementById('password');
-        const toggleRegPasswordBtn = document.getElementById('toggleRegPassword');
-        const regPasswordInput = document.getElementById('regPassword');
-    
-        function togglePasswordVisibility(button, input) {
-            let passwordVisible = false;
-    
-            button.addEventListener('click', function () {
-                passwordVisible = !passwordVisible;
-                if (passwordVisible) {
-                    input.setAttribute('type', 'text');
-                    this.innerHTML = '<i class="fa fa-eye-slash"></i>';
-                } else {
-                    input.setAttribute('type', 'password');
-                    this.innerHTML = '<i class="fa fa-eye"></i>';
-                }
             });
-        }
-        togglePasswordVisibility(togglePasswordBtn, passwordInput);
-        togglePasswordVisibility(toggleRegPasswordBtn, regPasswordInput);
-    </script>
+        </script>
 
-    <!-- CAPTCHA Functionality with Login form API-->
-    <script>
-        // JavaScript to generate random characters for CAPTCHA
-        function generateCaptcha() {
-            const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-            let captcha = '';
-            for (let i = 0; i < 6; i++) {
-                captcha += characters.charAt(Math.floor(Math.random() * characters.length));
+        <!-- Password Visibility Functionality -->
+        <script>
+            let contactForm = document.getElementById("registerForm");
+            contactForm.addEventListener("submit", function (e) 
+            {
+      
+            });
+            const togglePasswordBtn = document.getElementById('togglePassword');
+            const passwordInput = document.getElementById('password');
+            const toggleRegPasswordBtn = document.getElementById('toggleRegPassword');
+            const regPasswordInput = document.getElementById('regPassword');
+    
+            function togglePasswordVisibility(button, input) 
+            {
+                let passwordVisible = false;
+    
+                button.addEventListener('click', function () 
+                {
+                    passwordVisible = !passwordVisible;
+                    if (passwordVisible) 
+                    {
+                        input.setAttribute('type', 'text');
+                        this.innerHTML = '<i class="fa fa-eye-slash"></i>';
+                    } 
+                    else 
+                    {
+                        input.setAttribute('type', 'password');
+                        this.innerHTML = '<i class="fa fa-eye"></i>';
+                    }
+                });
             }
-            return captcha;
-        }
+            togglePasswordVisibility(togglePasswordBtn, passwordInput);
+            togglePasswordVisibility(toggleRegPasswordBtn, regPasswordInput);
+        </script>
+
+        <!-- CAPTCHA Functionality with Login form API-->
+        <script>
+            // JavaScript to generate random characters for CAPTCHA
+            function generateCaptcha() 
+            {
+                const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+                let captcha = '';
+                for (let i = 0; i < 6; i++) 
+                {
+                    captcha += characters.charAt(Math.floor(Math.random() * characters.length));
+                }
+                return captcha;
+            }
     
-        // Function to refresh CAPTCHA
-        function refreshCaptcha() {
-            const generatedCaptcha = generateCaptcha();
-            const captchaCharacters = document.getElementById('captchaCharacters');
-            const captchaInput = document.getElementById('captchaInput');
-            captchaCharacters.textContent = generatedCaptcha;
-            captchaInput.value = ''; // Clear previous input
-        }
+            // Function to refresh CAPTCHA
+            function refreshCaptcha() 
+            {
+                const generatedCaptcha = generateCaptcha();
+                const captchaCharacters = document.getElementById('captchaCharacters');
+                const captchaInput = document.getElementById('captchaInput');
+                captchaCharacters.textContent = generatedCaptcha;
+                captchaInput.value = ''; // Clear previous input
+
+                return generatedCaptcha;
+            }
+
+            let generatedCaptcha = refreshCaptcha();
+
+            // Refresh CAPTCHA when the refresh button is clicked
+            document.getElementById('refreshCaptcha').addEventListener('click', function() {
+                generatedCaptcha = refreshCaptcha(); // Call refreshCaptcha when the refresh button is clicked
+            });
     
-        // Call the function to generate CAPTCHA and display it
-        const captchaCharacters = document.getElementById('captchaCharacters');
-        const captchaInput = document.getElementById('captchaInput');
+            // Validate CAPTCHA input and perform API call upon form submission
+            document.getElementById('loginForm').addEventListener('submit', function(event) 
+            {
+                event.preventDefault();
     
-        // Generate CAPTCHA characters and display them
-        const generatedCaptcha = generateCaptcha();
-        captchaCharacters.textContent = generatedCaptcha;
+                // Get the user input for CAPTCHA
+                const userInput = document.getElementById('captchaInput').value;
     
-        // Refresh CAPTCHA when the refresh button is clicked
-        document.getElementById('refreshCaptcha').addEventListener('click', refreshCaptcha);
+                // Check if user input matches the generated CAPTCHA
+                if (userInput === generatedCaptcha) 
+                {
+                    // Proceed with API call
+                    var email = document.getElementById('email').value;
+                    var password = document.getElementById('password').value;
     
-        // Validate CAPTCHA input and perform API call upon form submission
-        document.getElementById('loginForm').addEventListener('submit', function(event) {
-            event.preventDefault();
+                    fetch('http://localhost:7077/login', 
+                    {
+                        method: 'POST',
+                        headers: 
+                        {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ email: email, password: password })
+                    })
+                    .then(response => 
+                    {
+                        if (!response.ok) 
+                        {
+                            throw new Error('Invalid credentials');
+                        }
+                        return response.json();
+                    })
+                    .then(data => 
+                    {
+                        console.log(data);
+                        localStorage.setItem('token', data.token);
+                        localStorage.setItem('email', data.email);
+                        localStorage.setItem('username', data.username);
+                        if (data.roles.includes('ADMIN')) 
+                        {
+                            window.location.href = 'admindashboard.html?username=' + encodeURIComponent(data.username);
+                        } 
+                        else    
+                        {
+                            window.location.href = 'dashboard.html?username=' + encodeURIComponent(data.username);
+                        }
+                    })
+                    .catch(error => 
+                    {
+                        document.getElementById('errorMessage1').textContent = error.message;
+                        document.getElementById('errorMessage1').style.display = 'block';
     
-            // Get the user input for CAPTCHA
-            const userInput = captchaInput.value;
+                        setTimeout(function() 
+                        {
+                            document.getElementById('errorMessage1').style.display = 'none';
+                        }, 3000);
+                    });
+                } 
+                else 
+                {
+                    // Display error message for invalid CAPTCHA
+                    alert('Invalid CAPTCHA. Please try again.');
+                    generatedCaptcha = refreshCaptcha();
+                }   
+            });
+        </script>
     
-            // Check if user input matches the generated CAPTCHA
-            if (userInput === generatedCaptcha) {
-                // Proceed with API call
-                var email = document.getElementById('email').value;
-                var password = document.getElementById('password').value;
+        <!-- Register form API -->
+        <script>
+            document.getElementById('registerForm').addEventListener('submit', function(event) 
+            {
+                event.preventDefault();
     
-                fetch('http://localhost:7077/login', {
+                var username = document.getElementById('username').value;
+                var email = document.getElementById('regEmail').value; // Fetch email field value
+                var password = document.getElementById('regPassword').value;
+    
+                fetch('http://localhost:7077/signup', 
+                {
                     method: 'POST',
-                    headers: {
+                    headers: 
+                    {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ email: email, password: password })
+                    body: JSON.stringify({ username: username, email: email, password: password })
                 })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Invalid credentials');
+                .then(response => 
+                {
+                    if (!response.ok) 
+                    {
+                        throw new Error('Registration failed, User Exists!');
                     }
-                    return response.json();
-                })
-                .then(data => {
-                    console.log(data);
-                    localStorage.setItem('token', data.token);
-                    localStorage.setItem('email', data.email);
-                    localStorage.setItem('username', data.username);
-                    if (data.roles.includes('ADMIN')) {
-                        window.location.href = 'admindashboard.html?username=' + encodeURIComponent(data.username);
-                    } else {
-                        window.location.href = 'dashboard.html?username=' + encodeURIComponent(data.username);
-                    }
-                })
-                .catch(error => {
-                    document.getElementById('errorMessage1').textContent = error.message;
-                    document.getElementById('errorMessage1').style.display = 'block';
+            
+                    document.getElementById('username').value = '';
+                    document.getElementById('regEmail').value = ''; // Clear email field
+                    document.getElementById('regPassword').value = '';
+    
+                    document.getElementById('errorMessage').textContent = "Registered Successfully";
+                    document.getElementById('successMessage').style.display = 'block';
     
                     setTimeout(function() {
-                        document.getElementById('errorMessage1').style.display = 'none';
+                    document.getElementById('successMessage').style.display = 'none';
                     }, 3000);
+                })
+                .catch(error => 
+                {
+                    document.getElementById('errorMessage').textContent = error.message;
+                    document.getElementById('errorMessage').style.display = 'block';
+    
+                    setTimeout(function() 
+                    {
+                        document.getElementById('errorMessage').style.display = 'none';
+                    }, 3000);
+    
                 });
-            } else {
-                // Display error message for invalid CAPTCHA
-                alert('Invalid CAPTCHA. Please try again.');
-            }
-        });
-    </script>
-    
-    <!-- Register form API -->
-    <script>
-        document.getElementById('registerForm').addEventListener('submit', function(event) {
-        event.preventDefault();
-    
-        var username = document.getElementById('username').value;
-        var email = document.getElementById('regEmail').value; // Fetch email field value
-        var password = document.getElementById('regPassword').value;
-    
-        fetch('http://localhost:7077/signup', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ username: username, email: email, password: password })
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Registration failed, User Exists!');
-            }
-            
-            document.getElementById('username').value = '';
-            document.getElementById('regEmail').value = ''; // Clear email field
-            document.getElementById('regPassword').value = '';
-    
-            document.getElementById('errorMessage').textContent = "Registered Successfully";
-            document.getElementById('successMessage').style.display = 'block';
-    
-            setTimeout(function() {
-                document.getElementById('successMessage').style.display = 'none';
-            }, 3000);
-        })
-        .catch(error => {
-            document.getElementById('errorMessage').textContent = error.message;
-            document.getElementById('errorMessage').style.display = 'block';
-    
-            setTimeout(function() {
-                document.getElementById('errorMessage').style.display = 'none';
-            }, 3000);
-    
-        });
     
         
-    });
-    </script>
+            });
+        </script>
 
-    <!-- Slide forms functionalities -->
-    <script>
-        const signUpButton = document.getElementById('signUp');
-        const signInButton = document.getElementById('signIn');
-        const container = document.getElementById('container');
+        <!-- Slide forms functionalities -->
+        <script>
+            const signUpButton = document.getElementById('signUp');
+            const signInButton = document.getElementById('signIn');
+            const container = document.getElementById('container');
         
-        signUpButton.addEventListener('click', () => {
-            container.classList.add("right-panel-active");
-        });
+            signUpButton.addEventListener('click', () => 
+            {
+                container.classList.add("right-panel-active");
+            });
         
-        signInButton.addEventListener('click', () => {
-            container.classList.remove("right-panel-active");
-        });
-    </script>
+            signInButton.addEventListener('click', () => 
+            {
+                container.classList.remove("right-panel-active");
+            });
+        </script>
 
-    <!-- To show the Modal -->
-    <script>
-        var $j = jQuery.noConflict();
-    </script>
+        <!-- To show the Modal -->
+        <script>
+            var $j = jQuery.noConflict();
+        </script>
 
-    <!-- Forget Password API -->
-    <script>
-        function Forgot(email) {
-            var requestOptions = {
-                method: 'POST',
-                redirect: 'follow'
-            };
-
-            var url = "http://localhost:7077/forgetpassword?email=" + encodeURIComponent(email);
-
-            fetch(url, requestOptions)
-                .then(response => {
-                const successMessageElement = document.getElementById('successMessage');
-                const errorMessageElement = document.getElementById('errorMessage');
-
-                if (response.ok) {
-                    const successMessage = 'Please check your email for instructions to reset your password.';
-                    successMessageElement.textContent = successMessage;
-                    errorMessageElement.textContent = ''; // Clear error message
-                }
-                else if (response.status === 404) 
+        <!-- Forget Password API -->
+        <script>
+            function Forgot(email) 
+            {
+                var requestOptions = 
                 {
-                    const errorMessage = 'Invalid email address.';
-                    errorMessageElement.textContent = errorMessage;
-                    successMessageElement.textContent = ''; // Clear success message
-                } else 
+                    method: 'POST',
+                    redirect: 'follow'
+                };
+
+                var url = "http://localhost:7077/forgetpassword?email=" + encodeURIComponent(email);
+
+                fetch(url, requestOptions)
+                    
+                .then(response => 
                 {
+                    const successMessageElement = document.getElementById('successMessage');
+                    const errorMessageElement = document.getElementById('errorMessage');
+
+                    if (response.ok) 
+                    {
+                        const successMessage = 'Please check your email for instructions to reset your password.';
+                        successMessageElement.textContent = successMessage;
+                        errorMessageElement.textContent = ''; // Clear error message
+                    }
+                    else if (response.status === 404) 
+                    {
+                        const errorMessage = 'Invalid email address.';
+                        errorMessageElement.textContent = errorMessage;
+                        successMessageElement.textContent = ''; // Clear success message
+                    } 
+                    else 
+                    {
                     const errorMessage = 'Failed to reset password. Please try again later.';
                     errorMessageElement.textContent = errorMessage;
                     successMessageElement.textContent = ''; // Clear success message
-                }
-            })
-            .catch(error => console.error('Error:', error));
-        }
-    </script>
-    
-    
-</body>
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            }
+        </script>
+    </body>
 </html>
 
 
