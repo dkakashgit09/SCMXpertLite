@@ -13,5 +13,5 @@ public class DataStream
     private double First_Sensor_temperature; 
     private String Route_From; 
     private String Route_To;
-    private String TimeStamp;
+    private String Time_Stamp;
 }

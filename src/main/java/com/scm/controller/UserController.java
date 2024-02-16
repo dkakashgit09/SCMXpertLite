@@ -1,7 +1,6 @@
 package com.scm.controller;
 
 import java.io.UnsupportedEncodingException;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.scm.entity.ScmUsers;
 import com.scm.payload.request.EditRequest;
 import com.scm.payload.request.ForgotPasswordRequest;
 import com.scm.payload.request.LoginRequest;
@@ -46,9 +44,8 @@ public class UserController
 	@PostMapping("/login")
 	public ResponseEntity<?> loginValid(@RequestBody LoginRequest loginRequest)
 	{
-		Object res=userService.loginIn(loginRequest);
 
-		return (ResponseEntity<?>) res;
+		return userService.loginIn(loginRequest);
 	}
 	
 	@PostMapping("/signup")
@@ -60,23 +57,13 @@ public class UserController
 	@PostMapping("/account")
 	public ResponseEntity<?> userDetails(@RequestParam("email") String email)
 	{
-		try
-		{
-			Optional<ScmUsers> user = userService.retriveDetails(email);
-			if(user.isEmpty())
-			{
-				String errorMessage="No User Found";
-				return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
-			}
-			else
-			{
-				return new ResponseEntity<>(user, HttpStatus.OK);
-			}
-		}
-		catch(Exception e)
-		{
-			return new ResponseEntity<>("invalid details to fetch", HttpStatus.BAD_REQUEST);
-		}
+		return userService.retriveDetails(email);
+	}
+	
+	@PostMapping("/all")
+	public ResponseEntity<?> retrive()
+	{
+		return userService.retriveAll();
 	}
 	
 	@PostMapping("/edituser")
@@ -91,6 +78,7 @@ public class UserController
 		return userService.deleteUser(deleteRequest, username);
 	}
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@PostMapping("/forgetpassword")
 	public ResponseEntity<ForgetPasswordResponse> forgotPassword(@RequestParam(required = false) String email)
 	{
@@ -98,7 +86,7 @@ public class UserController
 
         String response = passwordService.forgotPassword(email);
         System.out.println(response);
-//        
+      
         if (response.equals("Invalid email id")) 
         {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
@@ -114,12 +102,13 @@ public class UserController
 
                 return new ResponseEntity(HttpStatus.BAD_REQUEST);
             }
-//            
+         
             System.out.println(response);
             return new ResponseEntity(response, HttpStatus.OK);
         }
 	}
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@PostMapping("/resetpassword")
 	public ResponseEntity<ForgotPasswordRequest> resetPassword(@RequestParam(required = false) String token, @RequestParam String password) 
 	{

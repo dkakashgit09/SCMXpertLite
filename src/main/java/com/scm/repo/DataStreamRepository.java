@@ -1,10 +1,12 @@
 package com.scm.repo;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.stereotype.Repository;
 
 import com.scm.entity.DataStream;
 
-public interface DataStreamRepository extends CrudRepository <DataStream, String> 
+@Repository
+public interface DataStreamRepository extends MongoRepository<DataStream, String> 
 {
 
 }

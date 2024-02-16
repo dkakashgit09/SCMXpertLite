@@ -44,6 +44,11 @@ public class WebSecurityConfig
     }
 	
 	@Bean
+    public BCryptPasswordEncoder bCryptPasswordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+	
+	@Bean
     public AuthenticationProvider authenticationProvider()
 	{
         DaoAuthenticationProvider authenticationProvider=new DaoAuthenticationProvider();
@@ -63,13 +68,16 @@ public class WebSecurityConfig
 	{
 		http.cors(cors -> cors.configure(http));
 		http.csrf(csrf -> csrf.disable());
-		http.authorizeHttpRequests(req -> req.requestMatchers("/auth/login", "/auth/signup","/login","/signup","/shipment/create","/shipment/find","/account","/edituser","/deleteuser","/datastream/device").permitAll().requestMatchers("/forgetpassword").permitAll().requestMatchers("/resetpassword").permitAll());
-//		http.authorizeHttpRequests(req -> req.anyRequest().authenticated().and().formLogin().loginPage("/login").defaultSuccessUrl("/userdashboard").failureForwardUrl("/admindashboard"));
-		http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-		http.authenticationProvider(authenticationProvider());
-		http.addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class);
-		http.exceptionHandling(authentication -> authentication.authenticationEntryPoint(authEntryPointJwt));
-//		http.cors().and().csrf().disable().authorizeHttpRequests().requestMatchers("/**").permitAll().anyRequest().authenticated().and().formLogin().loginPage("/login").defaultSuccessUrl("/userdashboard").failureForwardUrl("/admindashboard");
+		http.authorizeHttpRequests(req -> req
+				.requestMatchers("/auth/login", "/auth/signup","/login","/signup","/shipment/create","/shipment/findall", "/shipment/edit", "/shipment/delete","/shipment/find","/account","/edituser","/deleteuser","/datastream/all","/all").permitAll()
+				.requestMatchers("/forgetpassword").permitAll()
+				.requestMatchers("/resetpassword").permitAll()
+				.anyRequest().authenticated()
+				)
+					.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+					.authenticationProvider(authenticationProvider())
+					.addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class)
+					.exceptionHandling(authentication -> authentication.authenticationEntryPoint(authEntryPointJwt));
 		return http.build();
 	}
 }

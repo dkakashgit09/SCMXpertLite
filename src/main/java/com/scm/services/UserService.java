@@ -1,6 +1,6 @@
 package com.scm.services;
 
-import java.util.Optional;
+import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 
@@ -14,7 +14,9 @@ public interface UserService
 {
 	public ResponseEntity<?> loginIn(LoginRequest loginRequest);
 	public ResponseEntity<?> signUp(SignRequest signupRequest);
-	public Optional<ScmUsers> retriveDetails(String email);
+	public ResponseEntity<?> retriveDetails(String email);
 	public ResponseEntity<?> editUser(EditRequest editRequest, String email, String username);
 	public ResponseEntity<?> deleteUser(LoginRequest deleteRequest, String username);
+	public ResponseEntity<List<ScmUsers>> retriveAll();
+	
 }

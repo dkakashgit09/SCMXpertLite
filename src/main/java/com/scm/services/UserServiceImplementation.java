@@ -70,6 +70,7 @@ public class UserServiceImplementation implements UserService
 		}
 		else
 		{
+			logger.warn("user not authenticated" + loginRequest.getEmail());
 			throw new UsernameNotFoundException("invalid user request !");
 		}
 
@@ -87,7 +88,7 @@ public class UserServiceImplementation implements UserService
 			users.setPassword(passwordEncoder.encode(signupRequest.getPassword()));
 
 				ScmRoles roles = new ScmRoles();
-				roles.setRole("ADMIN");
+				roles.setRole("USER");
 				Set<ScmRoles> addRole = new HashSet<>();
 				addRole.add(roles);
 				users.setRoles(addRole);
@@ -125,14 +126,14 @@ public class UserServiceImplementation implements UserService
 				}
 				else
 				{
-					logger.info("The Password You Have Entered is InCorrect");
+					logger.warn("The Password You Have Entered is InCorrect");
 					return new ResponseEntity<String>("IncorrectPassword", HttpStatus.BAD_REQUEST);
 				}
 			}
 			else
 			{
 				System.out.println(username);
-				logger.info("Users are null");
+				logger.warn("Users are null");
 				return new ResponseEntity<String>("usersarenull", HttpStatus.BAD_REQUEST);
 			}
 		}
@@ -148,92 +149,146 @@ public class UserServiceImplementation implements UserService
 	public ResponseEntity<?> deleteUser(LoginRequest deleteRequest, String username) 
 	{
 		String email=deleteRequest.getEmail();
-		ScmUsers users = userRepo.findByUsername(username);
+		ScmUsers mainUser = userRepo.findByUsername(username);
 		
-		List<ScmUsers> totalUsers = userRepo.findAll();
-		long adminCount=0;
-		for(ScmUsers user : totalUsers)
+		ScmUsers userInForm = null;
+		Set<ScmRoles> rolesForm = null;
+		ScmRoles roleForm = null;
+		String formUserRoleName = null;
+		
+		if(mainUser!=null)
 		{
-			Set<ScmRoles> roles = user.getRoles();
-			for (ScmRoles role : roles)
+
+			if(email.equals(mainUser.getEmail()))
 			{
-				if (role.getRole().equals("ADMIN"))
-				{
-					adminCount++;
-				}
-			}
-		}
-		
-		
-		if(users!=null)
-		{
-			if(email.equals(users.getEmail()))
-			{
-				String existedPassword=users.getPassword();
-				boolean existsPassword=bCryptPasswordEncoder.matches(deleteRequest.getPassword(), existedPassword);
+				Optional<ScmUsers> userIn = userRepo.findByEmail(email);
 				
-				if(existsPassword)
+				if(userIn.isPresent())
 				{
-					Set<ScmRoles> roles = users.getRoles();
-					ScmRoles role = roles.iterator().next();
-					String roleName = role.getRole();
-					
-					if(roleName.equals("ADMIN"))
+					userInForm = userIn.get();
+					rolesForm = userInForm.getRoles();
+					roleForm = rolesForm.iterator().next();
+					formUserRoleName = roleForm.getRole();
+				}
+				
+				if(formUserRoleName.equals("ADMIN"))
+				{
+					logger.warn("Single ADMIN Exists, Cant be Deleted");
+					return new ResponseEntity<String>("You Dont have Authority to Delete Admin",  HttpStatus.BAD_REQUEST);
+				}
+				else
+				{
+					String existedPassword=mainUser.getPassword();
+					boolean existsPassword=bCryptPasswordEncoder.matches(deleteRequest.getPassword(), existedPassword);
+					if(existsPassword)
 					{
-						System.out.println(adminCount + "Number of ADMIN2");
-						if(adminCount==1)
-						{
-							logger.info("Single ADMIN Exists, Cant be Deleted");
-							return new ResponseEntity<String>("!Admin-Cannot-be-Deleted",  HttpStatus.BAD_REQUEST);
-						}
-						else
-						{
-							userRepo.deleteById(users.getId());
-							logger.info("Account Deleted Sucessfully ");
-							return new ResponseEntity<String>("AccountDeleted", HttpStatus.OK);
-						}
+						userRepo.deleteById(userInForm.getId());
+						logger.info("Account Deleted Sucessfully ");
+						return new ResponseEntity<String>("AccountDeleted", HttpStatus.OK);
+						
 					}
 					else
 					{
-						userRepo.deleteById(users.getId());
-						logger.info("Account Deleted Sucessfully ");
-						return new ResponseEntity<String>("AccountDeleted", HttpStatus.OK);
+						logger.info("The Password You Have Entered is InCorrect");
+						return new ResponseEntity<String>("IncorrectPassword", HttpStatus.BAD_REQUEST);
+					}
+				}
+
+			}
+			else
+			{
+				Set<ScmRoles> roles = mainUser.getRoles();
+				ScmRoles role = roles.iterator().next();
+				String mainUserRoleName = role.getRole();
+				
+				if(mainUserRoleName.equals("ADMIN"))
+				{
+					Optional<ScmUsers> userIn = userRepo.findByEmail(email);
+					if(userIn.isPresent())
+					{
+						userInForm = userIn.get();
+						rolesForm = userInForm.getRoles();
+						roleForm = rolesForm.iterator().next();
+						formUserRoleName = roleForm.getRole();
+					}
+					
+					if(formUserRoleName==null)
+					{
+						logger.warn("Account not found in database");
+						return new ResponseEntity<String>("The account mentioned with :- " + email + " not present",  HttpStatus.BAD_REQUEST);
+					}
+					else if(formUserRoleName.equals("ADMIN"))
+					{
+						logger.warn("Single ADMIN Exists, Cant be Deleted");
+						return new ResponseEntity<String>("You Dont have Authority to Delete Admin",  HttpStatus.BAD_REQUEST);
+					}
+					else
+					{
+						String existedPassword=mainUser.getPassword();
+						boolean existsPassword=bCryptPasswordEncoder.matches(deleteRequest.getPassword(), existedPassword);
+						if(existsPassword)
+						{
+							userRepo.deleteById(userInForm.getId());
+							logger.info("Account Deleted Sucessfully ");
+							return new ResponseEntity<String>("AccountDeleted", HttpStatus.OK);
+							
+						}
+						else
+						{
+							logger.info("The Password You Have Entered is InCorrect");
+							return new ResponseEntity<String>("IncorrectPassword", HttpStatus.BAD_REQUEST);
+						}
 					}
 					
 				}
 				else
 				{
-					logger.info("The Password You Have Entered is InCorrect");
-					return new ResponseEntity<String>("IncorrectPassword", HttpStatus.BAD_REQUEST);
+					logger.warn("The given mail is not matching with your account details :- " + email);
+					return new ResponseEntity<String>("EmailNotMatching", HttpStatus.BAD_REQUEST);
 				}
+
 			}
-			else
-			{
-				logger.warn("The given mail is not matching with your account details :- " + email);
-				return new ResponseEntity<String>("EmailNotMatching", HttpStatus.BAD_REQUEST);
-			}
+			
 		}
 		else
 		{
 			logger.warn("The given mail does not contains any data :- " + email);
 			return new ResponseEntity<String>("Given-Email-Not-Exists-In-Database", HttpStatus.BAD_REQUEST);
 		}
+		
 	}
 	
 	@Override
-	public Optional<ScmUsers> retriveDetails(String email) 
+	public ResponseEntity<?> retriveDetails(String email) 
 	{
 		Optional<ScmUsers> user = userRepo.findByEmail(email);
 		if(user.isEmpty())
 		{
 			logger.warn("No User found with this email" + email);
-			return Optional.empty();
+			return new ResponseEntity<String>("Given-Email-Not-Exists-In-Database", HttpStatus.BAD_REQUEST);
 		}
 		else
 		{
-			return user;
+			logger.info("User found with this email" + email);
+			return new ResponseEntity<>(user, HttpStatus.OK);
 		}
 		
+	}
+
+	@Override
+	public ResponseEntity<List<ScmUsers>> retriveAll() 
+	{
+		List<ScmUsers> allUsers = userRepo.findAll();
+		if(allUsers.isEmpty())
+		{
+			logger.warn("No details found in database");
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		else
+		{
+			logger.info("Details sent Sucessfully ");
+			return new ResponseEntity<>(allUsers, HttpStatus.OK);
+		}
 	}
 
 

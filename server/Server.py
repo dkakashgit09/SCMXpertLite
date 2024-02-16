@@ -25,7 +25,20 @@ data =[{
  "First_Sensor_temperature":20.4 ,
  "Route_From":"Banglore, India",
  "Route_To":"Louisville, USA"
-}]
+},
+{"Battery_Level":4.57,
+ "Device_Id":1156053078,
+ "First_Sensor_temperature":20.4 ,
+ "Route_From":"Banglore, India",
+ "Route_To":"Louisville, USA"
+},
+{"Battery_Level":7.57,
+ "Device_Id":1156053079,
+ "First_Sensor_temperature":20.4 ,
+ "Route_From":"Banglore, India",
+ "Route_To":"Louisville, USA"
+}
+]
 while True:
     try:
         print("connected with", addr)

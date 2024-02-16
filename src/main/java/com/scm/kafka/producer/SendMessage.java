@@ -27,69 +27,47 @@ public class SendMessage
 	@Autowired
 	private DataProducer  producer;
 
-//	public void sendMessageToTopic()
-//	{
-//		try 
-//		{
-//			System.out.println(host+"     "+port);
-//			socket = new Socket(host, Integer.parseInt(port));
-//			input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-//			String line;
-//	        while ((line = input.readLine()) != null) 
-//	        {
-//	            producer.sendMessage(line);
-//	        }
-//		}
-//		catch(UnknownHostException e)
-//		{
-//			e.printStackTrace();
-//            System.out.println("Unknown host: " + host);
-//		}
-//		catch (IOException  e) 
-//		{
-//			e.printStackTrace();
-//            System.out.println("Error reading from socket");
-//		}
-//		finally
-//		{
-//			try 
-//			{
-//                if (input != null)
-//                {
-//                	input.close();
-//                }
-//                
-//                if (socket != null)
-//                {
-//                	socket.close();
-//                }
-//            } 
-//			catch (IOException e) 
-//			{
-//                e.printStackTrace();
-//            }
-//		}
-//	}
-
-	
-	public void sendMessageToTopic() throws NumberFormatException, UnknownHostException, IOException
+	public void sendMessageToTopic()
 	{
-		System.out.println(host+"     "+port);
-		socket = new Socket(host, Integer.parseInt(port));
-		input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-		String line = "";
-		while (!line.equals("Over"))
+		try 
 		{
-			try
+			System.out.println(host+"     "+port);
+			socket = new Socket(host, Integer.parseInt(port));
+			input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			String line;
+	        while ((line = input.readLine()) != null) 
+	        {
+	            producer.sendMessage(line);
+	        }
+		}
+		catch(UnknownHostException e)
+		{
+			e.printStackTrace();
+            System.out.println("Unknown host: " + host);
+		}
+		catch (IOException  e) 
+		{
+			e.printStackTrace();
+            System.out.println("Error reading from socket");
+		}
+		finally
+		{
+			try 
 			{
-				line = input.readLine();
-				producer.sendMessage(line);
-			}
-			catch(Exception exception)
+                if (input != null)
+                {
+                	input.close();
+                }
+                
+                if (socket != null)
+                {
+                	socket.close();
+                }
+            } 
+			catch (IOException e) 
 			{
-				System.out.println(exception);
-				System.out.println("something went wrong");
-			}
+                e.printStackTrace();
+            }
 		}
 	}
 }

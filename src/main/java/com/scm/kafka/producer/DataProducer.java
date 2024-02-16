@@ -1,6 +1,5 @@
 package com.scm.kafka.producer;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
@@ -9,7 +8,7 @@ public class DataProducer
 {
     private final KafkaTemplate<String, String> kafkaTemplate;
 
-    @Autowired
+//    @Autowired
     public DataProducer(KafkaTemplate<String, String> kafkaTemplate) 
     {
         this.kafkaTemplate = kafkaTemplate;
