@@ -515,7 +515,7 @@
                     var email = document.getElementById('email').value;
                     var password = document.getElementById('password').value;
     
-                    fetch('http://localhost:7077/login', 
+                    fetch('http://localhost:7077/auth/login', 
                     {
                         method: 'POST',
                         headers: 
@@ -577,7 +577,7 @@
                 var email = document.getElementById('regEmail').value; // Fetch email field value
                 var password = document.getElementById('regPassword').value;
     
-                fetch('http://localhost:7077/signup', 
+                fetch('http://localhost:7077/auth/signup', 
                 {
                     method: 'POST',
                     headers: 

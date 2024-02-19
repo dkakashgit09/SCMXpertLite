@@ -12,61 +12,84 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         
         <style>
-        .image-container {
-            position: relative;
-            max-height: 80vh; /* Set maximum height */
-            overflow: hidden; /* Hide overflowing content */
-        }
+            .image-container {
+                position: relative;
+                max-height: 80vh; /* Set maximum height */
+                overflow: hidden; /* Hide overflowing content */
+            }
+            
+            .image-container img {
+                width: 100%; /* Ensure image fills container width */
+                height: auto; /* Maintain aspect ratio */
+            }
     
-        .image-container img {
-            width: 100%; /* Ensure image fills container width */
-            height: auto; /* Maintain aspect ratio */
-        }
+            .overlay {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.5); /* Adjust the transparency here */
+            }
     
-        .overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5); /* Adjust the transparency here */
-        }
+            .form-container {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                z-index: 1; /* Ensure form is on top of overlay */
+                color: white; /* Adjust text color */
+            }
     
-        .form-container {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 1; /* Ensure form is on top of overlay */
-            color: white; /* Adjust text color */
-        }
+            /* Make table semi-transparent */
+            .table {
+                background-color: rgba(0, 0, 0, 0.5) !important;
+            }
     
-        /* Make table semi-transparent */
-        .table {
-            background-color: rgba(0, 0, 0, 0.5) !important;
-        }
+            /* Make table cells semi-transparent */
+            .table td {
+                background-color: rgba(0, 0, 0, 0.5) !important;
+            }
     
-        /* Make table cells semi-transparent */
-        .table td {
-            background-color: rgba(0, 0, 0, 0.5) !important;
-        }
+            /* Optional: Style submit and clear buttons */
+            .form-control.bg-success {
+                background-color: #28a745; /* Adjust button color */
+                border-color: #28a745; /* Adjust button border color */
+            }
     
-        /* Optional: Style submit and clear buttons */
-        .form-control.bg-success {
-            background-color: #28a745; /* Adjust button color */
-            border-color: #28a745; /* Adjust button border color */
-        }
+            .form-control.bg-danger {
+                background-color: #dc3545; /* Adjust button color */
+                border-color: #dc3545; /* Adjust button border color */
+            }
     
-        .form-control.bg-danger {
-            background-color: #dc3545; /* Adjust button color */
-            border-color: #dc3545; /* Adjust button border color */
-        }
-    
-        .form-control.bg-success:hover,
-        .form-control.bg-danger:hover {
-            background-color: #218838; /* Adjust button hover color */
-            border-color: #1e7e34; /* Adjust button border hover color */
-        }
+            .form-control.bg-success:hover,
+            .form-control.bg-danger:hover {
+                background-color: #218838; /* Adjust button hover color */
+                border-color: #1e7e34; /* Adjust button border hover color */
+            }
+
+            .search-container {
+                position: relative;
+            }
+
+            .search-container input {
+                padding-right: 30px; /* Adjust padding to accommodate the icon */
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                background-color: #343a40;
+                font-size: 16px;
+            }
+
+            .search-container .fas.fa-search {
+                position: absolute;
+                top: 50%;
+                right: 10px;
+                transform: translateY(-50%);
+                color:  #dc3545;
+            }
+            .search-container input::placeholder {
+                color: #54B4D3; /* Set the color you want */
+            }
         </style>
     </head>
     <body>
@@ -106,6 +129,7 @@
                             <div id="error-message" class="alert alert-danger" style="display: none;"></div>
                             <div class="search-container">
                                 <input type="text" id="searchInput" class="form-control bg-dark text-danger font-weight-bold" placeholder="Search by Device ID">
+                                <i class="fas fa-search"></i> 
                             </div>
                             <table id="streamTable" class="table table-dark">
                                 <thead class="text-warning">
@@ -128,12 +152,12 @@
                                 <ul class="pagination justify-content-center">
                                   <li class="page-item" id="prevPage">
                                     <a class="page-link bg-info font-weight-bold" href="#" aria-label="Previous">
-                                      <span aria-hidden="true" class="text-dark">&laquo; Previous Page</span>
+                                      <span aria-hidden="true" class="text-dark"><i class='fas fa-chevron-circle-left'></i>&nbsp; Previous Page</span>
                                     </a>
                                   </li>
                                   <li class="page-item" id="nextPage">
                                     <a class="page-link bg-info font-weight-bold" href="#" aria-label="Next">
-                                      <span aria-hidden="true" class="text-dark">Next Page &raquo;</span>
+                                      <span aria-hidden="true" class="text-dark"> Next Page &nbsp;<i class='fas fa-chevron-circle-right'></i></span>
                                     </a>
                                   </li>
                                 </ul>
@@ -157,16 +181,18 @@
             const rowsPerPage = 5;
             let totalPages;
             let allData;
+            let filteredStreamData;
           
             // Function to fetch data, populate the table, and manage pagination
             function fetchDataAndDisplay() {
               fetch('http://localhost:7077/datastream/all')
                 .then(response => response.json())
                 .then(data => {
-                  allData = data;
-                  totalPages = Math.ceil(data.length / rowsPerPage);
-                  displayPage(currentPage, data);
-                  addPaginationListeners();
+                    totalPages = Math.ceil(data.length / rowsPerPage);
+                    allData = data;
+                    filteredStreamData = allData;
+                    displayPage(currentPage, data);
+                    addPaginationListeners();
                 })
                 .catch(error => {
                   console.error('Error fetching data:', error);
@@ -178,43 +204,69 @@
                 $("#prevPage").click(function() {
                     if (currentPage > 1) {
                         currentPage--;
-                        displayPage(currentPage, allData);
+                        displayPage(currentPage);
                     }
                 });
                 $("#nextPage").click(function() {
                     if (currentPage < totalPages) {
                         currentPage++;
-                        displayPage(currentPage, allData);
+                        displayPage(currentPage);
                     }
                 });
             }
             // Function to display only the specified page of data
-            function displayPage(pageNumber, data) {
-              const startIndex = (pageNumber - 1) * rowsPerPage;
-              const endIndex = Math.min(startIndex + rowsPerPage, data.length);
+            function displayPage(pageNumber) {
+                const startIndex = (pageNumber - 1) * rowsPerPage;
+                const endIndex = Math.min(startIndex + rowsPerPage, filteredStreamData.length);
           
-              // Clear the table body
-              const tableBody = document.querySelector('#streamTableBody');
-              tableBody.innerHTML = ''; // Clear previous data
+                // Clear the table body
+                const tableBody = $('#streamTable tbody');
+                tableBody.empty(); // Clear previous data
           
-              // Add rows for the current page data
-              for (let i = startIndex; i < endIndex; i++) {
-                const row = data[i];
+                // Add rows for the current page data
+                for (let i = startIndex; i < endIndex; i++) {
+                    const streamData = filteredStreamData[i];
+                    appendStreamRow(streamData);
+                }
+            }
+
+            function appendStreamRow(streamData) {
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
-                  <td>${row.device_ID}</td>
-                  <td>${row.battery_Level}</td>
-                  <td>${row.first_Sensor_temperature}</td>
-                  <td>${row.route_From}</td>
-                  <td>${row.route_To}</td>
-                  <td>${row.time_Stamp}</td>
+                    <td>${streamData.device_ID}</td>
+                    <td>${streamData.battery_Level}</td>
+                    <td>${streamData.first_Sensor_temperature}</td>
+                    <td>${streamData.route_From}</td>
+                    <td>${streamData.route_To}</td>
+                    <td>${streamData.time_Stamp}</td>
                 `;
-                tableBody.appendChild(tr);
-              }
-          
-              // Update active page indicator in pagination
-              $(".page-item").removeClass("active");
-              $(`#page-${pageNumber}`).addClass("active");
+
+                $('#streamTable tbody').append(tr);
+            }
+
+            function filterAndDisplayPage(pageNumber) {
+                const searchTerm = $('#searchInput').val().trim();
+                filteredStreamData = searchTerm === '' ? allData : allData.filter(streamData => {
+                    return streamData.device_ID.toString().includes(searchTerm);
+                });
+                totalPages = Math.ceil(filteredStreamData.length / rowsPerPage);
+                displayPage(pageNumber);
+            }
+
+            function updatePagination() {
+                $('#pagination').empty();
+                $('#pagination').append(`
+                    <li class="page-item ${currentPage === 1 ? 'disabled' : ''}" id="prevPage">
+                        <a class="page-link bg-info font-weight-bold" href="#" aria-label="Previous">
+                            <span aria-hidden="true" class="text-dark">&laquo; Previous Page</span>
+                        </a>
+                    </li>
+                    <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}" id="nextPage">
+                        <a class="page-link bg-info font-weight-bold" href="#" aria-label="Next">
+                            <span aria-hidden="true" class="text-dark">Next Page &raquo;</span>
+                        </a>
+                    </li>`
+                );
             }
 
             // Call the combined function when the page loads
@@ -224,17 +276,7 @@
             setInterval(fetchDataAndDisplay, 120000); // 120 seconds (2 minutes)
             // Function to handle search by device ID
             $('#searchInput').on('input', function() {
-                const searchTerm = $(this).val().trim();
-                if (searchTerm === '') {
-                    displayPage(currentPage, allData);
-                    return;
-                }
-                const filteredData = allData.filter(item => {
-                    return (
-                        item.device_ID.toString().includes(searchTerm)
-                    );
-                });
-                displayPage(1, filteredData);
+                filterAndDisplayPage(1);
                 currentPage = 1;
             });
         </script>  

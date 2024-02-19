@@ -66,6 +66,28 @@
                 background-color: #218838; /* Adjust button hover color */
                 border-color: #1e7e34; /* Adjust button border hover color */
             }
+            .search-container {
+                position: relative;
+            }
+
+            .search-container input {
+                padding-right: 30px; /* Adjust padding to accommodate the icon */
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                background-color: #343a40;
+                font-size: 16px;
+            }
+
+            .search-container .fas.fa-search {
+                position: absolute;
+                top: 50%;
+                right: 10px;
+                transform: translateY(-50%);
+                color:  #dc3545;
+            }
+            .search-container input::placeholder {
+                color: #54B4D3; /* Set the color you want */
+            }
         </style>
     </head>
     <body>
@@ -105,6 +127,7 @@
                             <div id="error-message" class="alert alert-danger" style="display: none;"></div>
                             <div class="search-container">
                                 <input type="text" id="searchInput" class="form-control bg-dark text-danger font-weight-bold" placeholder="Enter Shipment Number / Associated Email">
+                                <i class="fas fa-search"></i> 
                             </div>
                             <table id="shipmentTable" class="table table-dark">
                                 <thead class="text-warning">
@@ -134,12 +157,12 @@
                                 <ul class="pagination justify-content-center">
                                   <li class="page-item" id="prevPage">
                                     <a class="page-link bg-info font-weight-bold" href="#" aria-label="Previous">
-                                      <span aria-hidden="true" class="text-dark">&laquo; Previous Page</span>
+                                      <span aria-hidden="true" class="text-dark"><i class='fas fa-chevron-circle-left'></i> &nbsp;Previous Page</span>
                                     </a>
                                   </li>
                                   <li class="page-item" id="nextPage">
                                     <a class="page-link bg-info font-weight-bold" href="#" aria-label="Next">
-                                      <span aria-hidden="true" class="text-dark">Next Page &raquo;</span>
+                                      <span aria-hidden="true" class="text-dark"> Next Page &nbsp;<i class='fas fa-chevron-circle-right'></i></span>
                                     </a>
                                   </li>
                                 </ul>

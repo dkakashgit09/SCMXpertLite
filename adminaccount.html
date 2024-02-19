@@ -177,7 +177,7 @@
     
                     $.ajax({
                         type: "POST",
-                        url: "http://localhost:7077/all",
+                        url: "http://localhost:7077/auth/all",
                         data: { email: email },
                         success: function(response) {
                             $('#error-message').hide();
@@ -253,7 +253,7 @@
     
                 $.ajax({
                     type: "POST",
-                    url: "http://localhost:7077/deleteuser?username=" + username, 
+                    url: "http://localhost:7077/auth/deleteuser?username=" + username, 
                     data: JSON.stringify({
                         email: $('#deleteEmail').val(),
                         password: $('#deletePassword').val()
@@ -268,7 +268,6 @@
                         // Show success message
                         $('#success-message').text("User deleted successfully.").show();
     
-                        localStorage.clear();
     
                         // Hide the success message after 3 seconds
                         setTimeout(function() {

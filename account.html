@@ -96,7 +96,7 @@
 
                     <!-- Overlay image  -->
                     <div class="image-container">
-                        <img src="./stream.jpg" alt="User Dashboard" class="img-fluid" />
+                        <img src="./data.jpg" alt="User Dashboard" class="img-fluid" />
                         <div class="overlay"></div>
 
                         <!-- Table Div -->
@@ -213,7 +213,7 @@
 
                     $.ajax({
                         type: "POST",
-                        url: "http://localhost:7077/account",
+                        url: "http://localhost:7077/auth/account",
                         data: { email: email },
                         success: function(user) {
                             $('#error-message').hide();
@@ -314,7 +314,7 @@
 
                 $.ajax({
                     type: "POST",
-                    url: "http://localhost:7077/edituser?email=" + email + "&username=" + username, 
+                    url: "http://localhost:7077/auth/edituser?email=" + email + "&username=" + username, 
                     data: JSON.stringify({
                     username: $('#editUsername').val(),
                         email: $('#editEmail').val(),
@@ -374,7 +374,7 @@
 
                 $.ajax({
                     type: "POST",
-                    url: "http://localhost:7077/deleteuser?username=" + username, 
+                    url: "http://localhost:7077/auth/deleteuser?username=" + username, 
                     data: JSON.stringify({
                         email: $('#deleteEmail').val(),
                         password: $('#deletePassword').val()

@@ -160,6 +160,7 @@
                 const rowsPerPage = 4;
                 let totalPages;
                 let allShipmentsData;
+                let filteredShipmentsData;
     
                 // Function to fetch shipments, manage pagination, and display data
                 function fetchShipmentsAndDisplay() {
@@ -169,6 +170,7 @@
                         // Calculate total pages
                         totalPages = Math.ceil(data.length / rowsPerPage);
                         allShipmentsData = data;
+                        filteredShipmentsData = allShipmentsData;
                         displayPage(currentPage, data);
                         addPaginationListeners();
                     })
@@ -184,36 +186,36 @@
                     $("#prevPage").click(function() {
                         if (currentPage > 1) {
                             currentPage--;
-                            displayPage(currentPage, allShipmentsData);
+                            displayPage(currentPage);
                         }
                     });
     
                     $("#nextPage").click(function() {
                         if (currentPage < totalPages) {
                             currentPage++;
-                            displayPage(currentPage, allShipmentsData);
+                            displayPage(currentPage);
                         }
                     });
                 }
 
                 // Function to display the specified page of shipments
-                function displayPage(pageNumber, data) {
+                function displayPage(pageNumber) {
                     const startIndex = (pageNumber - 1) * rowsPerPage;
-                    const endIndex = Math.min(startIndex + rowsPerPage, data.length);
-    
-                        // Clear the table body
-                    const tableBody = document.querySelector('#shipmentTable tbody');
-                    tableBody.innerHTML = '';
+                    const endIndex = Math.min(startIndex + rowsPerPage, filteredShipmentsData.length);
+
+                    const tableBody = $('#shipmentTable tbody');
+                    tableBody.empty();
     
                     // Add rows for the current page data
                     for (let i = startIndex; i < endIndex; i++) {
-                        const row = data[i];
-                        appendShipmentRow(row);
+                        const shipment = filteredShipmentsData[i];
+                        appendShipmentRow(shipment);
                     }
     
                     // Update active page indicator in pagination
-                    $(".page-item").removeClass("active");
-                    $(`#page-${pageNumber}`).addClass("active");
+                    // $(".page-item").removeClass("active");
+                    // $(`#page-${pageNumber}`).addClass("active");
+                    updatePagination();
                 }
     
                 // Function to append a shipment row to the table
@@ -234,25 +236,39 @@
                         <td>${shipment.description}</td>`;
                     $('#shipmentTable tbody').append(tr);
                 }
-    
+
+                function filterAndDisplayPage(pageNumber) {
+                    const searchTerm = $('#searchInput').val().trim();
+                    filteredShipmentsData = searchTerm === '' ? allShipmentsData : allShipmentsData.filter(shipment => {
+                        return shipment.shipmentNumber.toString().includes(searchTerm);
+                    });
+                    totalPages = Math.ceil(filteredShipmentsData.length / rowsPerPage);
+                    displayPage(pageNumber);
+                }
+
+                function updatePagination() {
+                    $('#pagination').empty();
+                    $('#pagination').append(`
+                        <li class="page-item ${currentPage === 1 ? 'disabled' : ''}" id="prevPage">
+                            <a class="page-link bg-info font-weight-bold" href="#" aria-label="Previous">
+                                <span aria-hidden="true" class="text-dark">&laquo; Previous Page</span>
+                            </a>
+                        </li>
+                        <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}" id="nextPage">
+                            <a class="page-link bg-info font-weight-bold" href="#" aria-label="Next">
+                                <span aria-hidden="true" class="text-dark">Next Page &raquo;</span>
+                            </a>
+                        </li>`
+                    );
+                }
+
                 // Call the function to fetch and display data
                 fetchShipmentsAndDisplay();
 
                 // Add event listener for the search input field
                 $('#searchInput').on('input', function() {
-                    const searchTerm = $(this).val().trim();
-                    if (searchTerm === '') {
-                        displayPage(currentPage, allShipmentsData);
-                        return;
-                    }
-                    const filteredData = allShipmentsData.filter(shipment => {
-                        return (
-                            shipment.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                            shipment.shipmentNumber.toString().includes(searchTerm)
-                        );
-                    });
-                    displayPage(1, filteredData); // Always display the first page when searching
-                    currentPage = 1; // Reset current page to 1 when searching
+                    filterAndDisplayPage(1);
+                    currentPage = 1;
                 });
             });
         </script>
