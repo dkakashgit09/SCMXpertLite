@@ -22,11 +22,13 @@ import org.springframework.stereotype.Service;
 
 import com.scm.entity.ScmRoles;
 import com.scm.entity.ScmUsers;
+import com.scm.entity.Shipment;
 import com.scm.payload.request.EditRequest;
 import com.scm.payload.request.LoginRequest;
 import com.scm.payload.request.SignRequest;
 import com.scm.payload.response.LoginResponse;
 import com.scm.repo.ScmUsersRepository;
+import com.scm.repo.ShipmentRepository;
 import com.scm.security.JwtUtils;
 
 @Service
@@ -37,6 +39,9 @@ public class UserServiceImplementation implements UserService
 	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+	
+	@Autowired
+	private ShipmentRepository shipmentRepo;
 	
 	@Autowired
     private AuthenticationManager authenticationManager;
@@ -182,14 +187,22 @@ public class UserServiceImplementation implements UserService
 					boolean existsPassword=bCryptPasswordEncoder.matches(deleteRequest.getPassword(), existedPassword);
 					if(existsPassword)
 					{
-						userRepo.deleteById(userInForm.getId());
-						logger.info("Account Deleted Sucessfully ");
-						return new ResponseEntity<String>("AccountDeleted", HttpStatus.OK);
-						
+						List<Shipment> listOfShipments=shipmentRepo.findByEmail(email);
+						if(listOfShipments.isEmpty())
+						{
+							userRepo.deleteById(userInForm.getId());
+							logger.info("Account Deleted Sucessfully ");
+							return new ResponseEntity<String>("AccountDeleted", HttpStatus.OK);
+						}
+						else
+						{
+							logger.info("Shipment exists cannot be deleted");
+							return new ResponseEntity<String>("Shipment exists with associated mail :- " + email + ", cannot be deleted", HttpStatus.BAD_REQUEST);
+						}
 					}
 					else
 					{
-						logger.info("The Password You Have Entered is InCorrect");
+						logger.warn("The Password You Have Entered is InCorrect");
 						return new ResponseEntity<String>("IncorrectPassword", HttpStatus.BAD_REQUEST);
 					}
 				}
@@ -228,14 +241,22 @@ public class UserServiceImplementation implements UserService
 						boolean existsPassword=bCryptPasswordEncoder.matches(deleteRequest.getPassword(), existedPassword);
 						if(existsPassword)
 						{
-							userRepo.deleteById(userInForm.getId());
-							logger.info("Account Deleted Sucessfully ");
-							return new ResponseEntity<String>("AccountDeleted", HttpStatus.OK);
-							
+							List<Shipment> listOfShipments=shipmentRepo.findByEmail(email);
+							if(listOfShipments.isEmpty())
+							{
+								userRepo.deleteById(userInForm.getId());
+								logger.info("Account Deleted Sucessfully ");
+								return new ResponseEntity<String>("AccountDeleted", HttpStatus.OK);
+							}
+							else
+							{
+								logger.info("Shipment exists cannot be deleted");
+								return new ResponseEntity<String>("Shipment exists with associated mail :- " + email + ", cannot be deleted", HttpStatus.BAD_REQUEST);
+							}
 						}
 						else
 						{
-							logger.info("The Password You Have Entered is InCorrect");
+							logger.warn("The Password You Have Entered is InCorrect");
 							return new ResponseEntity<String>("IncorrectPassword", HttpStatus.BAD_REQUEST);
 						}
 					}

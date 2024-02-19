@@ -69,9 +69,9 @@ public class WebSecurityConfig
 		http.cors(cors -> cors.configure(http));
 		http.csrf(csrf -> csrf.disable());
 		http.authorizeHttpRequests(req -> req
-				.requestMatchers("/auth/login", "/auth/signup","/login","/signup","/shipment/create","/shipment/findall", "/shipment/edit", "/shipment/delete","/shipment/find","/account","/edituser","/deleteuser","/datastream/all","/all").permitAll()
-				.requestMatchers("/forgetpassword").permitAll()
-				.requestMatchers("/resetpassword").permitAll()
+				.requestMatchers("/auth/**","/shipment/**","/datastream/all").permitAll()
+				.requestMatchers("/auth/forgetpassword").permitAll()
+				.requestMatchers("/auth/resetpassword").permitAll()
 				.anyRequest().authenticated()
 				)
 					.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
