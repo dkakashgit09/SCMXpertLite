@@ -27,10 +27,10 @@ public class ShipmentController
 	
 	
 	@PostMapping("/create")
-	public String signUpValid(@RequestBody Shipment shipment)
+	public ResponseEntity<?> signUpValid(@RequestBody Shipment shipment)
 	{
-		String response=shipmentService.saveShipment(shipment);
-		return response;
+		
+		return shipmentService.saveShipment(shipment);
 	}
 	
 	@GetMapping("/find")

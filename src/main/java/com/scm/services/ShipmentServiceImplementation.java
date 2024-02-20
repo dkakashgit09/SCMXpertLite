@@ -33,17 +33,20 @@ public class ShipmentServiceImplementation implements ShipmentService
 	private static Logger logger = LoggerFactory.getLogger(ShipmentServiceImplementation.class);
 	
 	@Override
-	public String saveShipment(Shipment shipment) 
+	public ResponseEntity<?> saveShipment(Shipment shipment) 
 	{
 		boolean exists = shipmentRepo.existsByShipmentNumber(shipment.getShipmentNumber());
 		if(!exists)
 		{
 			shipmentRepo.save(shipment);
-            return "Shipment created successfully with following number :- " + shipment.getShipmentNumber();
+			String message="Shipment created successfully with following number :- " + shipment.getShipmentNumber();
+        	logger.info("Shipment created successfully with following number :- " + shipment.getShipmentNumber());
+            return new ResponseEntity<>(message, HttpStatus.OK);
 		}
 		else
 		{
-			return "Shipment already exists with number :- " +shipment.getShipmentNumber();
+			logger.warn("Shipment already exists with number :- " +shipment.getShipmentNumber());
+            return new ResponseEntity<>("Shipment already exists with number :- " +shipment.getShipmentNumber(), HttpStatus.BAD_REQUEST);
 		}
 	}
 

@@ -46,7 +46,7 @@ public class DataConsumer
 
                 // Format timestamp to human-readable string
                 SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss a z");
-                dateFormatter.setTimeZone(TimeZone.getTimeZone("UTC+05:30")); // Set to UTC if desired
+                dateFormatter.setTimeZone(TimeZone.getTimeZone("IST"));
                 String timestampString = dateFormatter.format(new Date(timestampMillis));
 
                 // Set Time_Stamp with received timestamp

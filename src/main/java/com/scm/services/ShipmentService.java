@@ -10,7 +10,7 @@ import com.scm.payload.request.ShipmentEditRequest;
 
 public interface ShipmentService 
 {
-	public String saveShipment(Shipment shipment);
+	public ResponseEntity<?> saveShipment(Shipment shipment);
 	public ResponseEntity<?> getShipmentsByEmail(String email);
 	public ResponseEntity<List<Shipment>> getShipments();
 	public ResponseEntity<?> editShipment(ShipmentEditRequest shipment, String email);
