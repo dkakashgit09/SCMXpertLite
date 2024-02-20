@@ -225,62 +225,71 @@
 
     <!-- Create Shipment API, Form Adjustments -->
     <script>
-        function blockSpecialChar(e){
-          var k;
-          document.all ? k = e.keyCode : k = e.which;
-          return ((k > 64 && k < 91) || (k > 96 && k < 123) || k == 8 || k == 32 || (k >= 48 && k <= 57));
-        }
-    
-        function resetForm() {
-          document.getElementById("shipment").reset();
-          document.getElementById('shipmentSuccess').style.display = "none";
-          document.getElementById('shipmentError').style.display = "none";
-        }
+      function blockSpecialChar(e){
+        var k;
+        document.all ? k = e.keyCode : k = e.which;
+        return ((k > 64 && k < 91) || (k > 96 && k < 123) || k == 8 || k == 32 || (k >= 48 && k <= 57));
+      }
+  
+      function resetForm() {
+        document.getElementById("shipment").reset();
+        document.getElementById('shipmentSuccess').style.display = "none";
+        document.getElementById('shipmentError').style.display = "none";
+      }
+  
+      const email = localStorage.getItem('email');
+      console.log(email);
+      document.getElementById("shipment").addEventListener("submit", function (e) {
+        e.preventDefault();
+        var myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+        const thisForm = document.getElementById('shipment');
+        const formData = new FormData(thisForm);
+        formData.append('email', email);
+        console.log(formData);
+  
+        const raw = JSON.stringify(Object.fromEntries(formData));
+  
+        var requestOptions = {
+          method: 'POST',
+          headers: myHeaders,
+          body: raw,
+          redirect: 'follow'
+        };
+  
+        fetch("http://localhost:7077/shipment/create", requestOptions)
+            .then(response => response.text())
+            .then(result => {
+              // Here comparing the input result if the result is existing returns the success msg otherwise returns the error msg
+              if (result.toLowerCase().includes("exists")) {
+                document.getElementById('shipmentSuccess').style.display = "none";
+                document.getElementById('shipmentError').style.display = "block";
+                document.getElementById('shipmentError').innerText = result;
 
-        const email = localStorage.getItem('email');
-        console.log(email);
-        document.getElementById("shipment").addEventListener("submit", function (e) {
-          e.preventDefault();
-          var myHeaders = new Headers();
-          myHeaders.append("Content-Type", "application/json");
-          const thisForm = document.getElementById('shipment');
-          const formData = new FormData(thisForm);
-          formData.append('email', email);
-          console.log(formData);
-    
-       const raw = JSON.stringify(Object.fromEntries(formData));
-       
-          var requestOptions = {
-            method: 'POST',
-            headers: myHeaders,
-            body: raw,
-            redirect: 'follow'
-          };
-    
-          fetch("http://localhost:7077/shipment/create", requestOptions)
-              .then(response => response.text())
-              .then(result => {
-                // Here comparing the input result if the result is existing retuns the success msg other wise retuns the error msg
-                if (result.includes("Exists")) {
-    
-                  document.getElementById('shipmentSuccess').style.display = "none";
-                  document.getElementById('shipmentError').style.display = "block";
-                  document.getElementById('shipmentError').innerText = result;
-                  thisForm.reset();
-    
-                }
-                else {
-    
-                  document.getElementById('shipmentError').style.display = "none";
-                  document.getElementById('shipmentSuccess').style.display = "block";
-                  document.getElementById('shipmentSuccess').innerText = result;
-                  thisForm.reset();
-    
-                }
-              })
-              .catch(error => console.log('error', error));
-          });
-        
+                thisForm.reset();
+
+                setTimeout(function() 
+                {
+                  document.getElementById('shipmentError').style.display = 'none';
+                }, 3000);
+                
+              }
+              else {
+                document.getElementById('shipmentError').style.display = "none";
+                document.getElementById('shipmentSuccess').style.display = "block";
+                document.getElementById('shipmentSuccess').innerText = result;
+
+                thisForm.reset();
+
+                setTimeout(function() 
+                {
+                  document.getElementById('shipmentSuccess').style.display = 'none';
+                }, 3000);
+              }
+            })
+            .catch(error => console.log('error', error));
+      });
     </script>
+  
   </body>
 </html>

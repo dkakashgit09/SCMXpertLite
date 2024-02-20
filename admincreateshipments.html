@@ -273,12 +273,17 @@
             .then(response => response.text())
             .then(result => {
               // Here comparing the input result if the result is existing retuns the success msg other wise retuns the error msg
-              if (result.includes("Exists")) {
+              if (result.toLowerCase().includes("exists")) {
   
                 document.getElementById('shipmentSuccess').style.display = "none";
                 document.getElementById('shipmentError').style.display = "block";
                 document.getElementById('shipmentError').innerText = result;
                 thisForm.reset();
+
+                setTimeout(function() 
+                {
+                  document.getElementById('shipmentError').style.display = 'none';
+                }, 3000);
   
               }
               else {
@@ -287,6 +292,11 @@
                 document.getElementById('shipmentSuccess').style.display = "block";
                 document.getElementById('shipmentSuccess').innerText = result;
                 thisForm.reset();
+
+                setTimeout(function() 
+                {
+                  document.getElementById('shipmentSuccess').style.display = 'none';
+                }, 3000);
   
               }
             })
