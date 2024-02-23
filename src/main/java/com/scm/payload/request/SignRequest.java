@@ -1,7 +1,6 @@
 package com.scm.payload.request;
 
-import javax.validation.constraints.Email;
-
+import jakarta.validation.constraints.Email;
 import lombok.Data;
 
 @Data

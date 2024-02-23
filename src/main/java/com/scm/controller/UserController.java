@@ -3,13 +3,16 @@ package com.scm.controller;
 import java.io.UnsupportedEncodingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -56,26 +59,26 @@ public class UserController
 		return userService.signUp(signupRequest);
 	}
 	
-	@PostMapping("/account")
-	public ResponseEntity<?> userDetails(@RequestParam("email") String email)
+	@GetMapping("/account")
+	public ResponseEntity<?> userDetails(@RequestParam String email, @RequestHeader HttpHeaders headers)
 	{
-		return userService.retriveDetails(email);
+		return userService.retriveDetails(email, headers);
 	}
 	
 	@PostMapping("/all")
-	public ResponseEntity<?> retrive()
+	public ResponseEntity<?> retrive(@RequestHeader HttpHeaders headers)
 	{
-		return userService.retriveAll();
+		return userService.retriveAll(headers);
 	}
 	
 	@PostMapping("/edituser")
-	public ResponseEntity<?> editUser(@RequestBody EditRequest editRequest, @RequestParam("email") String email, @RequestParam("username") String username)
+	public ResponseEntity<?> editUser(@RequestBody EditRequest editRequest, @RequestParam String email, @RequestParam String username)
 	{
 		return userService.editUser(editRequest, email, username);
 	}
 	
 	@PostMapping("/deleteuser")
-	public ResponseEntity<?> deleteUser(@RequestBody LoginRequest deleteRequest, @RequestParam("username") String username)
+	public ResponseEntity<?> deleteUser(@RequestBody LoginRequest deleteRequest, @RequestParam String username)
 	{
 		return userService.deleteUser(deleteRequest, username);
 	}

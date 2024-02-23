@@ -13,17 +13,20 @@ import io.jsonwebtoken.security.SignatureException;
 public class ScmExceptionHandler
 {
     @ExceptionHandler(AuthenticationException.class)
-    public ResponseEntity<Object> handleAuthenticationException(AuthenticationException authenticationException) {
+    public ResponseEntity<Object> handleAuthenticationException(AuthenticationException authenticationException) 
+    {
         return new ResponseEntity<Object>(HttpStatusCode.valueOf(401));
     }
 
     @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<Object> handleAccessDeniedException(AccessDeniedException accessDeniedException) {
+    public ResponseEntity<Object> handleAccessDeniedException(AccessDeniedException accessDeniedException) 
+    {
         return new ResponseEntity<Object>(HttpStatusCode.valueOf(403));
     }
     
     @ExceptionHandler(SignatureException.class)
-    public ResponseEntity<Object> handleSignatureException(SignatureException signatureException) {
+    public ResponseEntity<Object> handleSignatureException(SignatureException signatureException) 
+    {
         return new ResponseEntity<Object>(HttpStatusCode.valueOf(400));
     }
 }

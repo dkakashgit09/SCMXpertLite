@@ -3,11 +3,13 @@ package com.scm.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,15 +36,15 @@ public class ShipmentController
 	}
 	
 	@GetMapping("/find")
-    public ResponseEntity<?> getShipmentsByEmail(@RequestParam("email") String email) 
+    public ResponseEntity<?> getShipmentsByEmail(@RequestParam String email, @RequestHeader HttpHeaders headers) 
 	{
-		return shipmentService.getShipmentsByEmail(email);
+		return shipmentService.getShipmentsByEmail(email, headers);
     }
 	
 	@GetMapping("/findall")
-	public ResponseEntity<List<Shipment>> getAll()
+	public ResponseEntity<List<Shipment>> getAll(@RequestHeader HttpHeaders headers)
 	{
-		return shipmentService.getShipments();
+		return shipmentService.getShipments(headers);
 	}
 	
 	@PostMapping("/edit")

@@ -18,7 +18,6 @@ public class UserDetailsServiceImplementation implements UserDetailsService
 	@Autowired
 	ScmUsersRepository userRepo;
 
-	//This method is to load user details by username
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException 
 	{

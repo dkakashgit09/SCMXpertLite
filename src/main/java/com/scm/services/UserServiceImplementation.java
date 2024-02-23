@@ -1,5 +1,6 @@
 package com.scm.services;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -10,11 +11,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -51,6 +54,9 @@ public class UserServiceImplementation implements UserService
 	
 	@Autowired
 	private JwtUtils jwtUtils;
+
+	@Autowired
+	private UserDetailsServiceImplementation userDetailsService;
 	
 	private static Logger logger = LoggerFactory.getLogger(UserServiceImplementation.class);
 
@@ -280,7 +286,7 @@ public class UserServiceImplementation implements UserService
 	}
 	
 	@Override
-	public ResponseEntity<?> retriveDetails(String email) 
+	public ResponseEntity<?> retriveDetails(String email, HttpHeaders headers) 
 	{
 		Optional<ScmUsers> user = userRepo.findByEmail(email);
 		if(user.isEmpty())
@@ -290,14 +296,46 @@ public class UserServiceImplementation implements UserService
 		}
 		else
 		{
-			logger.info("User found with this email" + email);
-			return new ResponseEntity<>(user, HttpStatus.OK);
+			String authorizationHeader = headers.getFirst(HttpHeaders.AUTHORIZATION);
+		    String token = null;
+		    String username = null;
+		    if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) 
+		    {
+		        token = authorizationHeader.substring(7);
+		        if (jwtUtils.isTokenExpired(token)) {
+		            logger.warn("Token Time Expired");
+		            return new ResponseEntity<>(Collections.emptyList(), HttpStatus.BAD_REQUEST);
+		        }
+		        username = jwtUtils.extractUsername(token);
+		    }
+
+		    if (username != null) 
+		    {
+		    	UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+		    	if (jwtUtils.validateToken(token, userDetails)) 
+		        {
+		    		logger.info("User found with this email" + email);
+					return new ResponseEntity<>(user, HttpStatus.OK);
+		        }
+		    	else
+		    	{
+					logger.warn("Token Validation Failed");
+					return new ResponseEntity<>(Collections.emptyList(), HttpStatus.BAD_REQUEST);
+		    	}
+
+		    }
+		    else
+		    {
+				logger.warn("Details Not Authenticated");
+				return new ResponseEntity<>(Collections.emptyList(), HttpStatus.BAD_REQUEST);
+		    }
+			
 		}
 		
 	}
 
 	@Override
-	public ResponseEntity<List<ScmUsers>> retriveAll() 
+	public ResponseEntity<List<ScmUsers>> retriveAll(HttpHeaders headers) 
 	{
 		List<ScmUsers> allUsers = userRepo.findAll();
 		if(allUsers.isEmpty())
@@ -307,8 +345,39 @@ public class UserServiceImplementation implements UserService
 		}
 		else
 		{
-			logger.info("Details sent Sucessfully ");
-			return new ResponseEntity<>(allUsers, HttpStatus.OK);
+			String authorizationHeader = headers.getFirst(HttpHeaders.AUTHORIZATION);
+		    String token = null;
+		    String username = null;
+		    if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) 
+		    {
+		        token = authorizationHeader.substring(7);
+		        if (jwtUtils.isTokenExpired(token)) {
+		            logger.warn("Token Time Expired");
+		            return new ResponseEntity<>(Collections.emptyList(), HttpStatus.BAD_REQUEST);
+		        }
+		        username = jwtUtils.extractUsername(token);
+		    }
+
+		    if (username != null) 
+		    {
+		    	UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+		    	if (jwtUtils.validateToken(token, userDetails)) 
+		        {
+					logger.info("Details sent Sucessfully ");
+					return new ResponseEntity<>(allUsers, HttpStatus.OK);
+		        }
+		    	else
+		    	{
+					logger.warn("Token Validation Failed");
+					return new ResponseEntity<>(Collections.emptyList(), HttpStatus.BAD_REQUEST);
+		    	}
+
+		    }
+		    else
+		    {
+				logger.warn("Details Not Authenticated");
+				return new ResponseEntity<>(Collections.emptyList(), HttpStatus.BAD_REQUEST);
+		    }
 		}
 	}
 

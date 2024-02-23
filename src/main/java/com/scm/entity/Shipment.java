@@ -1,10 +1,9 @@
 package com.scm.entity;
 
-import javax.validation.constraints.Email;
-
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import jakarta.validation.constraints.Email;
 import lombok.Data;
 
 @Data
@@ -26,6 +25,6 @@ public class Shipment
 	private String description;
 	
 	@Email
-    private String email; // Email address associated with the shipment
+    private String email; // Email associated with the shipment
 
 }

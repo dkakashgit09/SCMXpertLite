@@ -1,5 +1,6 @@
 package com.scm.services;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -7,8 +8,10 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +22,7 @@ import com.scm.payload.request.ShipmentDeleteRequest;
 import com.scm.payload.request.ShipmentEditRequest;
 import com.scm.repo.ScmUsersRepository;
 import com.scm.repo.ShipmentRepository;
+import com.scm.security.JwtUtils;
 
 @Service
 public class ShipmentServiceImplementation implements ShipmentService 
@@ -29,6 +33,10 @@ public class ShipmentServiceImplementation implements ShipmentService
 	private ScmUsersRepository userRepo;
 	@Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
+	@Autowired
+	private JwtUtils jwtUtils;
+	@Autowired
+	private UserDetailsServiceImplementation userDetailsService;
 	
 	private static Logger logger = LoggerFactory.getLogger(ShipmentServiceImplementation.class);
 	
@@ -51,7 +59,7 @@ public class ShipmentServiceImplementation implements ShipmentService
 	}
 
 	@Override
-	public ResponseEntity<?> getShipmentsByEmail(String email) 
+	public ResponseEntity<?> getShipmentsByEmail(String email, HttpHeaders headers) 
 	{
 		List<Shipment> shipments = shipmentRepo.findByEmail(email);
         if (shipments.isEmpty()) 
@@ -62,12 +70,44 @@ public class ShipmentServiceImplementation implements ShipmentService
         }
         else
         {
-        	return new ResponseEntity<>(shipments, HttpStatus.OK);
+			String authorizationHeader = headers.getFirst(HttpHeaders.AUTHORIZATION);
+		    String token = null;
+		    String username = null;
+		    if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) 
+		    {
+		        token = authorizationHeader.substring(7);
+		        if (jwtUtils.isTokenExpired(token)) {
+		            logger.warn("Token Time Expired");
+		            return new ResponseEntity<>(Collections.emptyList(), HttpStatus.BAD_REQUEST);
+		        }
+		        username = jwtUtils.extractUsername(token);
+		    }
+
+		    if (username != null) 
+		    {
+		    	UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+		    	if (jwtUtils.validateToken(token, userDetails)) 
+		        {
+					logger.info("Details sent Sucessfully ");
+					return new ResponseEntity<>(shipments, HttpStatus.OK);
+		        }
+		    	else
+		    	{
+					logger.warn("Token Validation Failed");
+					return new ResponseEntity<>(Collections.emptyList(), HttpStatus.BAD_REQUEST);
+		    	}
+
+		    }
+		    else
+		    {
+				logger.warn("Details Not Authenticated");
+				return new ResponseEntity<>(Collections.emptyList(), HttpStatus.BAD_REQUEST);
+		    }
         }
 	}
 	
 	@Override
-	public ResponseEntity<List<Shipment>> getShipments() 
+	public ResponseEntity<List<Shipment>> getShipments(HttpHeaders headers) 
 	{
 		List<Shipment> allShipments = shipmentRepo.findAll();
 		if(allShipments.isEmpty())
@@ -77,8 +117,40 @@ public class ShipmentServiceImplementation implements ShipmentService
 		}
 		else
 		{
-			logger.info("Details sent Sucessfully ");
-			return new ResponseEntity<>(allShipments, HttpStatus.OK);
+			String authorizationHeader = headers.getFirst(HttpHeaders.AUTHORIZATION);
+		    String token = null;
+		    String username = null;
+		    if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) 
+		    {
+		        token = authorizationHeader.substring(7);
+		        if (jwtUtils.isTokenExpired(token)) {
+		            logger.warn("Token Time Expired");
+		            return new ResponseEntity<>(Collections.emptyList(), HttpStatus.BAD_REQUEST);
+		        }
+		        // If token is not expired, extract username
+		        username = jwtUtils.extractUsername(token);
+		    }
+
+		    if (username != null) 
+		    {
+		    	UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+		    	if (jwtUtils.validateToken(token, userDetails)) 
+		        {
+					logger.info("Details sent Sucessfully ");
+					return new ResponseEntity<>(allShipments, HttpStatus.OK);
+		        }
+		    	else
+		    	{
+					logger.warn("Token Validation Failed");
+					return new ResponseEntity<>(Collections.emptyList(), HttpStatus.BAD_REQUEST);
+		    	}
+
+		    }
+		    else
+		    {
+				logger.warn("Details Not Authenticated");
+				return new ResponseEntity<>(Collections.emptyList(), HttpStatus.BAD_REQUEST);
+		    }
 		}
 	}
 
@@ -169,7 +241,7 @@ public class ShipmentServiceImplementation implements ShipmentService
 				}
 				else
 				{
-					logger.info("The Password You Have Entered is InCorrect");
+					logger.warn("The Password You Have Entered is InCorrect");
 					return new ResponseEntity<String>("IncorrectPassword", HttpStatus.BAD_REQUEST);
 				}
 			}

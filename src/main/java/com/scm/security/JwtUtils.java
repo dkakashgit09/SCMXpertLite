@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
@@ -22,17 +23,22 @@ import io.jsonwebtoken.security.Keys;
 public class JwtUtils 
 {
 
-	//Secret key used for signing JWT tokens, retrieved from application properties
 	@Value("${secret}")
 	private String jwtSecret;
 	
-	//JWT token expiration time in milliseconds, retrieved from application properties
 	@Value("${expire.time}")
 	private Long jwtExpirationMs;
 	
 	public String extractUsername(String token) 
     {
-        return extractClaim(token, Claims::getSubject);
+		try 
+		{
+	        return extractClaim(token, Claims::getSubject);
+	    } 
+		catch (ExpiredJwtException e) 
+		{
+	        return null; 
+	    }
     }
 	
 	public Date extractExpiration(String token) 
@@ -56,9 +62,23 @@ public class JwtUtils
                 .getBody();
     }
 	
-	private Boolean isTokenExpired(String token) 
+	public Boolean isTokenExpired(String token) 
     {
-        return extractExpiration(token).before(new Date());
+		try
+		{
+			 Claims claims = extractAllClaims(token);
+			 Date expiration = claims.getExpiration();
+			 return expiration.before(new Date());
+		}
+        catch (ExpiredJwtException e) 
+		{
+        	return true;
+		}
+		catch (Exception e)
+		{
+			return false;
+		}
+		
     }
 	
 	public Boolean validateToken(String token, UserDetails userDetails) 
@@ -70,7 +90,7 @@ public class JwtUtils
 	public String generateToken(String username, Set<String> roles){
         Map<String,Object> claims=new HashMap<>();
        
-        claims.put("roles", roles);//Add additional information here
+        claims.put("roles", roles);
         return createToken(claims,username);
     }
 	
