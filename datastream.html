@@ -108,7 +108,7 @@
                         <a class="nav-link text-warning fa-md" href="./admincreateshipments.html"><strong><i class="fas fa-shipping-fast text-danger">&nbsp;&nbsp;&nbsp;</i>Create Shipment</strong></a>
                     </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <li class="nav-item">
-                        <a class="nav-link text-warning fa-md" href="./adminshipments.html"><strong><i class="fa fa-database text-danger">&nbsp;&nbsp;&nbsp;</i>My Shipments</strong></a>
+                        <a class="nav-link text-warning fa-md" href="./adminshipments.html"><strong><i class="fa fa-database text-danger">&nbsp;&nbsp;&nbsp;</i>Shipments</strong></a>
                     </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <li class="nav-item">
                         <a class="nav-link text-warning fa-md" href="./home.html"><strong><i class="fas fa-sign-out-alt text-danger">&nbsp;&nbsp;&nbsp;</i>Logout</strong></a>
@@ -127,6 +127,8 @@
                         <!-- Stream Data -->
                         <div class="form-container">
                             <div id="error-message" class="alert alert-danger" style="display: none;"></div>
+                            <!-- Session Error Messages -->
+                            <div class="alert alert-danger" id="Error" style="display: none;"></div>
                             <div class="search-container">
                                 <input type="text" id="searchInput" class="form-control bg-dark text-danger font-weight-bold" placeholder="Search by Device ID">
                                 <i class="fas fa-search"></i> 
@@ -175,17 +177,65 @@
             </div>
         </div>
 
-        <!-- Stream API, Paginations, Search -->
+        <!-- Stream API, Paginations, Search, Session Management -->
         <script>
             let currentPage = 1;
             const rowsPerPage = 5;
             let totalPages;
             let allData;
             let filteredStreamData;
-          
+
+            $(document).ready(function() 
+            {
+                const token = localStorage.getItem('token');
+
+                // Function to check if the token is expired
+                function isTokenExpired(token) 
+                {
+                    if (!token) 
+                    {
+                        return true; // Token is considered expired if it doesn't exist
+                    }
+                    const tokenData = JSON.parse(atob(token.split('.')[1])); // Decode token payload
+                    const expirationTime = tokenData.exp * 1000; // Convert expiration time to milliseconds
+                    return Date.now() >= expirationTime; // Check if current time is greater than or equal to expiration time
+                }
+
+                // Function to automatically logout user if token is expired
+                function autoLogoutIfTokenExpired() 
+                {
+                    const token = localStorage.getItem('token');
+                    if (isTokenExpired(token)) 
+                    {
+                        document.getElementById('streamTableBody').innerHTML = '';
+
+                        let countdown = 10;
+                        const countdownInterval = setInterval(() => 
+                        {
+                            document.getElementById('Error').innerText = `Session expired or authentication failed. Please log in again. Redirecting to Login Page in ${countdown} seconds`;
+                            document.getElementById('Error').style.display = 'block';
+                            countdown--;
+                            if (countdown < 0) 
+                            {
+                                clearInterval(countdownInterval);
+                                document.getElementById('Error').style.display = 'none';
+                                localStorage.clear();
+                                window.location.href = 'home.html';
+                            }
+                        }, 1000);
+                        document.getElementById('Error').innerText = 'Session expired or authentication failed. Please log in again.';
+                    }
+                }
+                // Call autoLogoutIfTokenExpired function when page loads
+                autoLogoutIfTokenExpired(); 
+                // Call autoLogoutIfTokenExpired function periodically every minute
+                setInterval(autoLogoutIfTokenExpired, 60000);  
+            });
+
             // Function to fetch data, populate the table, and manage pagination
-            function fetchDataAndDisplay() {
-              fetch('http://localhost:7077/datastream/all')
+            function fetchDataAndDisplay() 
+            {
+              fetch('http://localhost:7078/datastream/all')
                 .then(response => response.json())
                 .then(data => {
                     totalPages = Math.ceil(data.length / rowsPerPage);
@@ -196,41 +246,49 @@
                 })
                 .catch(error => {
                   console.error('Error fetching data:', error);
-                  // Replace this with your error handling logic
                 });
             }
+
             // Function to add event listeners for pagination buttons
-            function addPaginationListeners() {
-                $("#prevPage").click(function() {
-                    if (currentPage > 1) {
+            function addPaginationListeners() 
+            {
+                $("#prevPage").click(function() 
+                {
+                    if (currentPage > 1) 
+                    {
                         currentPage--;
                         displayPage(currentPage);
                     }
                 });
-                $("#nextPage").click(function() {
-                    if (currentPage < totalPages) {
+                $("#nextPage").click(function() 
+                {
+                    if (currentPage < totalPages) 
+                    {
                         currentPage++;
                         displayPage(currentPage);
                     }
                 });
             }
+
             // Function to display only the specified page of data
-            function displayPage(pageNumber) {
+            function displayPage(pageNumber) 
+            {
                 const startIndex = (pageNumber - 1) * rowsPerPage;
                 const endIndex = Math.min(startIndex + rowsPerPage, filteredStreamData.length);
           
-                // Clear the table body
                 const tableBody = $('#streamTable tbody');
                 tableBody.empty(); // Clear previous data
           
                 // Add rows for the current page data
-                for (let i = startIndex; i < endIndex; i++) {
+                for (let i = startIndex; i < endIndex; i++) 
+                {
                     const streamData = filteredStreamData[i];
                     appendStreamRow(streamData);
                 }
             }
 
-            function appendStreamRow(streamData) {
+            function appendStreamRow(streamData) 
+            {
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
                     <td>${streamData.device_ID}</td>
@@ -244,7 +302,8 @@
                 $('#streamTable tbody').append(tr);
             }
 
-            function filterAndDisplayPage(pageNumber) {
+            function filterAndDisplayPage(pageNumber) 
+            {
                 const searchTerm = $('#searchInput').val().trim();
                 filteredStreamData = searchTerm === '' ? allData : allData.filter(streamData => {
                     return streamData.device_ID.toString().includes(searchTerm);
@@ -253,7 +312,8 @@
                 displayPage(pageNumber);
             }
 
-            function updatePagination() {
+            function updatePagination() 
+            {
                 $('#pagination').empty();
                 $('#pagination').append(`
                     <li class="page-item ${currentPage === 1 ? 'disabled' : ''}" id="prevPage">
@@ -275,7 +335,8 @@
             // Interval to reload data periodically (optional)
             setInterval(fetchDataAndDisplay, 120000); // 120 seconds (2 minutes)
             // Function to handle search by device ID
-            $('#searchInput').on('input', function() {
+            $('#searchInput').on('input', function() 
+            {
                 filterAndDisplayPage(1);
                 currentPage = 1;
             });

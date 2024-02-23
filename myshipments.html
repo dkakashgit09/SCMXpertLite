@@ -100,6 +100,9 @@
                         <!-- Shipments Table -->
                         <div class="form-container">
                             <div id="error-message" class="alert alert-danger" style="display: none;"></div>
+                            <!-- Session Error messages -->
+                            <div class="alert alert-danger" id="shipmentError" style="display: none; margin-left: 35%; margin-right: 35%;"></div>
+                            
                             <div class="search-container">
                                 <input type="text" id="searchInput" class="form-control bg-dark text-danger font-weight-bold" placeholder="Enter Shipment Number / Associated Email">
                             </div>
@@ -119,8 +122,8 @@
                                       <th>TotalGoods</th>
                                       <th>Description</th>
                                     </tr>
-                                </thead id="shipmentTableBody">
-                                <tbody>
+                                </thead>
+                                <tbody id="shipmentTableBody">
     
                                 </tbody>
                             </table>
@@ -161,11 +164,74 @@
                 let totalPages;
                 let allShipmentsData;
                 let filteredShipmentsData;
-    
+
+                const token = localStorage.getItem('token');
+                console.log(token)
+                var myHeaders = new Headers();
+                myHeaders.append("Authorization", "Bearer " + token);
+                myHeaders.append("Content-Type", "application/json");
+
+                var headers = {
+                    method: 'GET',
+                    headers: myHeaders,
+                    redirect: 'follow'
+                };
+
+                // Function to check if the token is expired
+                function isTokenExpired(token) {
+                    if (!token) {
+                        return true; // Token is considered expired if it doesn't exist
+                    }
+                    const tokenData = JSON.parse(atob(token.split('.')[1])); // Decode token payload
+                    const expirationTime = tokenData.exp * 1000; // Convert expiration time to milliseconds
+                    return Date.now() >= expirationTime; // Check if current time is greater than or equal to expiration time
+                }
+
+                // Function to automatically logout user if token is expired
+                function autoLogoutIfTokenExpired() {
+                    const token = localStorage.getItem('token');
+                    if (isTokenExpired(token)) 
+                    {
+                        document.getElementById('shipmentTableBody').innerHTML = '';
+                        let countdown = 10;
+                        const countdownInterval = setInterval(() => {
+                            document.getElementById('shipmentError').innerText = `Session expired or authentication failed. Please log in again. Redirecting to Login Page in ${countdown} seconds`;
+                            document.getElementById('shipmentError').style.display = 'block';
+                            countdown--;
+                            if (countdown < 0) {
+                                clearInterval(countdownInterval);
+                                document.getElementById('shipmentError').style.display = 'none';
+                                localStorage.clear();
+                                window.location.href = 'home.html'; 
+                            }
+                        }, 1000);
+                        document.getElementById('shipmentError').innerText = 'Session expired or authentication failed. Please log in again.';
+                    }
+                }
+
+                // Call autoLogoutIfTokenExpired function when page loads
+                autoLogoutIfTokenExpired();
+
+                // Call autoLogoutIfTokenExpired function periodically
+                setInterval(autoLogoutIfTokenExpired, 60000); // Check every minute
+
                 // Function to fetch shipments, manage pagination, and display data
                 function fetchShipmentsAndDisplay() {
-                    fetch('http://localhost:7077/shipment/find?email=' + localStorage.getItem('email'))
-                    .then(response => response.json())
+                    fetch('http://localhost:7077/shipment/find?email=' + localStorage.getItem('email'), headers)
+                    .then(response => {
+                        if (!response.ok) 
+                        {
+                            if (response.status === 400) 
+                            {
+                                throw new Error('Session expired or authentication failed');
+                            } 
+                            else 
+                            {
+                                throw new Error('Error fetching data');
+                            }
+                        }
+                        return response.json();
+                    })
                     .then(data => {
                         // Calculate total pages
                         totalPages = Math.ceil(data.length / rowsPerPage);
@@ -175,7 +241,31 @@
                         addPaginationListeners();
                     })
                     .catch(error => {
-                        console.error('Error fetching data:', error);   
+                        console.error('Error fetching data:', error);  
+                        console.log(error.message); 
+                        if (error.message.includes('Session expired') || error.message.includes('authentication failed')) 
+                        {
+                            let countdown = 10;
+                            const countdownInterval = setInterval(() => 
+                            {
+                                document.getElementById('shipmentError').innerText = `Session expired or authentication failed. Please log in again. Redirecting to Login Page in ${countdown} seconds`;
+                                document.getElementById('shipmentError').style.display = 'block';
+                                countdown--;
+                                if (countdown < 0) 
+                                {
+                                    clearInterval(countdownInterval);
+                                    document.getElementById('shipmentError').style.display = 'none';
+                                    localStorage.clear();
+                                    window.location.href = 'home.html'; 
+                                }
+                            }, 1000);
+                            document.getElementById('shipmentError').innerText = 'Session expired or authentication failed. Please log in again.';
+                        } 
+                        else 
+                        {
+                            document.getElementById('shipmentError').innerText = 'Error fetching data. Please try again later.';
+                        }
+                        document.getElementById('shipmentError').style.display = 'block';
                     });
                 }
 
@@ -184,14 +274,16 @@
                 {
                     // Add event listeners for pagination buttons
                     $("#prevPage").click(function() {
-                        if (currentPage > 1) {
+                        if (currentPage > 1) 
+                        {
                             currentPage--;
                             displayPage(currentPage);
                         }
                     });
     
                     $("#nextPage").click(function() {
-                        if (currentPage < totalPages) {
+                        if (currentPage < totalPages) 
+                        {
                             currentPage++;
                             displayPage(currentPage);
                         }
@@ -199,7 +291,8 @@
                 }
 
                 // Function to display the specified page of shipments
-                function displayPage(pageNumber) {
+                function displayPage(pageNumber) 
+                {
                     const startIndex = (pageNumber - 1) * rowsPerPage;
                     const endIndex = Math.min(startIndex + rowsPerPage, filteredShipmentsData.length);
 
@@ -207,19 +300,17 @@
                     tableBody.empty();
     
                     // Add rows for the current page data
-                    for (let i = startIndex; i < endIndex; i++) {
+                    for (let i = startIndex; i < endIndex; i++) 
+                    {
                         const shipment = filteredShipmentsData[i];
                         appendShipmentRow(shipment);
                     }
-    
-                    // Update active page indicator in pagination
-                    // $(".page-item").removeClass("active");
-                    // $(`#page-${pageNumber}`).addClass("active");
                     updatePagination();
                 }
     
                 // Function to append a shipment row to the table
-                function appendShipmentRow(shipment) {
+                function appendShipmentRow(shipment) 
+                {
                     const tr = document.createElement('tr');
                     tr.innerHTML = `
                         <td>${shipment.shipmentNumber}</td>
@@ -237,7 +328,8 @@
                     $('#shipmentTable tbody').append(tr);
                 }
 
-                function filterAndDisplayPage(pageNumber) {
+                function filterAndDisplayPage(pageNumber) 
+                {
                     const searchTerm = $('#searchInput').val().trim();
                     filteredShipmentsData = searchTerm === '' ? allShipmentsData : allShipmentsData.filter(shipment => {
                         return shipment.shipmentNumber.toString().includes(searchTerm);
@@ -246,7 +338,8 @@
                     displayPage(pageNumber);
                 }
 
-                function updatePagination() {
+                function updatePagination() 
+                {
                     $('#pagination').empty();
                     $('#pagination').append(`
                         <li class="page-item ${currentPage === 1 ? 'disabled' : ''}" id="prevPage">

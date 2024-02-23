@@ -81,7 +81,7 @@
                     <a class="nav-link text-warning fa-md" href="./admincreateshipments.html"><strong><i class="fas fa-shipping-fast text-danger">&nbsp;&nbsp;&nbsp;</i>Create Shipment</strong></a>
                   </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <li class="nav-item">
-                  <a class="nav-link text-warning fa-md" href="./adminshipments.html"><strong><i class="fa fa-database text-danger">&nbsp;&nbsp;&nbsp;</i>My Shipments</strong></a>
+                  <a class="nav-link text-warning fa-md" href="./adminshipments.html"><strong><i class="fa fa-database text-danger">&nbsp;&nbsp;&nbsp;</i>Shipments</strong></a>
                 </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <li class="nav-item">
                     <a class="nav-link text-warning fa-md" href="./datastream.html"><strong><i class="fa fa-database text-danger">&nbsp;&nbsp;&nbsp;</i>Data Stream</strong></a>
@@ -104,7 +104,9 @@
 
                         <!-- Table Div -->
                         <div class="form-container">
+                            <!-- Api Error and Session Error messages -->
                             <div id="error-message" class="alert alert-danger" style="display: none;"></div>
+                            <div class="alert alert-danger" id="Error" style="display: none;"></div>
                             <table id="userTable" class="table table-dark">
                                 <thead class="text-warning">
                                     <tr>
@@ -114,12 +116,12 @@
                                       <th>Delete-User</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody id="tbody">
     
                                 </tbody>
                             </table>
+                             <!-- Success message -->
                             <div id="success-message" class="alert alert-success" style="display: none;"></div>
-                            <div id="error-message" class="alert alert-danger" style="display: none;"></div>
     
                             <!-- Delete Form -->
                             <div id="deleteFormContainer" style="display: none;">
@@ -163,27 +165,80 @@
             </div>
         </div>
 
-        <!-- Fetch User Details API -->
+        <!-- Fetch User Details API, Session Management -->
         <script>
-            $(document).ready(function() {
+            $(document).ready(function() 
+            {
                 // Function to fetch user details by email
-                function fetchUserDetails() {
+                function fetchUserDetails() 
+                {
                     var email = localStorage.getItem('email');
     
-                    if (!email) {
+                    if (!email) 
+                    {
                         console.error('User email not found in localStorage.');
                         return;
                     }
-    
+
+                    const token = localStorage.getItem('token');
+                    // Function to check if the token is expired
+                    function isTokenExpired(token) 
+                    {
+                        if (!token) {
+                            return true; // Token is considered expired if it doesn't exist
+                        }
+                        const tokenData = JSON.parse(atob(token.split('.')[1])); // Decode token payload
+                        const expirationTime = tokenData.exp * 1000; // Convert expiration time to milliseconds
+                        return Date.now() >= expirationTime; // Check if current time is greater than or equal to expiration time
+                    }
+                    // Function to automatically logout user if token is expired
+                    function autoLogoutIfTokenExpired() 
+                    {
+                        const token = localStorage.getItem('token');
+                        if (isTokenExpired(token)) 
+                        {
+                            document.getElementById('tbody').innerHTML = '';
+
+                            let countdown = 10;
+                            const countdownInterval = setInterval(() => 
+                            {
+                                document.getElementById('Error').innerText = `Session expired or authentication failed. Please log in again. Redirecting to Login Page in ${countdown} seconds`;
+                                document.getElementById('Error').style.display = 'block';
+                                countdown--;
+                                if (countdown < 0) 
+                                {
+                                    clearInterval(countdownInterval);
+                                    document.getElementById('Error').style.display = 'none';
+                                    localStorage.clear();
+                                    window.location.href = 'home.html';
+                                }
+                            }, 1000);
+                            document.getElementById('Error').innerText = 'Session expired or authentication failed. Please log in again.';
+                        }
+                    }
+                    // Call autoLogoutIfTokenExpired function when page loads
+                    autoLogoutIfTokenExpired();
+                    // Call autoLogoutIfTokenExpired function periodically every minute
+                    setInterval(autoLogoutIfTokenExpired, 60000);
+
                     $.ajax({
                         type: "POST",
                         url: "http://localhost:7077/auth/all",
                         data: { email: email },
+                        beforeSend: function(xhr) 
+                        {
+                            const token = localStorage.getItem('token');
+                            xhr.setRequestHeader("Authorization", "Bearer " + token);
+                            xhr.setRequestHeader("Content-Type", "application/json");
+                        },
                         success: function(response) {
                             $('#error-message').hide();
-                            if (response && response.length > 0) {
-                                $.each(response, function(index, user) {
-                                var roles = user.roles.map(function(roleObj) {
+                            if (response && response.length > 0) 
+                            {
+                                $.each(response, function(index, user) 
+                                {
+                                var roles = user.roles.map(function(roleObj) 
+                                {
                                     return roleObj.role;
                                 });
                                 // Display user details
@@ -196,46 +251,49 @@
                                     '</tr>'
                                 );
                                 });
-                            } else {
+                            } 
+                            else 
+                            {
                                 $('#error-message').text("User details not found").show();
                             }
                         },
-                        error: function(xhr, status, error) {
+                        error: function(xhr, status, error) 
+                        {
                             var errorMessage = xhr.status === 0 ? "Failed to connect to the server." : xhr.responseText;
-                            $('#error-message').text(errorMessage).show();
+                            $('#error-message').text(errorMessage.includes('Session expired') || errorMessage.includes('authentication failed') ? 'Session expired or authentication failed. Please log in again.' : 'Error fetching data. Please try again later.').show();
+                            setTimeout(function() 
+                            {
+                                $('#error-message').hide();
+                            }, 3000);
                         }
                     });
                 }
     
-                // Call fetchUserDetailsByEmail when the document is ready
                 fetchUserDetails();
-    
             });
         </script>
     
         <!-- To showing delete forms -->
         <script>
-                // JavaScript to handle showing delete form
-                $(document).on('click', '.deleteUserBtn', function() {
+            // Function to handle showing delete form
+            $(document).on('click', '.deleteUserBtn', function() 
+            {    
+                // Assuming each row has data attributes containing user details, extract them
+                var username = $(this).closest('tr').data('username');
+                var email = $(this).closest('tr').data('email');
+
+                // Populate the delete form fields with user details
+                $('#deleteUsername').val(username);
+                $('#deleteEmail').val(email);
+
+                $('#deleteFormContainer').show();
+            });
     
-    
-                    // Assuming each row has data attributes containing user details, extract them
-                    var username = $(this).closest('tr').data('username');
-                    var email = $(this).closest('tr').data('email');
-    
-                    // Populate the delete form fields with user details
-                    $('#deleteUsername').val(username);
-                    $('#deleteEmail').val(email);
-    
-                    // Show the delete form container
-                    $('#deleteFormContainer').show();
-                });
-    
-                // JavaScript to handle closing delete form
-                $('#deleteFormContainer').on('click', '.btn-dark', function() {
-                    // Hide the delete form container
-                    $('#deleteFormContainer').hide();
-                });
+            // Function to handle closing delete form
+            $('#deleteFormContainer').on('click', '.btn-dark', function() 
+            {
+                $('#deleteFormContainer').hide();
+            });
         </script>
         
         <!-- Delete API -->
@@ -262,15 +320,12 @@
     
                     success: function(response) 
                     {
-                        // Hide error message, if shown
                         $('#error-message').hide();
     
-                        // Show success message
                         $('#success-message').text("User deleted successfully.").show();
     
-    
-                        // Hide the success message after 3 seconds
-                        setTimeout(function() {
+                        setTimeout(function() 
+                        {
                             $('#success-message').hide();
                             location.href = "adminaccount.html";
                         }, 3000);
@@ -280,11 +335,10 @@
                     {
                         $('#success-message').hide();
     
-                        // Show error message
                         $('#error-message').text(xhr.responseText).show();
     
-                        // Hide the error message after 3 seconds
-                        setTimeout(function() {
+                        setTimeout(function() 
+                        {
                             $('#error-message').hide();
                         }, 3000);
                         console.error(xhr.responseText);

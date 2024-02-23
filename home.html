@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"dir="ltr" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<html lang="en">
     <head>
         <title>SCMXpertLite</title>
         <meta charset="utf-8" />
@@ -417,18 +417,17 @@
 
         <!-- To Handle Forgot Password Modal Functionality -->
         <script>
-            // JavaScript to handle Forgot Password modal
+            // Function to handle Forgot Password modal
             document.getElementById('forgotPasswordLink').addEventListener('click', function() 
             {
                 $('#forgotPasswordModal').modal('show');
             });
 
-            // JavaScript for handling Forgot Password form submission
+            // Function for handling Forgot Password form submission
             document.getElementById('forgotPasswordForm').addEventListener('submit', function(event) 
             {
                 event.preventDefault();
-            // Implement logic to handle Forgot Password form submission
-            // For example, you can send a request to your backend API to reset the password
+                // Make API call to reset password
             });
         </script>
 
@@ -448,8 +447,7 @@
             {
                 let passwordVisible = false;
     
-                button.addEventListener('click', function () 
-                {
+                button.addEventListener('click', function () {
                     passwordVisible = !passwordVisible;
                     if (passwordVisible) 
                     {
@@ -469,7 +467,7 @@
 
         <!-- CAPTCHA Functionality with Login form API-->
         <script>
-            // JavaScript to generate random characters for CAPTCHA
+            // Function to generate random characters for CAPTCHA
             function generateCaptcha() 
             {
                 const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -497,12 +495,11 @@
 
             // Refresh CAPTCHA when the refresh button is clicked
             document.getElementById('refreshCaptcha').addEventListener('click', function() {
-                generatedCaptcha = refreshCaptcha(); // Call refreshCaptcha when the refresh button is clicked
+                generatedCaptcha = refreshCaptcha(); 
             });
     
             // Validate CAPTCHA input and perform API call upon form submission
-            document.getElementById('loginForm').addEventListener('submit', function(event) 
-            {
+            document.getElementById('loginForm').addEventListener('submit', function(event) {
                 event.preventDefault();
     
                 // Get the user input for CAPTCHA
@@ -515,8 +512,7 @@
                     var email = document.getElementById('email').value;
                     var password = document.getElementById('password').value;
     
-                    fetch('http://localhost:7077/auth/login', 
-                    {
+                    fetch('http://localhost:7077/auth/login', {
                         method: 'POST',
                         headers: 
                         {
@@ -524,16 +520,14 @@
                         },
                         body: JSON.stringify({ email: email, password: password })
                     })
-                    .then(response => 
-                    {
+                    .then(response => {
                         if (!response.ok) 
                         {
                             throw new Error('Invalid credentials');
                         }
                         return response.json();
                     })
-                    .then(data => 
-                    {
+                    .then(data => {
                         console.log(data);
                         localStorage.setItem('token', data.token);
                         localStorage.setItem('email', data.email);
@@ -547,8 +541,7 @@
                             window.location.href = 'dashboard.html?username=' + encodeURIComponent(data.username);
                         }
                     })
-                    .catch(error => 
-                    {
+                    .catch(error => {
                         document.getElementById('errorMessage1').textContent = error.message;
                         document.getElementById('errorMessage1').style.display = 'block';
     
@@ -560,7 +553,6 @@
                 } 
                 else 
                 {
-                    // Display error message for invalid CAPTCHA
                     alert('Invalid CAPTCHA. Please try again.');
                     generatedCaptcha = refreshCaptcha();
                 }   
@@ -569,16 +561,14 @@
     
         <!-- Register form API -->
         <script>
-            document.getElementById('registerForm').addEventListener('submit', function(event) 
-            {
+            document.getElementById('registerForm').addEventListener('submit', function(event) {
                 event.preventDefault();
     
                 var username = document.getElementById('username').value;
-                var email = document.getElementById('regEmail').value; // Fetch email field value
+                var email = document.getElementById('regEmail').value; 
                 var password = document.getElementById('regPassword').value;
     
-                fetch('http://localhost:7077/auth/signup', 
-                {
+                fetch('http://localhost:7077/auth/signup', {
                     method: 'POST',
                     headers: 
                     {
@@ -586,26 +576,25 @@
                     },
                     body: JSON.stringify({ username: username, email: email, password: password })
                 })
-                .then(response => 
-                {
+                .then(response => {
                     if (!response.ok) 
                     {
                         throw new Error('Registration failed, User Exists!');
                     }
             
                     document.getElementById('username').value = '';
-                    document.getElementById('regEmail').value = ''; // Clear email field
+                    document.getElementById('regEmail').value = ''; 
                     document.getElementById('regPassword').value = '';
     
                     document.getElementById('errorMessage').textContent = "Registered Successfully";
                     document.getElementById('successMessage').style.display = 'block';
     
-                    setTimeout(function() {
-                    document.getElementById('successMessage').style.display = 'none';
+                    setTimeout(function() 
+                    {
+                        document.getElementById('successMessage').style.display = 'none';
                     }, 3000);
                 })
-                .catch(error => 
-                {
+                .catch(error => {
                     document.getElementById('errorMessage').textContent = error.message;
                     document.getElementById('errorMessage').style.display = 'block';
     
@@ -615,8 +604,6 @@
                     }, 3000);
     
                 });
-    
-        
             });
         </script>
 
@@ -626,13 +613,11 @@
             const signInButton = document.getElementById('signIn');
             const container = document.getElementById('container');
         
-            signUpButton.addEventListener('click', () => 
-            {
+            signUpButton.addEventListener('click', () => {
                 container.classList.add("right-panel-active");
             });
         
-            signInButton.addEventListener('click', () => 
-            {
+            signInButton.addEventListener('click', () => {
                 container.classList.remove("right-panel-active");
             });
         </script>
@@ -656,8 +641,7 @@
 
                 fetch(url, requestOptions)
                     
-                .then(response => 
-                {
+                .then(response => {
                     const successMessageElement = document.getElementById('successMessage');
                     const errorMessageElement = document.getElementById('errorMessage');
 
@@ -685,6 +669,3 @@
         </script>
     </body>
 </html>
-
-
-

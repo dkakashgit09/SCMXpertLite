@@ -98,6 +98,8 @@
               <div class="form-container">
                 <!-- Create Shipment form goes here -->
                 <form id="shipment">
+                  <!-- Session Error Messages -->
+                  <div class="alert alert-danger" id="Error" style="display: none;"></div>
                   <h1 class="text-center" style="color: #bbafaf;"><strong>Create a New Shipment</strong></h1>
                   <table class="table table-dark">
                     <tr>
@@ -207,6 +209,7 @@
                     </tr>
                   </table>
 
+                  <!-- Sucess and Error Messages -->
                   <div class="alert alert-info" id="shipmentSuccess" style="display: none;"></div>
                   <div class="alert alert-danger" id="shipmentError" style="display: none;"></div>
                 </form>
@@ -231,7 +234,8 @@
         return ((k > 64 && k < 91) || (k > 96 && k < 123) || k == 8 || k == 32 || (k >= 48 && k <= 57));
       }
   
-      function resetForm() {
+      function resetForm() 
+      {
         document.getElementById("shipment").reset();
         document.getElementById('shipmentSuccess').style.display = "none";
         document.getElementById('shipmentError').style.display = "none";
@@ -261,7 +265,8 @@
             .then(response => response.text())
             .then(result => {
               // Here comparing the input result if the result is existing returns the success msg otherwise returns the error msg
-              if (result.toLowerCase().includes("exists")) {
+              if (result.toLowerCase().includes("exists")) 
+              {
                 document.getElementById('shipmentSuccess').style.display = "none";
                 document.getElementById('shipmentError').style.display = "block";
                 document.getElementById('shipmentError').innerText = result;
@@ -274,7 +279,8 @@
                 }, 3000);
                 
               }
-              else {
+              else 
+              {
                 document.getElementById('shipmentError').style.display = "none";
                 document.getElementById('shipmentSuccess').style.display = "block";
                 document.getElementById('shipmentSuccess').innerText = result;
@@ -288,6 +294,54 @@
               }
             })
             .catch(error => console.log('error', error));
+      });
+    </script>
+
+    <!-- Session Management -->
+    <script>
+      $(document).ready(function() {
+        const token = localStorage.getItem('token');
+
+        // Function to check if the token is expired
+        function isTokenExpired(token) 
+        {
+          if (!token) 
+          {
+            return true; // Token is considered expired if it doesn't exist
+          }
+          const tokenData = JSON.parse(atob(token.split('.')[1])); // Decode token payload
+          const expirationTime = tokenData.exp * 1000; // Convert expiration time to milliseconds
+          return Date.now() >= expirationTime; // Check if current time is greater than or equal to expiration time
+        }
+
+        // Function to automatically logout user if token is expired
+        function autoLogoutIfTokenExpired() 
+        {
+          const token = localStorage.getItem('token');
+          if (isTokenExpired(token)) 
+          {
+            let countdown = 10;
+            const countdownInterval = setInterval(() => 
+            {
+              document.getElementById('Error').innerText = `Session expired or authentication failed. Please log in again. Redirecting to Login Page in ${countdown} seconds`;
+              document.getElementById('Error').style.display = 'block';
+              countdown--;
+              if (countdown < 0) 
+              {
+                clearInterval(countdownInterval);
+                document.getElementById('Error').style.display = 'none';
+                localStorage.clear();
+                window.location.href = 'home.html'; // Redirect to home.html
+              }
+            }, 1000);
+            document.getElementById('Error').innerText = 'Session expired or authentication failed. Please log in again.';
+          }
+        }
+        
+        // Call autoLogoutIfTokenExpired function when page loads
+        autoLogoutIfTokenExpired();
+        // Call autoLogoutIfTokenExpired function periodically
+        setInterval(autoLogoutIfTokenExpired, 60000); // Check every minute
       });
     </script>
   

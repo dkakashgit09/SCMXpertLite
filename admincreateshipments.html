@@ -80,7 +80,7 @@
             <a class="nav-link text-warning fa-md" href="./adminaccount.html"><strong><i class="fas fa-user-tie text-danger">&nbsp;&nbsp;&nbsp;</i>Accounts</strong></a>
           </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           <li class="nav-item">
-            <a class="nav-link text-warning fa-md" href="./adminshipments.html"><strong><i class="fas fa-box text-danger">&nbsp;&nbsp;&nbsp;</i>My Shipments</strong></a>
+            <a class="nav-link text-warning fa-md" href="./adminshipments.html"><strong><i class="fas fa-box text-danger">&nbsp;&nbsp;&nbsp;</i>Shipments</strong></a>
           </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           <li class="nav-item">
               <a class="nav-link text-warning fa-md" href="./datastream.html"><strong><i class="fa fa-database text-danger">&nbsp;&nbsp;&nbsp;</i>Data Stream</strong></a>
@@ -100,6 +100,8 @@
             <img src="./shipmentpage.jpg" alt="User Dashboard" class="img-fluid" />
             <div class="overlay"></div>
             <div class="form-container">
+               <!-- Session Error messages -->
+              <div class="alert alert-danger" id="Error" style="display: none;"></div>
               <!--Shipment form goes here -->
               <form id="shipment">
                 <h1 class="text-center" style="color: #bbafaf;"><strong>Create a New Shipment</strong></h1>
@@ -236,20 +238,23 @@
 
     <!-- Create Shipment API -->
     <script>
-      function blockSpecialChar(e){
+      function blockSpecialChar(e)
+      {
         var k;
         document.all ? k = e.keyCode : k = e.which;
         return ((k > 64 && k < 91) || (k > 96 && k < 123) || k == 8 || k == 32 || (k >= 48 && k <= 57));
       }
   
-      function resetForm() {
+      function resetForm() 
+      {
         document.getElementById("shipment").reset();
         document.getElementById('shipmentSuccess').style.display = "none";
         document.getElementById('shipmentError').style.display = "none";
       }
       const email = localStorage.getItem('email');
       console.log(email);
-      document.getElementById("shipment").addEventListener("submit", function (e) {
+      document.getElementById("shipment").addEventListener("submit", function (e) 
+      {
         e.preventDefault();
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
@@ -260,9 +265,10 @@
         formData.append('email', email);
         console.log(formData);
   
-     const raw = JSON.stringify(Object.fromEntries(formData));
+        const raw = JSON.stringify(Object.fromEntries(formData));
      
-        var requestOptions = {
+        var requestOptions = 
+        {
           method: 'POST',
           headers: myHeaders,
           body: raw,
@@ -273,7 +279,8 @@
             .then(response => response.text())
             .then(result => {
               // Here comparing the input result if the result is existing retuns the success msg other wise retuns the error msg
-              if (result.toLowerCase().includes("exists")) {
+              if (result.toLowerCase().includes("exists")) 
+              {
   
                 document.getElementById('shipmentSuccess').style.display = "none";
                 document.getElementById('shipmentError').style.display = "block";
@@ -286,7 +293,8 @@
                 }, 3000);
   
               }
-              else {
+              else 
+              {
   
                 document.getElementById('shipmentError').style.display = "none";
                 document.getElementById('shipmentSuccess').style.display = "block";
@@ -302,6 +310,54 @@
             })
             .catch(error => console.log('error', error));
         });
+    </script>
+
+     <!-- Session Management -->
+    <script>
+      $(document).ready(function() 
+      {
+        const token = localStorage.getItem('token');
+
+        // Function to check if the token is expired
+        function isTokenExpired(token) 
+        {
+          if (!token) 
+          {
+            return true; // Token is considered expired if it doesn't exist
+          }
+          const tokenData = JSON.parse(atob(token.split('.')[1])); // Decode token payload
+          const expirationTime = tokenData.exp * 1000; // Convert expiration time to milliseconds
+          return Date.now() >= expirationTime; // Check if current time is greater than or equal to expiration time
+        }
+
+        // Function to automatically logout user if token is expired
+        function autoLogoutIfTokenExpired() {
+          const token = localStorage.getItem('token');
+          if (isTokenExpired(token)) 
+          {
+            let countdown = 10;
+            const countdownInterval = setInterval(() => 
+            {
+              document.getElementById('Error').innerText = `Session expired or authentication failed. Please log in again. Redirecting to Login Page in ${countdown} seconds`;
+              document.getElementById('Error').style.display = 'block';
+              countdown--;
+              if (countdown < 0) 
+              {
+                clearInterval(countdownInterval);
+                document.getElementById('Error').style.display = 'none';
+                localStorage.clear();
+                window.location.href = 'home.html';
+              }
+            }, 1000);
+            document.getElementById('Error').innerText = 'Session expired or authentication failed. Please log in again.';
+          }
+        }
+
+        // Call autoLogoutIfTokenExpired function when page loads
+        autoLogoutIfTokenExpired();
+        // Call autoLogoutIfTokenExpired function periodically every minute
+        setInterval(autoLogoutIfTokenExpired, 60000); 
+      });
     </script>
   </body>
 </html>

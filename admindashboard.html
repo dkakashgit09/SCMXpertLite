@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"dir="ltr" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<html lang="en">
   <head>
     <title>SCMXpertLite</title>
     <meta charset="utf-8" />
@@ -66,7 +66,7 @@
             <a class="nav-link text-warning fa-md" href="./adminaccount.html"><strong><i class="fas fa-user-tie text-danger">&nbsp;&nbsp;&nbsp;</i>Accounts</strong></a>
           </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           <li class="nav-item">
-            <a class="nav-link text-warning fa-md" href="./adminshipments.html"><strong><i class="fas fa-box text-danger">&nbsp;&nbsp;&nbsp;</i>My Shipments</strong></a>
+            <a class="nav-link text-warning fa-md" href="./adminshipments.html"><strong><i class="fas fa-box text-danger">&nbsp;&nbsp;&nbsp;</i>Shipments</strong></a>
           </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           <li class="nav-item">
             <a class="nav-link text-warning fa-md" href="./admincreateshipments.html"><strong><i class="fas fa-shipping-fast text-danger">&nbsp;&nbsp;&nbsp;</i>Create Shipment</strong></a>
@@ -116,6 +116,8 @@
               <hr class="d-sm-none">
             </div>
             <div class="col-sm-8">
+              <!-- Session Error messages -->
+              <div class="alert alert-danger" id="Error" style="display: none;"></div>
               <h1 id="welcomeMessage" class="font-weight-bold " style="margin-left: 30%; letter-spacing: 3px; color: rgb(0, 255, 179); text-shadow: 1px 1px 2px black, 0 0 25px rgb(0, 182, 106), 0 0 5px rgb(0, 103, 187);"></h1>
               <h2 class="text-info"><strong>SCMXpertLite</strong></h2>
               <h5 class="text-warning"><strong>Revolutionizing Supply Chain Management</strong></h5>
@@ -158,21 +160,68 @@
 
     <!-- Accordion -->
     <script>
-        $(document).ready(function() {
-            $('.card-header').on('click', function(event) {
+        $(document).ready(function() 
+        {
+            $('.card-header').on('click', function(event) 
+            {
                 event.preventDefault();
             });
         });
     </script>
 
-    <!-- Diaplay User Name -->
+    <!-- Diaplay User Name, Session Management-->
     <script>
-      // Retrieve username from local storage
       var username = localStorage.getItem('username');
-    
-      // Display welcome message
+
+      $(document).ready(function() 
+      {
+        const token = localStorage.getItem('token');
+
+        // Function to check if the token is expired
+        function isTokenExpired(token) 
+        {
+          if (!token) 
+          {
+            return true; // Token is considered expired if it doesn't exist
+          }
+          const tokenData = JSON.parse(atob(token.split('.')[1])); // Decode token payload
+          const expirationTime = tokenData.exp * 1000; // Convert expiration time to milliseconds
+          return Date.now() >= expirationTime; // Check if current time is greater than or equal to expiration time
+        }
+
+        // Function to automatically logout user if token is expired
+        function autoLogoutIfTokenExpired() 
+        {
+          const token = localStorage.getItem('token');
+          if (isTokenExpired(token)) 
+          {
+            let countdown = 10;
+            const countdownInterval = setInterval(() => 
+            {
+              document.getElementById('Error').innerText = `Session expired or authentication failed. Please log in again. Redirecting to Login Page in ${countdown} seconds`;
+              document.getElementById('Error').style.display = 'block';
+              countdown--;
+              if (countdown < 0) 
+              {
+                clearInterval(countdownInterval);
+                document.getElementById('Error').style.display = 'none';
+                localStorage.clear();
+                window.location.href = 'home.html';
+              }
+            }, 1000);
+            document.getElementById('Error').innerText = 'Session expired or authentication failed. Please log in again.';
+          }
+        }
+
+        // Call autoLogoutIfTokenExpired function when page loads
+        autoLogoutIfTokenExpired();
+        // Call autoLogoutIfTokenExpired function periodically
+        setInterval(autoLogoutIfTokenExpired, 60000); // Check every minute
+      });
+      
       var welcomeMessageElement = document.getElementById('welcomeMessage');
-      if (username) {
+      if (username) 
+      {
         welcomeMessageElement.innerHTML = '<div class="row align-items-center">' +
                                              '<div class="col-auto">' +
                                                  '<i class="fas fa-user-tie"></i>' +
@@ -181,7 +230,9 @@
                                                  'Welcome ' + username +
                                              '</div>' +
                                          '</div>';
-      } else {
+      } 
+      else 
+      {
         welcomeMessageElement.innerHTML = '<div class="row align-items-center">' +
                                              '<div class="col-auto">' +
                                                  '<i class="fas fa-user-tie"></i>' +

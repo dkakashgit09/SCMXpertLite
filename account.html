@@ -13,7 +13,7 @@
         <style>
             .image-container {
                 position: relative;
-                max-height: 80vh; /* Set maximum height */
+                max-height: 80vh; /* adjust height for image */
                 overflow: hidden; /* Hide overflowing content */
             }
     
@@ -101,6 +101,10 @@
 
                         <!-- Table Div -->
                         <div class="form-container">
+                            <!-- Api Error and Session Error messages -->
+                            <div id="error-message" class="alert alert-danger" style="display: none;"></div>
+                            <div class="alert alert-danger" id="Error" style="display: none;"></div>
+
                             <div id="error-message" class="alert alert-danger" style="display: none;"></div>
                             <table id="userTable" class="table table-dark">
                                 <thead class="text-warning">
@@ -112,12 +116,11 @@
                                       <th>Delete-User</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody  id="tbody">
 
                                 </tbody>
                             </table>
                             <div id="success-message" class="alert alert-success" style="display: none;"></div>
-                            <div id="error-message" class="alert alert-danger" style="display: none;"></div>
 
                             <!-- Edit Form -->
                             <div id="editFormContainer" style="display: none;">
@@ -199,27 +202,80 @@
             </div>
         </div>
 
-        <!-- Fetch User Details API -->
+        <!-- Fetch User Details API, Session Management -->
         <script>
-            $(document).ready(function() {
-                // Function to fetch user details by email
-                function fetchUserDetailsByEmail() {
+            $(document).ready(function() 
+            {
+                // Function to fetch user details by email and session management
+                function fetchUserDetailsByEmail() 
+                {
                     var email = localStorage.getItem('email');
-
-                    if (!email) {
+                    if (!email) 
+                    {
                         console.error('User email not found in localStorage.');
                         return;
                     }
 
-                    $.ajax({
-                        type: "POST",
-                        url: "http://localhost:7077/auth/account",
-                        data: { email: email },
-                        success: function(user) {
-                            $('#error-message').hide();
-                            if (user && user.email) {
+                    const token = localStorage.getItem('token');
+                    // Function to check if the token is expired
+                    function isTokenExpired(token) 
+                    {
+                        if (!token) 
+                        {
+                            return true; // Token is considered expired if it doesn't exist
+                        }
+                        const tokenData = JSON.parse(atob(token.split('.')[1])); // Decode token payload
+                        const expirationTime = tokenData.exp * 1000; // Convert expiration time to milliseconds
+                        return Date.now() >= expirationTime; // Check if current time is greater than or equal to expiration time
+                    }
 
-                                var roles = user.roles.map(function(roleObj) {
+                    // Function to automatically logout user if token is expired
+                    function autoLogoutIfTokenExpired() 
+                    {
+                        const token = localStorage.getItem('token');
+                        if (isTokenExpired(token)) 
+                        {
+                            document.getElementById('tbody').innerHTML = '';
+
+                            let countdown = 10;
+                            const countdownInterval = setInterval(() => 
+                            {
+                                document.getElementById('Error').innerText = `Session expired or authentication failed. Please log in again. Redirecting to Login Page in ${countdown} seconds`;
+                                document.getElementById('Error').style.display = 'block';
+                                countdown--;
+                                if (countdown < 0) 
+                                {
+                                    clearInterval(countdownInterval);
+                                    document.getElementById('Error').style.display = 'none';
+                                    localStorage.clear();
+                                    window.location.href = 'home.html';
+                                }
+                            }, 1000);
+                            document.getElementById('Error').innerText = 'Session expired or authentication failed. Please log in again.';
+                        }
+                    }
+                    // Call autoLogoutIfTokenExpired function when page loads
+                    autoLogoutIfTokenExpired();
+                    // Call autoLogoutIfTokenExpired function periodically every minute
+                    setInterval(autoLogoutIfTokenExpired, 60000);
+
+                    $.ajax({
+                        type: "GET",
+                        url: "http://localhost:7077/auth/account",
+                        data: { email: localStorage.getItem('email') },
+                        beforeSend: function(xhr) 
+                        {
+                            const token = localStorage.getItem('token');
+                            xhr.setRequestHeader("Authorization", "Bearer " + token);
+                            xhr.setRequestHeader("Content-Type", "application/json");
+                        },
+                        success: function(user) 
+                        {
+                            $('#error-message').hide();
+                            if (user && user.email) 
+                            {
+                                var roles = user.roles.map(function(roleObj) 
+                                {
                                     return roleObj.role;
                                 });
                                 // Display user details
@@ -232,28 +288,33 @@
                                         '<td>'+ '<button class="deleteUserBtn bg-danger" style="border:10px;">'+'<i class="fas fa-trash">&nbsp;&nbsp;&nbsp;&nbsp;Delete</button>' +'</a>'+'</td>' +
                                     '</tr>'
                                 );
-                            } else {
+                            } 
+                            else 
+                            {
                                 $('#error-message').text("User details not found").show();
                             }
                         },
-                        error: function(xhr, status, error) {
+                        error: function(xhr, status, error) 
+                        {
                             var errorMessage = xhr.status === 0 ? "Failed to connect to the server." : xhr.responseText;
-                            $('#error-message').text(errorMessage).show();
+                            $('#error-message').text(errorMessage.includes('Session expired') || errorMessage.includes('authentication failed') ? 'Session expired or authentication failed. Please log in again.' : 'Error fetching data. Please try again later.').show();
+                            setTimeout(function() 
+                            {
+                                $('#error-message').hide();
+                            }, 3000);
                         }
                     }); 
                 }
 
-                // Call fetchUserDetailsByEmail when the document is ready
                 fetchUserDetailsByEmail();
-
             });
         </script>
 
         <!-- To showing edit and delete forms -->
         <script>
-            // JavaScript to handle showing edit form
-            $(document).on('click', '.editUserBtn', function() {
-                // Hide delete form container
+            // Function to handle showing edit form
+            $(document).on('click', '.editUserBtn', function() 
+            {
                 $('#deleteFormContainer').hide();
 
                 // Assuming each row has data attributes containing user details, extract them
@@ -264,13 +325,12 @@
                 $('#editUsername').val(username);
                 $('#editEmail').val(email);
 
-                // Show the edit form container
                 $('#editFormContainer').show();
             });
 
-            // JavaScript to handle showing delete form
-            $(document).on('click', '.deleteUserBtn', function() {
-                // Hide edit form container
+            // Function to handle showing delete form
+            $(document).on('click', '.deleteUserBtn', function() 
+            {
                 $('#editFormContainer').hide();
 
                 // Assuming each row has data attributes containing user details, extract them
@@ -281,33 +341,34 @@
                 $('#deleteUsername').val(username);
                 $('#deleteEmail').val(email);
 
-                // Show the delete form container
                 $('#deleteFormContainer').show();
             });
 
-                // JavaScript to handle closing edit form
-            $('#editFormContainer').on('click', '.btn-dark', function() {
-                // Hide the edit form container
+            // Function to handle closing edit form
+            $('#editFormContainer').on('click', '.btn-dark', function() 
+            {
                 $('#editFormContainer').hide();
             });
 
-            // JavaScript to handle closing delete form
-            $('#deleteFormContainer').on('click', '.btn-dark', function() {
-                // Hide the delete form container
+            // Function to handle closing delete form
+            $('#deleteFormContainer').on('click', '.btn-dark', function() 
+            {
                 $('#deleteFormContainer').hide();
             });
         </script>
     
         <!-- Edit API -->
         <script>
-            $(document).on('submit', '#editUserForm', function(e) {
-                e.preventDefault(); // Prevent default form submission
+            $(document).on('submit', '#editUserForm', function(e) 
+            {
+                e.preventDefault(); 
 
                 var email = localStorage.getItem('email');
                 var username = localStorage.getItem('username');
                 var username1 = $('#editUsername').val()
                 console.log(username1);
-                if (!email) {
+                if (!email) 
+                {
                     console.error('User email not found in localStorage.');
                     return;
                 }
@@ -318,39 +379,34 @@
                     data: JSON.stringify({
                     username: $('#editUsername').val(),
                         email: $('#editEmail').val(),
-                        password: $('#oldPassword').val(), // Assuming this is the current password
+                        password: $('#oldPassword').val(),
                         updatePassword: $('#editPassword').val()
                     }),
                     contentType: "application/json",
-                    success: function(response) {
-                        
+                    success: function(response) 
+                    {
                         // Update the username in localStorage with the new value
                         localStorage.setItem('username', username1);
             
-                        // Hide error message, if shown
                         $('#error-message').hide();
 
-                        // Show success message
                         $('#success-message').text("User details updated successfully.").show();
 
-                        // Optionally, reset the form fields
-                        // $('#editUserForm')[0].reset();
-
-                        // Hide the success message after 3 seconds
-                        setTimeout(function() {
+                        setTimeout(function() 
+                        {
                             $('#success-message').hide();
                             location.reload();
                         }, 3000);
                         console.log(response);
                     },
-                    error: function(xhr, status, error) {
+                    error: function(xhr, status, error) 
+                    {
                         $('#success-message').hide();
 
-                        // Show error message
                         $('#error-message').text(xhr.responseText).show();
 
-                        // Hide the error message after 3 seconds
-                        setTimeout(function() {
+                        setTimeout(function() 
+                        {
                             $('#error-message').hide();
                         }, 3000);
                         console.error(xhr.responseText);
@@ -383,16 +439,14 @@
 
                     success: function(response) 
                     {
-                        // Hide error message, if shown
                         $('#error-message').hide();
 
-                        // Show success message
                         $('#success-message').text("User deleted successfully.").show();
 
                         localStorage.clear();
 
-                        // Hide the success message after 3 seconds
-                        setTimeout(function() {
+                        setTimeout(function() 
+                        {
                             $('#success-message').hide();
                             location.href = "home.html";
                         }, 3000);
@@ -402,11 +456,10 @@
                     {
                         $('#success-message').hide();
 
-                        // Show error message
                         $('#error-message').text(xhr.responseText).show();
 
-                        // Hide the error message after 3 seconds
-                        setTimeout(function() {
+                        setTimeout(function() 
+                        {
                             $('#error-message').hide();
                         }, 3000);
                         console.error(xhr.responseText);
