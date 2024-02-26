@@ -365,7 +365,8 @@
                                     </div>
                                 </div>
                                 <a id="forgotPasswordLink" class="text-danger font-weight-bold">Forgot your password?</a>
-                                <button type="submit">login In</button>
+                                <button type="submit">login In</button><br>
+
                                 <div id="errorMessage1" style="display: none;" class="alert alert-danger" role="alert"></div>
                             </form>
                         </div>
@@ -553,7 +554,13 @@
                 } 
                 else 
                 {
-                    alert('Invalid CAPTCHA. Please try again.');
+                    document.getElementById('errorMessage1').textContent = 'Invalid CAPTCHA. Please try again.';
+                    document.getElementById('errorMessage1').style.display = 'block';
+    
+                    setTimeout(function() 
+                    {
+                        document.getElementById('errorMessage1').style.display = 'none';
+                    }, 3000);
                     generatedCaptcha = refreshCaptcha();
                 }   
             });

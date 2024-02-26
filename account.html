@@ -142,10 +142,20 @@
                                                 <input type="text" class="form-control" id="editEmail" name="email" required placeholder="Enter Your Registered Email">
                                             </td>
                                             <td>
-                                                <input type="text" class="form-control" id="editPassword" name="updatePassword" required placeholder="Enter New Password">
+                                                <div class="input-group">
+                                                    <input type="password" class="form-control" id="editPassword" name="updatePassword" required placeholder="Enter New Password">
+                                                    <button class="btn btn-outline-warning" type="button" id="editTogglePassword">
+                                                        <i class="fas fa-eye" id="editEyeIcon"></i>
+                                                    </button>
+                                                </div>                        
                                             </td>
                                             <td>
-                                                <input type="text" class="form-control" id="oldPassword" name="password" required placeholder="Confirm Your Password">
+                                                <div class="input-group">
+                                                    <input type="password" class="form-control" id="editConfirmPassword" name="confirmPassword" required placeholder="Confirm New Password">
+                                                    <button class="btn btn-outline-warning" type="button" id="editToggleConfirmPassword">
+                                                        <i class="fas fa-eye" id="editConfirmEyeIcon"></i>
+                                                    </button>
+                                                </div>
                                             </td>
                                             <tr>
                                                 <td colspan="2">
@@ -175,11 +185,16 @@
                                                 <input type="text" class="form-control" id="deleteEmail" required placeholder="Enter Your Registered Email">
                                             </td>
                                             <td>
-                                                <input type="text" class="form-control" id="deletePassword" required placeholder="Confirm Your Password">
+                                                <div class="input-group">
+                                                    <input type="password" class="form-control" id="deletePassword" required placeholder="Confirm Your Password">
+                                                    <button class="btn btn-outline-warning" type="button" id="deleteTogglePassword">
+                                                        <i class="fas fa-eye" id="deleteEyeIcon"></i>
+                                                    </button>
+                                                </div>
                                             </td>
                                             <tr>
                                                 <td>
-                                                    <button type="submit" class="btn btn-danger" style="margin-left: 55%;">Delete User</button>
+                                                    <button type="submit" class="btn btn-danger" style="margin-left: 50%;">Delete User</button>
                                                 </td>
                                                 <td>
                                                     <button type="button" class="btn btn-dark">close</button>
@@ -201,6 +216,41 @@
                <h3> <strong>&copy; 2024 SCMXpertLite</strong></h3>
             </div>
         </div>
+
+        <!-- Password show and hide functionalities -->
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const editTogglePassword = document.getElementById('editTogglePassword');
+                const editPassword = document.getElementById('editPassword');
+                const editEyeIcon = document.getElementById('editEyeIcon');
+
+                editTogglePassword.addEventListener('click', function() {
+                    const type = editPassword.getAttribute('type') === 'password' ? 'text' : 'password';
+                    editPassword.setAttribute('type', type);
+                    editEyeIcon.classList.toggle('fa-eye-slash');
+                });
+
+                const editToggleConfirmPassword = document.getElementById('editToggleConfirmPassword');
+                const editConfirmPassword = document.getElementById('editConfirmPassword');
+                const editConfirmEyeIcon = document.getElementById('editConfirmEyeIcon');
+
+                editToggleConfirmPassword.addEventListener('click', function() {
+                    const type = editConfirmPassword.getAttribute('type') === 'password' ? 'text' : 'password';
+                    editConfirmPassword.setAttribute('type', type);
+                    editConfirmEyeIcon.classList.toggle('fa-eye-slash');
+                });
+
+                const deleteTogglePassword = document.getElementById('deleteTogglePassword');
+                const deletePassword = document.getElementById('deletePassword');
+                const deleteEyeIcon = document.getElementById('deleteEyeIcon');
+
+                deleteTogglePassword.addEventListener('click', function() {
+                    const type = deletePassword.getAttribute('type') === 'password' ? 'text' : 'password';
+                    deletePassword.setAttribute('type', type);
+                    deleteEyeIcon.classList.toggle('fa-eye-slash');
+                });
+            });
+        </script>
 
         <!-- Fetch User Details API, Session Management -->
         <script>
