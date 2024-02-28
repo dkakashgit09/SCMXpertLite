@@ -39,6 +39,7 @@ public class DataConsumer
                 dataStream.setDevice_ID(jsonObject.getInt("Device_Id"));
                 dataStream.setFirst_Sensor_temperature(jsonObject.getDouble("First_Sensor_temperature"));
                 dataStream.setRoute_To(jsonObject.getString("Route_To"));
+                dataStream.setRoute_From(jsonObject.getString("Route_From"));
                 // Get current Time_Stamp in milliseconds
                 long timestampMillis = System.currentTimeMillis();
 
