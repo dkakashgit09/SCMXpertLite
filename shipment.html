@@ -83,7 +83,7 @@
             <a class="nav-link text-warning fa-md" href="./myshipments.html"><strong><i class="fas fa-box text-danger">&nbsp;&nbsp;&nbsp;</i>My Shipments</strong></a>
           </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           <li class="nav-item">
-            <a class="nav-link text-warning fa-md" href="./home.html"><strong><i class="fas fa-sign-out-alt text-danger">&nbsp;&nbsp;&nbsp;</i>Logout</strong></a>
+            <a class="nav-link text-warning fa-md" href="./index.html"><strong><i class="fas fa-sign-out-alt text-danger">&nbsp;&nbsp;&nbsp;</i>Logout</strong></a>
           </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     
         </ul>
       </div>  
@@ -331,7 +331,7 @@
                 clearInterval(countdownInterval);
                 document.getElementById('Error').style.display = 'none';
                 localStorage.clear();
-                window.location.href = 'home.html'; // Redirect to home.html
+                window.location.href = 'index.html';
               }
             }, 1000);
             document.getElementById('Error').innerText = 'Session expired or authentication failed. Please log in again.';

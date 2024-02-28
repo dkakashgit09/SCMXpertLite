@@ -75,7 +75,7 @@
             <a class="nav-link text-warning fa-md" href="./datastream.html"><strong><i class="fa fa-database text-danger">&nbsp;&nbsp;&nbsp;</i>Data Stream</strong></a>
           </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           <li class="nav-item">
-            <a class="nav-link text-warning fa-md" href="./home.html"><strong><i class="fas fa-sign-out-alt text-danger">&nbsp;&nbsp;&nbsp;</i>Logout</strong></a>
+            <a class="nav-link text-warning fa-md" href="./index.html"><strong><i class="fas fa-sign-out-alt text-danger">&nbsp;&nbsp;&nbsp;</i>Logout</strong></a>
           </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
        
         </ul>
@@ -169,7 +169,7 @@
         });
     </script>
 
-    <!-- Diaplay User Name, Session Management-->
+    <!-- Display User Name, Session Management-->
     <script>
       var username = localStorage.getItem('username');
 
@@ -206,7 +206,7 @@
                 clearInterval(countdownInterval);
                 document.getElementById('Error').style.display = 'none';
                 localStorage.clear();
-                window.location.href = 'home.html';
+                window.location.href = 'index.html';
               }
             }, 1000);
             document.getElementById('Error').innerText = 'Session expired or authentication failed. Please log in again.';
@@ -215,8 +215,8 @@
 
         // Call autoLogoutIfTokenExpired function when page loads
         autoLogoutIfTokenExpired();
-        // Call autoLogoutIfTokenExpired function periodically
-        setInterval(autoLogoutIfTokenExpired, 60000); // Check every minute
+        // Call autoLogoutIfTokenExpired function periodically every minute
+        setInterval(autoLogoutIfTokenExpired, 60000);
       });
       
       var welcomeMessageElement = document.getElementById('welcomeMessage');

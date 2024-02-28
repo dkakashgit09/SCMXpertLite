@@ -86,7 +86,7 @@
               <a class="nav-link text-warning fa-md" href="./datastream.html"><strong><i class="fa fa-database text-danger">&nbsp;&nbsp;&nbsp;</i>Data Stream</strong></a>
           </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           <li class="nav-item">
-            <a class="nav-link text-warning fa-md" href="./home.html"><strong><i class="fas fa-sign-out-alt text-danger">&nbsp;&nbsp;&nbsp;</i>Logout</strong></a>
+            <a class="nav-link text-warning fa-md" href="./index.html"><strong><i class="fas fa-sign-out-alt text-danger">&nbsp;&nbsp;&nbsp;</i>Logout</strong></a>
           </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
        
         </ul>
@@ -252,7 +252,7 @@
         document.getElementById('shipmentError').style.display = "none";
       }
       const email = localStorage.getItem('email');
-      console.log(email);
+      // console.log(email);
       document.getElementById("shipment").addEventListener("submit", function (e) 
       {
         e.preventDefault();
@@ -263,7 +263,7 @@
   
         const formData = new FormData(thisForm);
         formData.append('email', email);
-        console.log(formData);
+        // console.log(formData);
   
         const raw = JSON.stringify(Object.fromEntries(formData));
      
@@ -346,7 +346,7 @@
                 clearInterval(countdownInterval);
                 document.getElementById('Error').style.display = 'none';
                 localStorage.clear();
-                window.location.href = 'home.html';
+                window.location.href = 'index.html';
               }
             }, 1000);
             document.getElementById('Error').innerText = 'Session expired or authentication failed. Please log in again.';

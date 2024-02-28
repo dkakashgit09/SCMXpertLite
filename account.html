@@ -84,7 +84,7 @@
                         <a class="nav-link text-warning fa-md" href="./myshipments.html"><strong><i class="fa fa-database text-danger">&nbsp;&nbsp;&nbsp;</i>My Shipments</strong></a>
                     </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <li class="nav-item">
-                      <a class="nav-link text-warning fa-md" href="./home.html"><strong><i class="fas fa-sign-out-alt text-danger">&nbsp;&nbsp;&nbsp;</i>Logout</strong></a>
+                      <a class="nav-link text-warning fa-md" href="./index.html"><strong><i class="fas fa-sign-out-alt text-danger">&nbsp;&nbsp;&nbsp;</i>Logout</strong></a>
                     </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 </ul>
             </div>  
@@ -120,6 +120,12 @@
 
                                 </tbody>
                             </table>
+
+                            <!-- Loading Spinner -->
+                            <div class="alert alert-danger" id="spinner" style="display: none;">
+                                <i class="fa fa-spinner fa-spin text-danger"></i> Loading...
+                            </div>
+
                             <div id="success-message" class="alert alert-success" style="display: none;"></div>
 
                             <!-- Edit Form -->
@@ -259,10 +265,12 @@
                 // Function to fetch user details by email and session management
                 function fetchUserDetailsByEmail() 
                 {
+                    $('#spinner').show();
                     var email = localStorage.getItem('email');
                     if (!email) 
                     {
                         console.error('User email not found in localStorage.');
+                        $('#spinner').hide();
                         return;
                     }
 
@@ -298,7 +306,7 @@
                                     clearInterval(countdownInterval);
                                     document.getElementById('Error').style.display = 'none';
                                     localStorage.clear();
-                                    window.location.href = 'home.html';
+                                    window.location.href = 'index.html';
                                 }
                             }, 1000);
                             document.getElementById('Error').innerText = 'Session expired or authentication failed. Please log in again.';
@@ -328,6 +336,7 @@
                                 {
                                     return roleObj.role;
                                 });
+                                $('#spinner').hide();
                                 // Display user details
                                 $('#userTable tbody').html(
                                     '<tr class="text-white font-weight-bold">' +
@@ -416,7 +425,7 @@
                 var email = localStorage.getItem('email');
                 var username = localStorage.getItem('username');
                 var username1 = $('#editUsername').val()
-                console.log(username1);
+                
                 if (!email) 
                 {
                     console.error('User email not found in localStorage.');
@@ -447,7 +456,7 @@
                             $('#success-message').hide();
                             location.reload();
                         }, 3000);
-                        console.log(response);
+                        
                     },
                     error: function(xhr, status, error) 
                     {
@@ -459,7 +468,7 @@
                         {
                             $('#error-message').hide();
                         }, 3000);
-                        console.error(xhr.responseText);
+                    
                     }
                 });
             });
@@ -498,9 +507,8 @@
                         setTimeout(function() 
                         {
                             $('#success-message').hide();
-                            location.href = "home.html";
+                            location.href = "index.html";
                         }, 3000);
-                        console.log(response);
                     },
                     error: function(xhr, status, error) 
                     {
@@ -512,7 +520,6 @@
                         {
                             $('#error-message').hide();
                         }, 3000);
-                        console.error(xhr.responseText);
                     }
                 });
             });

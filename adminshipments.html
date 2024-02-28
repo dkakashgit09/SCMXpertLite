@@ -109,7 +109,7 @@
                     <a class="nav-link text-warning fa-md" href="./datastream.html"><strong><i class="fa fa-database text-danger">&nbsp;&nbsp;&nbsp;</i>Data Stream</strong></a>
                 </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <li class="nav-item">
-                  <a class="nav-link text-warning fa-md" href="./home.html"><strong><i class="fas fa-sign-out-alt text-danger">&nbsp;&nbsp;&nbsp;</i>Logout</strong></a>
+                  <a class="nav-link text-warning fa-md" href="./index.html"><strong><i class="fas fa-sign-out-alt text-danger">&nbsp;&nbsp;&nbsp;</i>Logout</strong></a>
                 </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
               </ul>
             </div>  
@@ -155,6 +155,11 @@
 
                                 </tbody>
                             </table>
+
+                            <!-- Loading Spinner -->
+                            <div class="alert alert-danger" id="spinner" style="margin-left: 30%; margin-right: 30%; display: none;">
+                                <i class="fa fa-spinner fa-spin text-danger"></i> Loading...
+                            </div>
 
                             <!-- Pagination Links -->
                             <nav aria-label="Page navigation">
@@ -292,9 +297,11 @@
                                     <th></th>
                                 </tr>
                                 <tr>
-                                    <th>
-                                        <button type="submit" form="editForm" class="btn btn-info">Save changes</button>
-                                    </th>
+                                    <div class="modal-footer justify-content-center">
+                                        <th>
+                                            <button type="submit" form="editForm" class="btn btn-info">Save changes</button>
+                                        </th>
+                                    </div>
                                 </tr>
                             </table>
                             <!-- Add input fields for other shipment details here -->
@@ -362,7 +369,7 @@
             });
         </script>
 
-        <!-- Shipment API, Edit API, Delete API Search, Paginations, Session Management -->
+        <!-- Shipment API, Edit API, Delete API Search, Paginations, Session Management --> 
         <script>
             $(document).ready(function() 
             {
@@ -373,7 +380,6 @@
                 let filteredShipmentsData;
 
                 const token = localStorage.getItem('token');
-                console.log(token)
                 var myHeaders = new Headers();
                 myHeaders.append("Authorization", "Bearer " + token);
                 myHeaders.append("Content-Type", "application/json");
@@ -415,7 +421,7 @@
                                 clearInterval(countdownInterval);
                                 document.getElementById('shipmentError').style.display = 'none';
                                 localStorage.clear();
-                                window.location.href = 'home.html'; 
+                                window.location.href = 'index.html'; 
                             }
                         }, 1000);
                         document.getElementById('shipmentError').innerText = 'Session expired or authentication failed. Please log in again.';
@@ -429,49 +435,58 @@
                 setInterval(autoLogoutIfTokenExpired, 60000);
 
                 // Function to fetch shipments, manage pagination, and display data
-                function fetchShipmentsAndDisplay() {
-                fetch('http://localhost:7077/shipment/findall', headers)
-                    .then(response => {
-                        if (!response.ok) 
-                        {
-
-                            if (response.status === 400) 
+                if (!isTokenExpired(token))
+                {
+                    $('#spinner').show();
+                    function fetchShipmentsAndDisplay() 
+                    {
+                        fetch('http://localhost:7077/shipment/findall', headers)
+                        .then(response => {
+                            if (!response.ok) 
                             {
-                                throw new Error('Session expired or authentication failed');
+
+                                if (response.status === 400) 
+                                {
+                                    throw new Error('Session expired or authentication failed');
+                                } 
+                                else 
+                                {
+
+                                    throw new Error('Error fetching data');
+                                }
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            totalPages = Math.ceil(data.length / rowsPerPage);
+                            allShipmentsData = data;
+                            filteredShipmentsData = allShipmentsData;
+                            $('#spinner').hide();
+                            displayPage(currentPage, data);
+                            addPaginationListeners();
+                        })
+                        .catch(error => {
+                            if (error.message.includes('Session expired') || error.message.includes('authentication failed')) 
+                            {
+                                document.getElementById('shipmentError1').innerText = 'Session expired or authentication failed. Please log in again.';
                             } 
                             else 
                             {
-
-                                throw new Error('Error fetching data');
+                                document.getElementById('shipmentError1').innerText = 'Error fetching data. Please try again later.';
                             }
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        totalPages = Math.ceil(data.length / rowsPerPage);
-                        allShipmentsData = data;
-                        filteredShipmentsData = allShipmentsData;
-                        displayPage(currentPage, data);
-                        addPaginationListeners();
-                    })
-                    .catch(error => {
-                        console.error('Error fetching data:', error);  
-                        console.log(error.message); 
-                        if (error.message.includes('Session expired') || error.message.includes('authentication failed')) 
-                        {
-                            document.getElementById('shipmentError1').innerText = 'Session expired or authentication failed. Please log in again.';
-                        } 
-                        else 
-                        {
-                            document.getElementById('shipmentError1').innerText = 'Error fetching data. Please try again later.';
-                        }
-                        document.getElementById('shipmentError1').style.display = 'block';
-                        setTimeout(function() 
-                        {
-                            document.getElementById('shipmentError1').style.display = 'none';
-                        }, 3000);
-                    });
-                }   
+                            document.getElementById('shipmentError1').style.display = 'block';
+                            setTimeout(function() 
+                            {
+                                document.getElementById('shipmentError1').style.display = 'none';
+                            }, 3000);
+                        });
+                        }   
+                    }
+                    else
+                    {
+                        autoLogoutIfTokenExpired();
+                    }
+
 
                 // Function to add event listeners for pagination buttons
                 function addPaginationListeners() 
@@ -645,7 +660,6 @@
                         .then(response => {
                             if (response.ok) 
                             {
-                                console.log('Shipment edited successfully');
                                 $('#editModal').modal('hide'); 
                                 $('#shipmentSuccess').text('Shipment edited successfully').show(); 
                                 setTimeout(function() 
@@ -657,7 +671,6 @@
                             } 
                             else 
                             {
-                                console.error('Failed to edit shipment');
                                 $('#editModal').modal('hide'); 
                                 $('#shipmentError').text('Failed to edit shipment').show(); 
                                 setTimeout(function() 
@@ -667,7 +680,6 @@
                             }
                         })
                         .catch(error => {
-                            console.error('Error editing shipment:', error);
                             $('#editModal').modal('hide'); 
                             $('#shipmentError').text('Error editing shipment:', error).show(); 
                             setTimeout(function() 
@@ -716,7 +728,6 @@
                         if (response.ok) 
                         {
                             // Handle successful deletion, e.g., show a success message
-                            console.log('Shipment deleted successfully');
                             $('#deleteModal').modal('hide'); // Hide the delete modal
                             location.reload(); // Reload the page
                         } 

@@ -111,7 +111,7 @@
                         <a class="nav-link text-warning fa-md" href="./adminshipments.html"><strong><i class="fa fa-database text-danger">&nbsp;&nbsp;&nbsp;</i>Shipments</strong></a>
                     </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <li class="nav-item">
-                        <a class="nav-link text-warning fa-md" href="./home.html"><strong><i class="fas fa-sign-out-alt text-danger">&nbsp;&nbsp;&nbsp;</i>Logout</strong></a>
+                        <a class="nav-link text-warning fa-md" href="./index.html"><strong><i class="fas fa-sign-out-alt text-danger">&nbsp;&nbsp;&nbsp;</i>Logout</strong></a>
                     </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 </ul>
             </div>  
@@ -148,6 +148,11 @@
 
                                 </tbody>
                             </table>
+
+                            <!-- Loading Spinner -->
+                            <div class="alert alert-danger" id="spinner" style="margin-left: 30%; margin-right: 30%; display: none;">
+                                <i class="fa fa-spinner fa-spin text-danger"></i> Loading...
+                            </div>
 
                             <!-- Pagination Links -->
                             <nav aria-label="Page navigation">
@@ -220,7 +225,7 @@
                                 clearInterval(countdownInterval);
                                 document.getElementById('Error').style.display = 'none';
                                 localStorage.clear();
-                                window.location.href = 'home.html';
+                                window.location.href = 'index.html';
                             }
                         }, 1000);
                         document.getElementById('Error').innerText = 'Session expired or authentication failed. Please log in again.';
@@ -235,21 +240,21 @@
             // Function to fetch data, populate the table, and manage pagination
             function fetchDataAndDisplay() 
             {
-              fetch('http://localhost:7078/datastream/all')
-                .then(response => response.json())
-                .then(data => {
-                    totalPages = Math.ceil(data.length / rowsPerPage);
-                    allData = data;
-                    filteredStreamData = allData;
-                    displayPage(currentPage, data);
-                    addPaginationListeners();
-                })
-                .catch(error => {
-                  console.error('Error fetching data:', error);
-                  document.getElementById('error-message').innerText = error.message;
-                  document.getElementById('error-message').style.display = 'block';
-
-                });
+                $('#spinner').show();
+                fetch('http://localhost:7078/datastream/all')
+                    .then(response => response.json())
+                    .then(data => {
+                        totalPages = Math.ceil(data.length / rowsPerPage);
+                        allData = data;
+                        filteredStreamData = allData;
+                        $('#spinner').hide();
+                        displayPage(currentPage, data);
+                        addPaginationListeners();
+                    })
+                    .catch(error => {
+                      document.getElementById('error-message').innerText = error.message;
+                      document.getElementById('error-message').style.display = 'block';
+                    });
             }
 
             // Function to add event listeners for pagination buttons
