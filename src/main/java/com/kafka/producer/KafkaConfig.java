@@ -16,16 +16,22 @@ import org.springframework.kafka.core.ProducerFactory;
 public class KafkaConfig 
 {
 
-	@Value("${kafka.bootstrap-servers}")
+	@Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServers;
 
+	@Value("${spring.kafka.producer.key-serializer}")
+    private String keySerializer;
+
+	@Value("${spring.kafka.producer.value-serializer}")
+    private String valueSerializer;
+	
     @Bean
     public ProducerFactory<String, String> producerFactory() 
     {
         Map<String, Object> configProps = new HashMap<>();
         configProps.put("bootstrap.servers", bootstrapServers);
-        configProps.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
-        configProps.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
+        configProps.put("key.serializer", keySerializer);
+        configProps.put("value.serializer", valueSerializer);
 
         return new DefaultKafkaProducerFactory<>(configProps);
     }
