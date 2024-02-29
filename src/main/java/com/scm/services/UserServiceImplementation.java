@@ -122,7 +122,6 @@ public class UserServiceImplementation implements UserService
 		if(editRequest.getEmail().equals(email))
 		{
 			ScmUsers users = userRepo.findByUsername(username);
-			System.out.println(username);
 			if(users!=null)
 			{
 				String existedPassword=users.getPassword();
