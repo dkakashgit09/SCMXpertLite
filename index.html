@@ -3,13 +3,9 @@
     <head>
         <title>SCMXpertLite</title>
         <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" />
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous" />
-        <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <style>
             @import url('https://fonts.googleapis.com/css?family=Montserrat:400,800');
             * 
@@ -238,48 +234,16 @@
             {
 	            transform: translateX(20%);
             }
-
-            .modal-content 
-            {
-                background-color: transparent;
-                border: none;
-                box-shadow: none;
-            }
-
-            .modal-dialog 
-            {
-                margin: 10% auto;
-                width: 25%;
-            }
-
-            .modal-header,
-            .modal-footer 
-            {
-                border: none;
-            }
-
-            .modal-body 
-            {
-                background-color: rgba(0, 0, 0, 0.5); /* Change the opacity value as needed */
-                border-radius: 10px;
-                padding: 15px;
-            }
-
-            .modal-body form 
-            {
-                background-color: transparent;
-                border: none;
-            }
         </style>
     </head>
     <body>
-        <div class="jumbotron text-center bg-dark" style="margin-bottom: -20px; margin-top: -10px; text-align: center">
+        <div class="jumbotron text-center bg-dark" style="margin-bottom: 0; margin-top: 0;">
             <h1 class="text-white">SCMXpertLite</h1>
             <h2 class="text-danger">The Better Way to Shipments</h2>
         </div>
 
         <!-- Navigation bars -->
-        <nav class="navbar navbar-expand-sm  sticky-top" style="box-shadow: 0.3em 0.3em 5em rgb(0, 0, 0); background: rgb(58, 58, 58);">
+        <nav class="navbar navbar-expand-md   sticky-top" style="box-shadow: 0.3em 0.3em 5em rgb(0, 0, 0); background: rgb(58, 58, 58);">
             <a class="navbar-brand text-danger" href="/index.html"><strong>SCMXpertLite</strong></a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -289,9 +253,9 @@
         <!-- content and forms -->
         <div class="container-fluid" style="background: rgb(0, 0, 0);">
             <div class="row">
-                <div class="col-sm-3" style="margin-top: 17px;">
+                <div class="col-md-3 mt-3">
                     <h2 class="text-info"><i class="fa fa-bars fa-sm"></i>&nbsp;<strong>SCMXpertLite Services</strong></h2>
-                    <ul class="text-white" style="margin-left: 25px;">
+                    <ul class="text-white ml-3">
                         <li>Inventory Management</li>
                         <li>Procurement</li>
                         <li>Warehouse Management</li>
@@ -316,7 +280,7 @@
                     </ul>
                 </div>
     
-                <div class="col-sm-9" style="margin-top: 35px;">
+                <div class="col-md-9 mt-5">
                     <div class="container form" id="container">
                         <div class="form-container sign-up-container">
                             <form id="registerForm">
@@ -364,7 +328,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <a id="forgotPasswordLink" class="text-danger font-weight-bold">Forgot your password?</a>
+                                <a class="text-danger font-weight-bold">Forgot your password?</a>
                                 <button type="submit">login In</button><br>
 
                                 <div id="errorMessage1" style="display: none;" class="alert alert-danger" role="alert"></div>
@@ -385,7 +349,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="modal fade" id="forgotPasswordModal" tabindex="-1" aria-labelledby="forgotPasswordModalLabel" aria-hidden="true">
+                    <!-- <div class="modal fade" id="forgotPasswordModal" tabindex="-1" aria-labelledby="forgotPasswordModalLabel" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -404,33 +368,24 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>
 
         <!--jumbotron footer -->
-        <div class="jumbotron text-center bg-dark" style="margin-bottom: 0">
+        <div class="jumbotron jumbotron-fluid text-center bg-dark  mb-0">
             <div class="container footer text-danger">
                 <strong class="fa-lg">&copy; 2024 SCMXperLite</strong>
             </div>
         </div>
 
-        <!-- To Handle Forgot Password Modal Functionality -->
-        <script>
-            // Function to handle Forgot Password modal
-            document.getElementById('forgotPasswordLink').addEventListener('click', function() 
-            {
-                $('#forgotPasswordModal').modal('show');
-            });
 
-            // Function for handling Forgot Password form submission
-            document.getElementById('forgotPasswordForm').addEventListener('submit', function(event) 
-            {
-                event.preventDefault();
-                // Make API call to reset password
-            });
-        </script>
+        <!-- CDN Scripts -->
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
         <!-- Password Visibility Functionality -->
         <script>
@@ -630,12 +585,12 @@
         </script>
 
         <!-- To show the Modal -->
-        <script>
+        <!-- <script>
             var $j = jQuery.noConflict();
-        </script>
+        </script> -->
 
         <!-- Forget Password API -->
-        <script>
+        <!-- <script>
             function Forgot(email) 
             {
                 var requestOptions = 
@@ -673,6 +628,22 @@
                 })
                 .catch(error => console.error('Error:', error));
             }
-        </script>
+        </script> -->
+    
+        <!-- To Handle Forgot Password Modal Functionality -->
+        <!-- <script>
+            // Function to handle Forgot Password modal
+            document.getElementById('forgotPasswordLink').addEventListener('click', function() 
+            {
+                $('#forgotPasswordModal').modal('show');
+            });
+
+            // Function for handling Forgot Password form submission
+            document.getElementById('forgotPasswordForm').addEventListener('submit', function(event) 
+            {
+                event.preventDefault();
+                // Make API call to reset password
+            });
+        </script> -->
     </body>
 </html>

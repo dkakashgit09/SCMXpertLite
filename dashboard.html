@@ -76,7 +76,7 @@
             <a class="nav-link text-warning fa-md" href="./shipment.html"><strong><i class="fas fa-shipping-fast text-danger">&nbsp;&nbsp;&nbsp;</i>Create Shipment</strong></a>
           </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           <li class="nav-item">
-            <a class="nav-link text-warning fa-md" href="./index.html"><strong><i class="fas fa-sign-out-alt text-danger">&nbsp;&nbsp;&nbsp;</i>Logout</strong></a>
+            <a id="logout-link" class="nav-link text-warning fa-md" href="./index.html"><strong><i class="fas fa-sign-out-alt text-danger">&nbsp;&nbsp;&nbsp;</i>Logout</strong></a>
           </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         </ul>
       </div>  
@@ -240,6 +240,18 @@
                                              '</div>' +
                                            '</div>';
       }
+    </script>
+
+    <script>
+      document.getElementById('logout-link').addEventListener('click', function(e) {
+        e.preventDefault(); // Prevents default action of clicking on a link
+      
+        // Clear local storage
+        localStorage.clear();
+      
+        // Redirect to index.html
+        window.location.href = "./index.html";
+      });
     </script>
   </body>
 </html>

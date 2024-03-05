@@ -66,6 +66,7 @@
                 background-color: #218838; /* Adjust button hover color */
                 border-color: #1e7e34; /* Adjust button border hover color */
             }
+            
         </style>
     </head>
     <body>
@@ -76,16 +77,16 @@
               <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse justify-content-center" id="collapsibleNavbar">
-                <ul class="navbar-nav" style="margin-left: -7%;">
-                    <li class="nav-item">
-                        <a class="nav-link text-warning fa-md" href="./shipment.html"><strong><i class="fas fa-shipping-fast text-danger">&nbsp;&nbsp;&nbsp;</i>Create Shipment</strong></a>
-                    </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <li class="nav-item">
-                        <a class="nav-link text-warning fa-md" href="./myshipments.html"><strong><i class="fa fa-database text-danger">&nbsp;&nbsp;&nbsp;</i>My Shipments</strong></a>
-                    </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <li class="nav-item">
-                      <a class="nav-link text-warning fa-md" href="./index.html"><strong><i class="fas fa-sign-out-alt text-danger">&nbsp;&nbsp;&nbsp;</i>Logout</strong></a>
-                    </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <ul class="navbar-nav">
+                    <li class="nav-item mr-5">
+                        <a class="nav-link text-warning" href="./shipment.html"><strong><i class="fas fa-shipping-fast text-danger">&nbsp;&nbsp;&nbsp;</i>Create Shipment</strong></a>
+                    </li>
+                    <li class="nav-item mr-5">
+                        <a class="nav-link text-warning" href="./myshipments.html"><strong><i class="fa fa-database text-danger">&nbsp;&nbsp;&nbsp;</i>My Shipments</strong></a>
+                    </li>
+                    <li class="nav-item mr-5">
+                      <a id="logout-link" class="nav-link text-warning" href="./index.html"><strong><i class="fas fa-sign-out-alt text-danger">&nbsp;&nbsp;&nbsp;</i>Logout</strong></a>
+                    </li>
                 </ul>
             </div>  
         </nav>
@@ -157,7 +158,7 @@
                                             </td>
                                             <td>
                                                 <div class="input-group">
-                                                    <input type="password" class="form-control" id="editConfirmPassword" name="confirmPassword" required placeholder="Confirm New Password">
+                                                    <input type="password" class="form-control" id="editConfirmPassword" name="confirmPassword" required placeholder="Enter Old Password">
                                                     <button class="btn btn-outline-warning" type="button" id="editToggleConfirmPassword">
                                                         <i class="fas fa-eye" id="editConfirmEyeIcon"></i>
                                                     </button>
@@ -438,7 +439,7 @@
                     data: JSON.stringify({
                     username: $('#editUsername').val(),
                         email: $('#editEmail').val(),
-                        password: $('#oldPassword').val(),
+                        password: $('#editConfirmPassword').val(),
                         updatePassword: $('#editPassword').val()
                     }),
                     contentType: "application/json",
@@ -460,6 +461,7 @@
                     },
                     error: function(xhr, status, error) 
                     {
+                        console.log( $('#oldPassword').val());
                         $('#success-message').hide();
 
                         $('#error-message').text(xhr.responseText).show();
@@ -522,6 +524,18 @@
                         }, 3000);
                     }
                 });
+            });
+        </script>
+
+        <script>
+            document.getElementById('logout-link').addEventListener('click', function(e) {
+                e.preventDefault(); // Prevents default action of clicking on a link
+                
+                // Clear local storage
+                localStorage.clear();
+                
+                // Redirect to index.html
+                window.location.href = "./index.html";
             });
         </script>
     </body>
