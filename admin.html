@@ -151,7 +151,7 @@
                                                 <input type="text" class="form-control" id="editUsername" name="username" required placeholder="Edit UserName">
                                             </td>
                                             <td>
-                                                <input type="text" class="form-control" id="editEmail" name="email" required placeholder="Enter Your Registered Email">
+                                                <input type="text" class="form-control" id="editEmail" name="email" disabled required>
                                             </td>
                                             <td>
                                                 <div class="input-group">
@@ -384,7 +384,7 @@
 
                 // Assuming each row has data attributes containing user details, extract them
                 var username = $(this).closest('tr').data('username');
-                var email = $(this).closest('tr').data('email');
+                var email = $(this).closest('tr').find('td:eq(1)').text();
 
                 // Populate the edit form fields with user details
                 $('#editUsername').val(username);
@@ -400,7 +400,7 @@
 
                 // Assuming each row has data attributes containing user details, extract them
                 var username = $(this).closest('tr').data('username');
-                var email = $(this).closest('tr').data('email');
+                var email = $(this).closest('tr').find('td:eq(1)').text();
 
                 // Populate the delete form fields with user details
                 $('#deleteUsername').val(username);
@@ -487,8 +487,8 @@
             {
                 e.preventDefault();
 
-                var username = localStorage.getItem('username');
-                if (!username) 
+                var email = localStorage.getItem('email');
+                if (!email) 
                 {
                     console.error('User email not found in localStorage.');
                     return;
@@ -496,7 +496,7 @@
 
                 $.ajax({
                     type: "POST",
-                    url: "http://localhost:7077/auth/deleteuser?username=" + username, 
+                    url: "http://localhost:7077/auth/deleteuser?email=" + email, 
                     data: JSON.stringify({
                         email: $('#deleteEmail').val(),
                         password: $('#deletePassword').val()

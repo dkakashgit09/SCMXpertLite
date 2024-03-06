@@ -46,7 +46,7 @@
             }
     
             /* Make table cells semi-transparent */
-            .table td {
+            .table th {
                 background-color: rgba(0, 0, 0, 0.5) !important;
             }
     
@@ -179,176 +179,11 @@
                                   </li>
                                 </ul>
                             </nav>
-                            <!-- Error and Success Messages -->
-                            <div class="alert alert-info" id="shipmentSuccess" style="margin-left: 40%; margin-right: 40%; text-align:center; display: none;"></div>
-                            <div class="alert alert-danger" id="shipmentError" style="margin-left: 40%; margin-right: 40%; text-align:center; display: none;"></div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-
-        <!-- Edit Modal -->
-        <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content" style="background-color: rgba(51, 45, 45, 0.384);">
-                    <div class="modal-header">
-                        <h5 class="modal-title justify-content-center text-danger font-weight-bold" id="editModalLabel" style="margin-left: 32%;">Edit Shipment</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form id="editForm" class="justify-content">
-                            <table>
-                                <tr>
-                                    <th class="text-warning font-weight-bold">Shipment Number</th>
-                                    <th class="text-warning font-weight-bold">Associated Email</th>
-                                </tr>
-                                <tr>
-                                    <th><input type="text" class="form-control" id="editShipmentNumber" name="shipmentNumber" disabled></th>
-                                    <th><input type="email" class="form-control" id="editEmail" name="email" disabled></th>
-                                </tr>
-                                <tr>
-                                    <th class="text-warning font-weight-bold">Conatiner Number</th>
-                                    <th class="text-warning font-weight-bold">Route Details</th>
-                                </tr>
-                                <tr>
-                                    <th><input type="text" class="form-control" id="editContainerNumber" name="containerNumber" required pattern="[0-9]+" placeholder="Enter Container Number"/></th>
-                                    <th>
-                                        <select class="form-control" name="route" id="editRoute" required>
-                                            <option value="" disabled selected hidden>Select Route</option>
-                                            <option>Australia-England</option>
-                                            <option>Canada-Japan</option>
-                                            <option>USA-SriLanka</option>
-                                            <option>Italy-Canada</option>
-                                            <option>Canada-India</option>
-                                            <option>USA-India</option>
-                                       </select>
-                                    </th>
-                                </tr>
-                                <tr>
-                                    <th class="text-warning font-weight-bold">Goods Type</th>
-                                    <th class="text-warning font-weight-bold">Device</th>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        <select class="form-control" name="goods" id="editGoods" required>
-                                            <option value="" disabled selected hidden>Select Goods Type</option>
-                                            <option>Groceries</option>
-                                            <option>Electronics</option>
-                                            <option>Automobiles</option>
-                                            <option>Pharmaceuticals</option>
-                                            <option>Industrial Goods</option>
-                                            <option>Luxury Goods</option>
-                                        </select>
-                                    </th>
-                                    <th>
-                                        <select class="form-control" name="device" id="editDevice" required>
-                                            <option value="" disabled selected hidden>Select Device</option>
-                                            <option >202351</option>
-                                            <option >202362</option>
-                                            <option >202373</option>
-                                            <option >202384</option>
-                                            <option >202395</option>
-                                            <option >202406</option>
-                                        </select>
-                                    </th>
-                                </tr>
-                                <tr>
-                                    <th class="text-warning font-weight-bold">Date</th>
-                                    <th class="text-warning font-weight-bold">PO Number</th>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        <input type="date" class="form-control" id="editDeliveryDate" name="deliveryDate" required placeholder="choose date"/>
-                                    </th>
-                                    <th>
-                                        <input type="text" class="form-control" id="editPoNumber" name="poNumber" required pattern="[0-9]+" placeholder="Enter PO Number"/>
-                                    </th>
-                                </tr>
-                                <tr>
-                                    <th class="text-warning font-weight-bold">Delivery Number</th>
-                                    <th class="text-warning font-weight-bold">NDC Number</th>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        <input type="text" class="form-control" id="editDeliveryNumber" name="deliveryNumber" required pattern="[0-9]+" placeholder="Enter Delivery Number"/>
-                                    </th>
-                                    <th>
-                                        <input type="number" class="form-control" id="editNdcNumber" name="ndcNumber" required pattern="[0-9]+" placeholder="Enter NDC Number"/>
-                                    </th>
-                                </tr>
-                                <tr>
-                                    <th class="text-warning font-weight-bold">Batch ID</th>
-                                    <th class="text-warning font-weight-bold">Number of Goods</th>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        <input type="number" class="form-control" id="editBatchId" name="batchId" required pattern="[0-9]+" placeholder="Enter Batch ID"/>
-                                    </th>
-                                    <th>
-                                        <input type="number" class="form-control" id="editSerialNumberOfGoods" name="serialNumberOfGoods" required placeholder="Number of Goods"/>
-                                    </th>
-                                </tr>
-                                <tr>
-                                    <th colspan="2" class="text-warning font-weight-bold">Shipment Description</th>
-                                    <th></th>
-                                </tr>
-                                <tr>
-                                    <th colspan="2">
-                                        <textarea class="form-control" id="editDescription" name="description" placeholder="Enter Your Description" onkeypress="return blockSpecialChar(event)" required="required"></textarea>
-                                    </th>
-                                    <th></th>
-                                </tr>
-                                <tr>
-                                    <div class="modal-footer justify-content-center">
-                                        <th>
-                                            <button type="submit" form="editForm" class="btn btn-info">Save changes</button>
-                                        </th>
-                                    </div>
-                                </tr>
-                            </table>
-                            <!-- Add input fields for other shipment details here -->
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Delete Modal -->
-        <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content" style="background-color: rgba(51, 45, 45, 0.384);">
-                    <div class="modal-header">
-                        <h5 class="modal-title text-danger font-weight-bold" id="deleteModalLabel" style="margin-left: 32%;">Delete Shipment</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form id="deleteForm">
-                            <div class="mb-3">
-                                <label for="deleteShipmentNumber" class="form-label text-warning font-weight-bold">Shipment Number</label>
-                                <input type="text" class="form-control" id="deleteShipmentNumber" name="shipmentNumber" readonly>
-                            </div>
-                            <div class="mb-3">
-                                <label for="deleteEmail" class="form-label text-warning font-weight-bold">Email</label>
-                                <input type="email" class="form-control" id="deleteEmail" name="email" placeholder="Enter Admin Email ID">
-                            </div>
-                            <div class="mb-3">
-                                <label for="deletePassword" class="form-label text-warning font-weight-bold">Password</label>
-                                <div class="input-group">
-                                    <input type="password" class="form-control" id="deletePassword" name="password" placeholder="Enter Admin Password">
-                                    <button class="btn btn-outline-warning" type="button" id="togglePassword"><i class="fas fa-eye" id="eyeIcon"></i></button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer justify-content-center">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" form="deleteForm" class="btn btn-danger">Delete</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
+        </div>       
 
         <!-- Footer -->
         <div class="jumbotron text-center bg-dark" style="margin-bottom: 0">
@@ -357,27 +192,12 @@
             </div>
         </div>
 
-        <!-- Password Show and Hide Functionalities -->
-        <script>
-            document.addEventListener("DOMContentLoaded", function() {
-                const togglePassword = document.getElementById('togglePassword');
-                const passwordField = document.getElementById('deletePassword');
-                const eyeIcon = document.getElementById('eyeIcon');
-
-                togglePassword.addEventListener('click', function() {
-                    const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
-                    passwordField.setAttribute('type', type);
-                    eyeIcon.classList.toggle('fa-eye-slash');
-                });
-            });
-        </script>
-
-        <!-- Shipment API, Edit API, Delete API Search, Paginations, Session Management --> 
+        <!-- Shipment API Paginations, Session Management --> 
         <script>
             $(document).ready(function() 
             {
                 let currentPage = 1;
-                const rowsPerPage = 4;
+                const rowsPerPage = 7;
                 let totalPages;
                 let allShipmentsData;
                 let filteredShipmentsData;
@@ -535,21 +355,19 @@
                 {
                     const tr = document.createElement('tr');
                     tr.innerHTML = `
-                        <td>${shipment.email}</td>
-                        <td>${shipment.shipmentNumber}</td>
-                        <td>${shipment.containerNumber}</td>
-                        <td>${shipment.route}</td>
-                        <td>${shipment.goods}</td>
-                        <td>${shipment.device}</td>
-                        <td>${shipment.deliveryDate}</td>
-                        <td>${shipment.poNumber}</td>
-                        <td>${shipment.deliveryNumber}</td>
-                        <td>${shipment.ndcNumber}</td>
-                        <td>${shipment.batchId}</td>
-                        <td>${shipment.serialNumberOfGoods}</td>
-                        <td>${shipment.description}</td>
-                        <td><button class="btn btn-primary btn-sm edit-btn" data-shipment-number="${shipment.shipmentNumber}">Edit</button></td>
-                        <td><button class="btn btn-danger btn-sm delete-btn" data-shipment-number="${shipment.shipmentNumber}">Delete</button></td>`;
+                        <th>${shipment.email}</th>
+                        <th>${shipment.shipmentNumber}</th>
+                        <th>${shipment.containerNumber}</th>
+                        <th>${shipment.route}</th>
+                        <th>${shipment.goods}</th>
+                        <th>${shipment.device}</th>
+                        <th>${shipment.deliveryDate}</th>
+                        <th>${shipment.poNumber}</th>
+                        <th>${shipment.deliveryNumber}</th>
+                        <th>${shipment.ndcNumber}</th>
+                        <th>${shipment.batchId}</th>
+                        <th>${shipment.serialNumberOfGoods}</th>
+                        <th>${shipment.description}</th>`;
                     $('#shipmentTable tbody').append(tr);
                 }
 
@@ -592,165 +410,6 @@
                     filterAndDisplayPage(1);
                     currentPage = 1;
                 });
-
-                // Event listener for edit button
-                $('#shipmentTableBody').on('click', '.edit-btn', function() 
-                {
-                    const shipmentNumber = $(this).data('shipment-number');
-                    const shipment = allShipmentsData.find(s => s.shipmentNumber === shipmentNumber);
-                    if (shipment) 
-                    {
-                        populateEditModal(shipment);
-                        $('#editModal').modal('show');
-                    }
-                });
-
-                // Function to populate edit modal form with shipment details
-                function populateEditModal(shipment) 
-                {
-                    // Populate the input fields in the edit modal with shipment details
-                    $('#editShipmentNumber').val(shipment.shipmentNumber);
-                    $('#editEmail').val(shipment.email); // Populate email field
-                    $('#editContainerNumber').val(shipment.containerNumber);
-                    $('#editRoute').val(shipment.route);
-                    $('#editGoods').val(shipment.goods);
-                    $('#editDevice').val(shipment.device);
-                    $('#editDeliveryDate').val(shipment.deliveryDate);
-                    $('#editPoNumber').val(shipment.poNumber);
-                    $('#editDeliveryNumber').val(shipment.deliveryNumber);
-                    $('#editNdcNumber').val(shipment.ndcNumber);
-                    $('#editBatchId').val(shipment.batchId);
-                    $('#editSerialNumberOfGoods').val(shipment.serialNumberOfGoods);
-                    $('#editDescription').val(shipment.description);
-                }
-
-                // Event listener for edit form submission
-                $('#editForm').submit(function(event) 
-                {
-                    event.preventDefault(); 
-
-                    // Extract updated shipment details from the form fields
-                    const editedShipment = 
-                    {
-                        shipmentNumber: $('#editShipmentNumber').val(),
-                        containerNumber: $('#editContainerNumber').val(),
-                        email: $('#editEmail').val(),
-                        route: $('#editRoute').val(),
-                        goods: $('#editGoods').val(),
-                        device: $('#editDevice').val(),
-                        deliveryDate: $('#editDeliveryDate').val(),
-                        poNumber: $('#editPoNumber').val(),
-                        deliveryNumber: $('#editDeliveryNumber').val(),
-                        ndcNumber: $('#editNdcNumber').val(),
-                        batchId: $('#editBatchId').val(),
-                        serialNumberOfGoods: $('#editSerialNumberOfGoods').val(),
-                        description: $('#editDescription').val()
-                    };
-
-                    // Make an API call to update the shipment
-                    const email = localStorage.getItem('email'); 
-                    if (!isTokenExpired(token)) 
-                    {
-                        fetch('http://localhost:7077/shipment/edit?email=' + email, 
-                        {
-                            method: 'POST',
-                            headers: 
-                            {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify(editedShipment),
-                        })
-                        .then(response => {
-                            if (response.ok) 
-                            {
-                                $('#editModal').modal('hide'); 
-                                $('#shipmentSuccess').text('Shipment edited successfully').show(); 
-                                setTimeout(function() 
-                                {
-                                    $('#shipmentSuccess').hide(); 
-                                    location.reload();
-                                }, 3000);
-                                
-                            } 
-                            else 
-                            {
-                                $('#editModal').modal('hide'); 
-                                $('#shipmentError').text('Failed to edit shipment').show(); 
-                                setTimeout(function() 
-                                {
-                                    $('#shipmentError').hide(); 
-                                }, 3000);
-                            }
-                        })
-                        .catch(error => {
-                            $('#editModal').modal('hide'); 
-                            $('#shipmentError').text('Error editing shipment:', error).show(); 
-                            setTimeout(function() 
-                            {
-                                $('#shipmentError').hide(); 
-                            }, 3000);
-                        });
-                    }
-                    else
-                    {
-                        autoLogoutIfTokenExpired();
-                    }
-
-                });
-
-                // Event listener for delete button
-                $('#shipmentTableBody').on('click', '.delete-btn', function() 
-                {
-                    const shipmentNumber = $(this).data('shipment-number');
-                    $('#deleteShipmentNumber').val(shipmentNumber);
-                    $('#deleteModal').modal('show');
-                });
-
-                // Event listener for delete form submission
-                $('#deleteForm').submit(function(event) {
-                    event.preventDefault(); 
-
-                    // Extract delete request details from the form fields
-                    const deleteRequest = {
-                        shipmentNumber: $('#deleteShipmentNumber').val(),
-                        email: $('#deleteEmail').val(),
-                    password: $('#deletePassword').val()
-                    };
-
-                    // Make an API call to delete the shipment
-                    const email = localStorage.getItem('email');
-                    fetch('http://localhost:7077/shipment/delete?email=' + email, {
-                        method: 'POST',
-                        headers: 
-                        {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify(deleteRequest),
-                    })
-                    .then(response => {
-                        if (response.ok) 
-                        {
-                            // Handle successful deletion, e.g., show a success message
-                            $('#deleteModal').modal('hide'); // Hide the delete modal
-                            location.reload(); // Reload the page
-                        } 
-                        else 
-                        {
-                            // Handle deletion failure, e.g., show an error message
-                            console.error('Failed to delete shipment');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error deleting shipment:', error);
-                    }); 
-                });
-
-                $.noConflict();
-                jQuery(document).ready(function($) 
-                {
-                    // Your jQuery code using $ alias
-                });
-
             });
         </script>
 

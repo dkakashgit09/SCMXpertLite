@@ -185,7 +185,7 @@
         <!-- Stream API, Paginations, Search, Session Management -->
         <script>
             let currentPage = 1;
-            const rowsPerPage = 5;
+            const rowsPerPage = 7;
             let totalPages;
             let allData;
             let filteredStreamData;
@@ -300,12 +300,12 @@
             {
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
-                    <td>${streamData.device_ID}</td>
-                    <td>${streamData.battery_Level}</td>
-                    <td>${streamData.first_Sensor_temperature}</td>
-                    <td>${streamData.route_From}</td>
-                    <td>${streamData.route_To}</td>
-                    <td>${streamData.time_Stamp}</td>
+                    <th>${streamData.device_ID}</th>
+                    <th>${streamData.battery_Level}</th>
+                    <th>${streamData.first_Sensor_temperature}</th>
+                    <th>${streamData.route_From}</th>
+                    <th>${streamData.route_To}</th>
+                    <th>${streamData.time_Stamp}</th>
                 `;
 
                 $('#streamTable tbody').append(tr);

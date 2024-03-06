@@ -349,26 +349,6 @@
                             </div>
                         </div>
                     </div>
-                    <!-- <div class="modal fade" id="forgotPasswordModal" tabindex="-1" aria-labelledby="forgotPasswordModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title text-warning font-weight-bold" id="forgotPasswordModalLabel">Forgot Password ?</h5>
-                                    <button type="button" class="close text-danger" data-dismiss="modal" aria-label="Close">
-                                        <span style="font-size: 30px; color: rgb(245, 0, 0);" aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <form id="forgotPasswordForm">
-                                        <div class="form-group">
-                                            <input type="email" class="form-control" id="forgotPasswordEmail" placeholder="Enter email" required>
-                                        </div>
-                                        <button type="button" class="btn btn-warning font-weight-bold" onclick="Forgot(document.getElementById('forgotPasswordEmail').value)">Reset Password</button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div> -->
                 </div>
             </div>
         </div>
@@ -583,67 +563,5 @@
                 container.classList.remove("right-panel-active");
             });
         </script>
-
-        <!-- To show the Modal -->
-        <!-- <script>
-            var $j = jQuery.noConflict();
-        </script> -->
-
-        <!-- Forget Password API -->
-        <!-- <script>
-            function Forgot(email) 
-            {
-                var requestOptions = 
-                {
-                    method: 'POST',
-                    redirect: 'follow'
-                };
-
-                var url = "http://localhost:7077/forgetpassword?email=" + encodeURIComponent(email);
-
-                fetch(url, requestOptions)
-                    
-                .then(response => {
-                    const successMessageElement = document.getElementById('successMessage');
-                    const errorMessageElement = document.getElementById('errorMessage');
-
-                    if (response.ok) 
-                    {
-                        const successMessage = 'Please check your email for instructions to reset your password.';
-                        successMessageElement.textContent = successMessage;
-                        errorMessageElement.textContent = ''; 
-                    }
-                    else if (response.status === 404) 
-                    {
-                        const errorMessage = 'Invalid email address.';
-                        errorMessageElement.textContent = errorMessage;
-                        successMessageElement.textContent = ''; 
-                    } 
-                    else 
-                    {
-                    const errorMessage = 'Failed to reset password. Please try again later.';
-                    errorMessageElement.textContent = errorMessage;
-                    successMessageElement.textContent = '';
-                    }
-                })
-                .catch(error => console.error('Error:', error));
-            }
-        </script> -->
-    
-        <!-- To Handle Forgot Password Modal Functionality -->
-        <!-- <script>
-            // Function to handle Forgot Password modal
-            document.getElementById('forgotPasswordLink').addEventListener('click', function() 
-            {
-                $('#forgotPasswordModal').modal('show');
-            });
-
-            // Function for handling Forgot Password form submission
-            document.getElementById('forgotPasswordForm').addEventListener('submit', function(event) 
-            {
-                event.preventDefault();
-                // Make API call to reset password
-            });
-        </script> -->
     </body>
 </html>
