@@ -116,12 +116,18 @@ public class UserServiceImplementation implements UserService
 	}
 	
 	@Override
-	public ResponseEntity<?> editUser(EditRequest editRequest, String email, String username) 
+	public ResponseEntity<?> editUser(EditRequest editRequest, String email) 
 	{
 		
 		if(editRequest.getEmail().equals(email))
 		{
-			ScmUsers users = userRepo.findByUsername(username);
+			Optional<ScmUsers> user = userRepo.findByEmail(email);
+			ScmUsers users = null;
+			if(user.isPresent())
+			{
+				users = user.get(); 
+			}
+
 			if(users!=null)
 			{
 				String existedPassword=users.getPassword();
@@ -142,7 +148,6 @@ public class UserServiceImplementation implements UserService
 			}
 			else
 			{
-				System.out.println(username);
 				logger.warn("Users are null");
 				return new ResponseEntity<String>("usersarenull", HttpStatus.BAD_REQUEST);
 			}
@@ -156,131 +161,39 @@ public class UserServiceImplementation implements UserService
 	}
 	
 	@Override
-	public ResponseEntity<?> deleteUser(LoginRequest deleteRequest, String username) 
+	public ResponseEntity<?> deleteUser(LoginRequest deleteRequest, String email) 
 	{
-		String email=deleteRequest.getEmail();
-		ScmUsers mainUser = userRepo.findByUsername(username);
-		
-		ScmUsers userInForm = null;
-		Set<ScmRoles> rolesForm = null;
-		ScmRoles roleForm = null;
-		String formUserRoleName = null;
-		
-		if(mainUser!=null)
+		String formEmail=deleteRequest.getEmail();
+		Optional<ScmUsers> mainUser = userRepo.findByEmail(email);
+		if(mainUser.isPresent())
 		{
-
-			if(email.equals(mainUser.getEmail()))
+			ScmUsers mainUserIn = mainUser.get();
+			Set<ScmRoles> rolesForm = mainUserIn.getRoles();
+			ScmRoles roleForm = rolesForm.iterator().next();
+			String UserRoleName = roleForm.getRole();
+			
+			if(UserRoleName.equals("ADMIN"))
 			{
-				Optional<ScmUsers> userIn = userRepo.findByEmail(email);
-				
-				if(userIn.isPresent())
-				{
-					userInForm = userIn.get();
-					rolesForm = userInForm.getRoles();
-					roleForm = rolesForm.iterator().next();
-					formUserRoleName = roleForm.getRole();
-				}
-				
-				if(formUserRoleName.equals("ADMIN"))
-				{
-					logger.warn("Single ADMIN Exists, Cant be Deleted");
-					return new ResponseEntity<String>("You Dont have Authority to Delete Admin",  HttpStatus.BAD_REQUEST);
-				}
-				else
-				{
-					String existedPassword=mainUser.getPassword();
-					boolean existsPassword=bCryptPasswordEncoder.matches(deleteRequest.getPassword(), existedPassword);
-					if(existsPassword)
-					{
-						List<Shipment> listOfShipments=shipmentRepo.findByEmail(email);
-						if(listOfShipments.isEmpty())
-						{
-							userRepo.deleteById(userInForm.getId());
-							logger.info("Account Deleted Sucessfully ");
-							return new ResponseEntity<String>("AccountDeleted", HttpStatus.OK);
-						}
-						else
-						{
-							logger.info("Shipment exists cannot be deleted");
-							return new ResponseEntity<String>("Shipment exists with associated mail :- " + email + ", cannot be deleted", HttpStatus.BAD_REQUEST);
-						}
-					}
-					else
-					{
-						logger.warn("The Password You Have Entered is InCorrect");
-						return new ResponseEntity<String>("IncorrectPassword", HttpStatus.BAD_REQUEST);
-					}
-				}
+				Optional<ScmUsers> formUser = userRepo.findByEmail(formEmail);
 
+			}
+			else if(formEmail.equals(mainUserIn.getEmail()))
+			{
+				
 			}
 			else
 			{
-				Set<ScmRoles> roles = mainUser.getRoles();
-				ScmRoles role = roles.iterator().next();
-				String mainUserRoleName = role.getRole();
-				
-				if(mainUserRoleName.equals("ADMIN"))
-				{
-					Optional<ScmUsers> userIn = userRepo.findByEmail(email);
-					if(userIn.isPresent())
-					{
-						userInForm = userIn.get();
-						rolesForm = userInForm.getRoles();
-						roleForm = rolesForm.iterator().next();
-						formUserRoleName = roleForm.getRole();
-					}
-					
-					if(formUserRoleName==null)
-					{
-						logger.warn("Account not found in database");
-						return new ResponseEntity<String>("The account mentioned with :- " + email + " not present",  HttpStatus.BAD_REQUEST);
-					}
-					else if(formUserRoleName.equals("ADMIN"))
-					{
-						logger.warn("Single ADMIN Exists, Cant be Deleted");
-						return new ResponseEntity<String>("You Dont have Authority to Delete Admin",  HttpStatus.BAD_REQUEST);
-					}
-					else
-					{
-						String existedPassword=mainUser.getPassword();
-						boolean existsPassword=bCryptPasswordEncoder.matches(deleteRequest.getPassword(), existedPassword);
-						if(existsPassword)
-						{
-							List<Shipment> listOfShipments=shipmentRepo.findByEmail(email);
-							if(listOfShipments.isEmpty())
-							{
-								userRepo.deleteById(userInForm.getId());
-								logger.info("Account Deleted Sucessfully ");
-								return new ResponseEntity<String>("AccountDeleted", HttpStatus.OK);
-							}
-							else
-							{
-								logger.info("Shipment exists cannot be deleted");
-								return new ResponseEntity<String>("Shipment exists with associated mail :- " + email + ", cannot be deleted", HttpStatus.BAD_REQUEST);
-							}
-						}
-						else
-						{
-							logger.warn("The Password You Have Entered is InCorrect");
-							return new ResponseEntity<String>("IncorrectPassword", HttpStatus.BAD_REQUEST);
-						}
-					}
-					
-				}
-				else
-				{
-					logger.warn("The given mail is not matching with your account details :- " + email);
-					return new ResponseEntity<String>("EmailNotMatching", HttpStatus.BAD_REQUEST);
-				}
-
+				logger.warn("The given mail is not matching with your account details :- " + email);
+				return new ResponseEntity<String>("EmailNotMatching", HttpStatus.BAD_REQUEST);
 			}
-			
+
 		}
 		else
 		{
 			logger.warn("The given mail does not contains any data :- " + email);
 			return new ResponseEntity<String>("Given-Email-Not-Exists-In-Database", HttpStatus.BAD_REQUEST);
 		}
+		return null;
 		
 	}
 	

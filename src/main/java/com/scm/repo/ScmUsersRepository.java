@@ -10,7 +10,6 @@ import com.scm.entity.ScmUsers;
 @Repository
 public interface ScmUsersRepository extends MongoRepository<ScmUsers, String> 
 {
-	  ScmUsers findByUsername(String username);
 	  Optional<ScmUsers> findByEmail(String email);
 	  Boolean existsByUsername(String username);
 	  Boolean existsByEmail(String email);

@@ -16,7 +16,7 @@ public interface UserService
 	public ResponseEntity<?> loginIn(LoginRequest loginRequest);
 	public ResponseEntity<?> signUp(SignRequest signupRequest);
 	public ResponseEntity<?> retriveDetails(String email, HttpHeaders headers);
-	public ResponseEntity<?> editUser(EditRequest editRequest, String email, String username);
+	public ResponseEntity<?> editUser(EditRequest editRequest, String email);
 	public ResponseEntity<?> deleteUser(LoginRequest deleteRequest, String username);
 	public ResponseEntity<List<ScmUsers>> retriveAll(HttpHeaders headers);
 	

@@ -55,15 +55,15 @@ public class UserController
 	}
 	
 	@PostMapping("/edituser")
-	public ResponseEntity<?> editUser(@RequestBody EditRequest editRequest, @RequestParam String email, @RequestParam String username)
+	public ResponseEntity<?> editUser(@RequestBody EditRequest editRequest, @RequestParam String email)
 	{
-		return userService.editUser(editRequest, email, username);
+		return userService.editUser(editRequest, email);
 	}
 	
 	@PostMapping("/deleteuser")
-	public ResponseEntity<?> deleteUser(@RequestBody LoginRequest deleteRequest, @RequestParam String username)
+	public ResponseEntity<?> deleteUser(@RequestBody LoginRequest deleteRequest, @RequestParam String email)
 	{
-		return userService.deleteUser(deleteRequest, username);
+		return userService.deleteUser(deleteRequest, email);
 	}
 	
 }
