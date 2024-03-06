@@ -1,6 +1,5 @@
 package com.scm.services;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -295,7 +294,7 @@ public class UserServiceImplementation implements UserService
 		        token = authorizationHeader.substring(7);
 		        if (jwtUtils.isTokenExpired(token)) {
 		            logger.warn("Token Time Expired");
-		            return new ResponseEntity<>(Collections.emptyList(), HttpStatus.BAD_REQUEST);
+		            return new ResponseEntity<>("Token Time Expired", HttpStatus.BAD_REQUEST);
 		        }
 		        username = jwtUtils.extractUsername(token);
 		    }
@@ -311,14 +310,14 @@ public class UserServiceImplementation implements UserService
 		    	else
 		    	{
 					logger.warn("Token Validation Failed");
-					return new ResponseEntity<>(Collections.emptyList(), HttpStatus.BAD_REQUEST);
+					return new ResponseEntity<>("Token Validation Failed", HttpStatus.BAD_REQUEST);
 		    	}
 
 		    }
 		    else
 		    {
 				logger.warn("Details Not Authenticated");
-				return new ResponseEntity<>(Collections.emptyList(), HttpStatus.BAD_REQUEST);
+				return new ResponseEntity<>("Details Not Authenticated", HttpStatus.BAD_REQUEST);
 		    }
 			
 		}
@@ -326,7 +325,7 @@ public class UserServiceImplementation implements UserService
 	}
 
 	@Override
-	public ResponseEntity<List<ScmUsers>> retriveAll(HttpHeaders headers) 
+	public ResponseEntity<?> retriveAll(HttpHeaders headers) 
 	{
 		List<ScmUsers> allUsers = userRepo.findAll();
 		if(allUsers.isEmpty())
@@ -344,7 +343,7 @@ public class UserServiceImplementation implements UserService
 		        token = authorizationHeader.substring(7);
 		        if (jwtUtils.isTokenExpired(token)) {
 		            logger.warn("Token Time Expired");
-		            return new ResponseEntity<>(Collections.emptyList(), HttpStatus.BAD_REQUEST);
+		            return new ResponseEntity<>("Token Time Expired", HttpStatus.BAD_REQUEST);
 		        }
 		        username = jwtUtils.extractUsername(token);
 		    }
@@ -360,14 +359,14 @@ public class UserServiceImplementation implements UserService
 		    	else
 		    	{
 					logger.warn("Token Validation Failed");
-					return new ResponseEntity<>(Collections.emptyList(), HttpStatus.BAD_REQUEST);
+					return new ResponseEntity<>("Token Validation Failed", HttpStatus.BAD_REQUEST);
 		    	}
 
 		    }
 		    else
 		    {
 				logger.warn("Details Not Authenticated");
-				return new ResponseEntity<>(Collections.emptyList(), HttpStatus.BAD_REQUEST);
+				return new ResponseEntity<>("Details Not Authenticated", HttpStatus.BAD_REQUEST);
 		    }
 		}
 	}

@@ -1,6 +1,5 @@
 package com.scm.services;
 
-import java.util.Collections;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -38,7 +37,7 @@ public class ShipmentServiceImplementation implements ShipmentService
 			{
 				shipmentRepo.save(shipment);
 				String message="Shipment created successfully with following number :- " + shipment.getShipmentNumber();
-				logger.info("Shipment created successfully with following number :- " + shipment.getShipmentNumber());
+				logger.info(message);
 				return new ResponseEntity<>(message, HttpStatus.OK);
 			}
 			else
@@ -78,7 +77,7 @@ public class ShipmentServiceImplementation implements ShipmentService
 			        token = authorizationHeader.substring(7);
 			        if (jwtUtils.isTokenExpired(token)) {
 			            logger.warn("Token Time Expired");
-			            return new ResponseEntity<>(Collections.emptyList(), HttpStatus.BAD_REQUEST);
+			            return new ResponseEntity<>("Token Time Expired", HttpStatus.BAD_REQUEST);
 			        }
 			        username = jwtUtils.extractUsername(token);
 			    }
@@ -94,14 +93,14 @@ public class ShipmentServiceImplementation implements ShipmentService
 			    	else
 			    	{
 						logger.warn("Token Validation Failed");
-						return new ResponseEntity<>(Collections.emptyList(), HttpStatus.BAD_REQUEST);
+						return new ResponseEntity<>("Token Validation Failed", HttpStatus.BAD_REQUEST);
 			    	}
 
 			    }
 			    else
 			    {
 					logger.warn("Details Not Authenticated");
-					return new ResponseEntity<>(Collections.emptyList(), HttpStatus.BAD_REQUEST);
+					return new ResponseEntity<>("Details Not Authenticated", HttpStatus.BAD_REQUEST);
 			    }
 	        }
 		}
@@ -134,7 +133,7 @@ public class ShipmentServiceImplementation implements ShipmentService
 			        token = authorizationHeader.substring(7);
 			        if (jwtUtils.isTokenExpired(token)) {
 			            logger.warn("Token Time Expired");
-			            return new ResponseEntity<>(Collections.emptyList(), HttpStatus.BAD_REQUEST);
+			            return new ResponseEntity<>("Token Time Expired", HttpStatus.BAD_REQUEST);
 			        }
 			        // If token is not expired, extract username
 			        username = jwtUtils.extractUsername(token);
@@ -151,14 +150,14 @@ public class ShipmentServiceImplementation implements ShipmentService
 			    	else
 			    	{
 						logger.warn("Token Validation Failed");
-						return new ResponseEntity<>(Collections.emptyList(), HttpStatus.BAD_REQUEST);
+						return new ResponseEntity<>("Token Validation Failed", HttpStatus.BAD_REQUEST);
 			    	}
 
 			    }
 			    else
 			    {
 					logger.warn("Details Not Authenticated");
-					return new ResponseEntity<>(Collections.emptyList(), HttpStatus.BAD_REQUEST);
+					return new ResponseEntity<>("Details Not Authenticated", HttpStatus.BAD_REQUEST);
 			    }
 			}
 		}
