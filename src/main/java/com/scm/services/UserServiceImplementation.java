@@ -165,21 +165,101 @@ public class UserServiceImplementation implements UserService
 	{
 		String formEmail=deleteRequest.getEmail();
 		Optional<ScmUsers> mainUser = userRepo.findByEmail(email);
+		Optional<ScmUsers> formUser = userRepo.findByEmail(formEmail);
+		
+		ScmUsers formUserIn = null;
+		Set<ScmRoles> rolesFormUser = null;
+		ScmRoles roleFormUser = null;
+		String userRoleNameForm = null;
 		if(mainUser.isPresent())
 		{
 			ScmUsers mainUserIn = mainUser.get();
 			Set<ScmRoles> rolesForm = mainUserIn.getRoles();
 			ScmRoles roleForm = rolesForm.iterator().next();
-			String UserRoleName = roleForm.getRole();
+			String userRoleName = roleForm.getRole();
 			
-			if(UserRoleName.equals("ADMIN"))
+			if(userRoleName.equals("ADMIN"))
 			{
-				Optional<ScmUsers> formUser = userRepo.findByEmail(formEmail);
+				if(formUser.isPresent())
+				{
+					formUserIn = formUser.get();
+					rolesFormUser = formUserIn.getRoles();
+					roleFormUser = rolesFormUser.iterator().next();
+					userRoleNameForm = roleFormUser.getRole();
+					
+					if(userRoleNameForm.equals("ADMIN"))
+					{
+						logger.warn("ADMIN Cant be Deleted");
+						return new ResponseEntity<String>("You Dont have Authority to Delete Admin", HttpStatus.BAD_REQUEST);
+					}
+					else
+					{
+						String existedPassword=mainUserIn.getPassword();
+						boolean existsPassword=bCryptPasswordEncoder.matches(deleteRequest.getPassword(), existedPassword);
+						if(existsPassword)
+						{
+							List<Shipment> listOfShipments=shipmentRepo.findByEmail(formEmail);
+							if(listOfShipments.isEmpty())
+							{
+								userRepo.deleteById(formUserIn.getId());
+								logger.info("Account Deleted Sucessfully ");
+								return new ResponseEntity<String>("AccountDeleted", HttpStatus.OK);
+							}
+							else
+							{
+								logger.info("Shipment exists cannot be deleted");
+								return new ResponseEntity<String>("Shipment exists with associated mail :- " + formEmail + ", cannot be deleted", HttpStatus.BAD_REQUEST);
+							}
+						}
+						else
+						{
+							logger.warn("The Password You Have Entered is InCorrect");
+							return new ResponseEntity<String>("IncorrectPassword", HttpStatus.BAD_REQUEST);
+						}
+					}
+				}
+				else
+				{
+					logger.warn("The mail does not contains any data :- " + formEmail);
+					return new ResponseEntity<String>("Given-Email-Not-Exists-In-Database", HttpStatus.BAD_REQUEST);
+				}
+			
 
 			}
 			else if(formEmail.equals(mainUserIn.getEmail()))
 			{
-				
+				if(formUser.isPresent())
+				{
+					formUserIn = formUser.get();
+					
+					String existedPassword=formUserIn.getPassword();
+					boolean existsPassword=bCryptPasswordEncoder.matches(deleteRequest.getPassword(), existedPassword);
+					if(existsPassword)
+					{
+						List<Shipment> listOfShipments=shipmentRepo.findByEmail(email);
+						if(listOfShipments.isEmpty())
+						{
+							userRepo.deleteById(formUserIn.getId());
+							logger.info("Account Deleted Sucessfully ");
+							return new ResponseEntity<String>("AccountDeleted", HttpStatus.OK);
+						}
+						else
+						{
+							logger.info("Shipment exists cannot be deleted");
+							return new ResponseEntity<String>("Shipment exists with associated mail :- " + formEmail + ", cannot be deleted", HttpStatus.BAD_REQUEST);
+						}
+					}
+					else
+					{
+						logger.warn("The Password You Have Entered is InCorrect");
+						return new ResponseEntity<String>("IncorrectPassword", HttpStatus.BAD_REQUEST);
+					}
+				}
+				else
+				{
+					logger.warn("The mail does not contains any data :- " + email);
+					return new ResponseEntity<String>("Given-Email-Not-Exists-In-Database", HttpStatus.BAD_REQUEST);
+				}
 			}
 			else
 			{
@@ -190,10 +270,9 @@ public class UserServiceImplementation implements UserService
 		}
 		else
 		{
-			logger.warn("The given mail does not contains any data :- " + email);
+			logger.warn("The mail does not contains any data :- " + email);
 			return new ResponseEntity<String>("Given-Email-Not-Exists-In-Database", HttpStatus.BAD_REQUEST);
 		}
-		return null;
 		
 	}
 	
