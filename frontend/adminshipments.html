@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>SCMXpertLite</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous" />
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <style>
+            .image-container {
+                position: relative;
+                max-height: 80vh; /* Set maximum height */
+                overflow: hidden; /* Hide overflowing content */
+            }
+    
+            .image-container img {
+                width: 100%; /* Ensure image fills container width */
+                height: auto; /* Maintain aspect ratio */
+            }
+    
+            .overlay {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.5); /* Adjust the transparency here */
+            }
+    
+            .form-container {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                z-index: 1; /* Ensure form is on top of overlay */
+                color: white; /* Adjust text color */
+            }
+    
+            /* Make table semi-transparent */
+            .table {
+                background-color: rgba(0, 0, 0, 0.5) !important;
+            }
+    
+            /* Make table cells semi-transparent */
+            .table th {
+                background-color: rgba(0, 0, 0, 0.5) !important;
+            }
+    
+            /* Optional: Style submit and clear buttons */
+            .form-control.bg-success {
+                background-color: #28a745; /* Adjust button color */
+                border-color: #28a745; /* Adjust button border color */
+            }
+    
+            .form-control.bg-danger {
+                background-color: #dc3545; /* Adjust button color */
+                border-color: #dc3545; /* Adjust button border color */
+            }
+    
+            .form-control.bg-success:hover,
+            .form-control.bg-danger:hover {
+                background-color: #218838; /* Adjust button hover color */
+                border-color: #1e7e34; /* Adjust button border hover color */
+            }
+            .search-container {
+                position: relative;
+            }
+
+            .search-container input {
+                padding-right: 30px; /* Adjust padding to accommodate the icon */
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                background-color: #343a40;
+                font-size: 16px;
+            }
+
+            .search-container .fas.fa-search {
+                position: absolute;
+                top: 50%;
+                right: 10px;
+                transform: translateY(-50%);
+                color:  #dc3545;
+            }
+            .search-container input::placeholder {
+                color: #54B4D3; /* Set the color you want */
+            }
+        </style>
+    </head>
+    <body>
+        <!-- Navigation Links -->
+        <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+            <a class="navbar-brand text-danger" href="/admindashboard.html"><strong>SCMXpertLite</strong></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-center" id="collapsibleNavbar">
+              <ul class="navbar-nav">
+                <li class="nav-item mr-5">
+                    <a class="nav-link text-warning" href="./admin.html"><strong><i class="fas fa-user-tie text-danger"></i> My Account</strong></a>
+                </li>
+                <li class="nav-item mr-5">
+                    <a class="nav-link text-warning fa-md" href="./adminaccount.html"><strong><i class="fas fa-user-tie text-danger">&nbsp;&nbsp;&nbsp;</i>Accounts</strong></a>
+                </li>
+                <li class="nav-item mr-5">
+                    <a class="nav-link text-warning fa-md" href="./admincreateshipments.html"><strong><i class="fas fa-shipping-fast text-danger">&nbsp;&nbsp;&nbsp;</i>Create Shipment</strong></a>
+                </li>
+                <li class="nav-item mr-5">
+                    <a class="nav-link text-warning fa-md" href="./datastream.html"><strong><i class="fa fa-database text-danger">&nbsp;&nbsp;&nbsp;</i>Data Stream</strong></a>
+                </li>
+                <li class="nav-item">
+                  <a id="logout-link" class="nav-link text-warning fa-md" href="./index.html"><strong><i class="fas fa-sign-out-alt text-danger">&nbsp;&nbsp;&nbsp;</i>Logout</strong></a>
+                </li>
+              </ul>
+            </div>  
+        </nav>
+
+        <div class="container-fluid bg-dark">
+            <div class="row">
+                <div class="col-sm-12 position-relative">
+                    <div class="image-container">
+                        <img src="./shipments.jpg" alt="User Dashboard" class="img-fluid" />
+                        <div class="overlay"></div>
+
+                        <!-- Shipment Table -->
+                        <div class="form-container">
+                            <div id="error-message" class="alert alert-danger" style="display: none;"></div>
+                            <!-- Session Error messages -->
+                            <div class="alert alert-danger" id="shipmentError" style="display: none; margin-left: 35%; margin-right: 35%;"></div>
+                            <div class="alert alert-danger" id="shipmentError1" style="display: none; margin-left: 35%; margin-right: 35%;"></div>
+                            
+                            <div class="search-container">
+                                <input type="text" id="searchInput" class="form-control bg-dark text-danger font-weight-bold" placeholder="Enter Shipment Number / Associated Email">
+                                <i class="fas fa-search"></i> 
+                            </div>
+                            <table id="shipmentTable" class="table table-dark">
+                                <thead class="text-warning">
+                                    <tr>
+                                        <th>Associated_Email</th>
+                                        <th>Shipment_Number</th>
+                                        <th>Container_Number</th>
+                                        <th>Route_Details</th>
+                                        <th>Goods_Type</th>
+                                        <th>Device</th>
+                                        <th>Delivery_Date</th>
+                                        <th>Po_Number</th>
+                                        <th>Delivery_Number</th>
+                                        <th>Ndc_Number</th>
+                                        <th>Batch_ID</th>
+                                        <th>Total_Goods</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="shipmentTableBody">
+
+                                </tbody>
+                            </table>
+
+                            <!-- Loading Spinner -->
+                            <div class="alert alert-danger" id="spinner" style="margin-left: 30%; margin-right: 30%; display: none;">
+                                <i class="fa fa-spinner fa-spin text-danger"></i> Loading...
+                            </div>
+
+                            <!-- Pagination Links -->
+                            <nav aria-label="Page navigation">
+                                <ul class="pagination justify-content-center">
+                                  <li class="page-item" id="prevPage">
+                                    <a class="page-link bg-info font-weight-bold" href="#" aria-label="Previous">
+                                      <span aria-hidden="true" class="text-dark"><i class='fas fa-chevron-circle-left'></i> &nbsp;Previous Page</span>
+                                    </a>
+                                  </li>
+                                  <li class="page-item" id="nextPage">
+                                    <a class="page-link bg-info font-weight-bold" href="#" aria-label="Next">
+                                      <span aria-hidden="true" class="text-dark"> Next Page &nbsp;<i class='fas fa-chevron-circle-right'></i></span>
+                                    </a>
+                                  </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>       
+
+        <!-- Footer -->
+        <div class="jumbotron text-center bg-dark" style="margin-bottom: 0">
+            <div class="container footer text-danger">
+                <h3> <strong>&copy; 2024 SCMXpertLite</strong></h3>
+            </div>
+        </div>
+
+        <!-- Shipment API Paginations, Session Management --> 
+        <script>
+            $(document).ready(function() 
+            {
+                let currentPage = 1;
+                const rowsPerPage = 7;
+                let totalPages;
+                let allShipmentsData;
+                let filteredShipmentsData;
+
+                const token = localStorage.getItem('token');
+                var myHeaders = new Headers();
+                myHeaders.append("Authorization", "Bearer " + token);
+                myHeaders.append("Content-Type", "application/json");
+
+                var headers = 
+                {
+                    method: 'GET',
+                    headers: myHeaders,
+                    redirect: 'follow'
+                };
+
+                // Function to check if the token is expired
+                function isTokenExpired(token) 
+                {
+                    if (!token) 
+                    {
+                        return true; // Token is considered expired if it doesn't exist
+                    }
+                    const tokenData = JSON.parse(atob(token.split('.')[1])); // Decode token payload
+                    const expirationTime = tokenData.exp * 1000; // Convert expiration time to milliseconds
+                    return Date.now() >= expirationTime; // Check if current time is greater than or equal to expiration time
+                }
+
+                // Function to automatically logout user if token is expired
+                function autoLogoutIfTokenExpired() 
+                {
+                    const token = localStorage.getItem('token');
+                    if (isTokenExpired(token)) 
+                    {
+                        document.getElementById('shipmentTableBody').innerHTML = '';
+                        let countdown = 10;
+                        const countdownInterval = setInterval(() => 
+                        {
+                            document.getElementById('shipmentError').innerText = `Session expired or authentication failed. Please log in again. Redirecting to Login Page in ${countdown} seconds`;
+                            document.getElementById('shipmentError').style.display = 'block';
+                            countdown--;
+                            if (countdown < 0) 
+                            {
+                                clearInterval(countdownInterval);
+                                document.getElementById('shipmentError').style.display = 'none';
+                                localStorage.clear();
+                                window.location.href = 'index.html'; 
+                            }
+                        }, 1000);
+                        document.getElementById('shipmentError').innerText = 'Session expired or authentication failed. Please log in again.';
+                    }
+                }
+
+                // Call autoLogoutIfTokenExpired function when page loads
+                autoLogoutIfTokenExpired();
+
+                // Call autoLogoutIfTokenExpired function periodically every minute
+                setInterval(autoLogoutIfTokenExpired, 60000);
+
+                // Function to fetch shipments, manage pagination, and display data
+                if (!isTokenExpired(token))
+                {
+                    $('#spinner').show();
+                    function fetchShipmentsAndDisplay() 
+                    {
+                        fetch('http://localhost:7077/shipment/findall', headers)
+                        .then(response => {
+                            if (!response.ok) 
+                            {
+
+                                if (response.status === 400) 
+                                {
+                                    throw new Error('Session expired or authentication failed');
+                                } 
+                                else 
+                                {
+
+                                    throw new Error('Error fetching data');
+                                }
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            totalPages = Math.ceil(data.length / rowsPerPage);
+                            allShipmentsData = data;
+                            filteredShipmentsData = allShipmentsData;
+                            $('#spinner').hide();
+                            displayPage(currentPage, data);
+                            addPaginationListeners();
+                        })
+                        .catch(error => {
+                            if (error.message.includes('Session expired') || error.message.includes('authentication failed')) 
+                            {
+                                document.getElementById('shipmentError1').innerText = 'Session expired or authentication failed. Please log in again.';
+                            } 
+                            else 
+                            {
+                                document.getElementById('shipmentError1').innerText = 'Error fetching data. Please try again later.';
+                            }
+                            document.getElementById('shipmentError1').style.display = 'block';
+                            setTimeout(function() 
+                            {
+                                document.getElementById('shipmentError1').style.display = 'none';
+                            }, 3000);
+                        });
+                        }   
+                    }
+                    else
+                    {
+                        autoLogoutIfTokenExpired();
+                    }
+
+
+                // Function to add event listeners for pagination buttons
+                function addPaginationListeners() 
+                {
+                    $("#prevPage").click(function() 
+                    {
+                        if (currentPage > 1) 
+                        {
+                            currentPage--;
+                            displayPage(currentPage);
+                        }
+                    });
+
+                    $("#nextPage").click(function() 
+                    {
+                        if (currentPage < totalPages) 
+                        {
+                            currentPage++;
+                            displayPage(currentPage);
+                        }
+                    });
+                }
+
+                // Function to display the specified page of shipments
+                function displayPage(pageNumber, data) 
+                {
+                    const startIndex = (pageNumber - 1) * rowsPerPage;
+                    const endIndex = Math.min(startIndex + rowsPerPage, filteredShipmentsData.length);
+                    const tableBody = $('#shipmentTable tbody');
+                    tableBody.empty();
+
+                    for (let i = startIndex; i < endIndex; i++) 
+                    {
+                        const shipment = filteredShipmentsData[i];
+                        appendShipmentRow(shipment);
+                    }
+
+                    updatePagination();
+                }
+
+                // Function to append a shipment row to the table
+                function appendShipmentRow(shipment) 
+                {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <th>${shipment.email}</th>
+                        <th>${shipment.shipmentNumber}</th>
+                        <th>${shipment.containerNumber}</th>
+                        <th>${shipment.route}</th>
+                        <th>${shipment.goods}</th>
+                        <th>${shipment.device}</th>
+                        <th>${shipment.deliveryDate}</th>
+                        <th>${shipment.poNumber}</th>
+                        <th>${shipment.deliveryNumber}</th>
+                        <th>${shipment.ndcNumber}</th>
+                        <th>${shipment.batchId}</th>
+                        <th>${shipment.serialNumberOfGoods}</th>
+                        <th>${shipment.description}</th>`;
+                    $('#shipmentTable tbody').append(tr);
+                }
+
+                function filterAndDisplayPage(pageNumber) 
+                {
+                    const searchTerm = $('#searchInput').val().trim();
+                    filteredShipmentsData = searchTerm === '' ? allShipmentsData : allShipmentsData.filter(shipment => 
+                    {
+                        return shipment.email.toLowerCase().includes(searchTerm.toLowerCase()) || shipment.shipmentNumber.toString().includes(searchTerm);
+                    });
+                    totalPages = Math.ceil(filteredShipmentsData.length / rowsPerPage);
+                    displayPage(pageNumber);
+                }
+
+                
+                function updatePagination() 
+                {
+                    $('#pagination').empty();
+                    $('#pagination').append(`
+                        <li class="page-item ${currentPage === 1 ? 'disabled' : ''}" id="prevPage">
+                            <a class="page-link bg-info font-weight-bold" href="#" aria-label="Previous">
+                                <span aria-hidden="true" class="text-dark">&laquo; Previous Page</span>
+                            </a>
+                        </li>
+                        <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}" id="nextPage">
+                            <a class="page-link bg-info font-weight-bold" href="#" aria-label="Next">
+                                <span aria-hidden="true" class="text-dark">Next Page &raquo;</span>
+                            </a>
+                        </li>`
+                    );
+                }
+                
+                // Call the function to fetch and display data
+                fetchShipmentsAndDisplay();
+                autoLogoutIfTokenExpired();
+
+                // Add event listener for the search input field
+                $('#searchInput').on('input', function() 
+                {
+                    filterAndDisplayPage(1);
+                    currentPage = 1;
+                });
+            });
+        </script>
+
+        <script>
+            document.getElementById('logout-link').addEventListener('click', function(e) {
+                e.preventDefault(); // Prevents default action of clicking on a link
+                
+                // Clear local storage
+                localStorage.clear();
+                
+                // Redirect to index.html
+                window.location.href = "./index.html";
+            });
+        </script>
+    </body>
+</html>
