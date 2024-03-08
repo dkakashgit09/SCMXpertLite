@@ -2,6 +2,7 @@
 <section name="Workbench">
 	<section name="MavenProjectImportWizardPage">
 		<list key="rootDirectory">
+			<item value="C:\Project\SCMXpertLite\backend"/>
 			<item value="C:\Project\SCMXpertLite"/>
 		</list>
 		<list key="projectNameTemplate">
