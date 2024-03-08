@@ -316,6 +316,7 @@
                                 }
                             }, 1000);
                             document.getElementById('Error').innerText = 'Session expired or authentication failed. Please log in again.';
+                            $('#spinner').hide();
                         }
                     }
                     // Call autoLogoutIfTokenExpired function when page loads
