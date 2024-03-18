@@ -63,9 +63,8 @@ public class ShipmentServiceImplementation implements ShipmentService
 			List<Shipment> shipments = shipmentRepo.findByEmail(email);
 	        if (shipments.isEmpty()) 
 	        {
-	        	String errorMessage="No records found";
 	        	logger.warn("No Records found with this email" + email);
-	            return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
+	            return new ResponseEntity<>(shipments, HttpStatus.OK);
 	        }
 	        else
 	        {
@@ -121,7 +120,7 @@ public class ShipmentServiceImplementation implements ShipmentService
 			if(allShipments.isEmpty())
 			{
 				logger.warn("No details found in database");
-				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+				return new ResponseEntity<>(allShipments, HttpStatus.OK);
 			}
 			else
 			{
