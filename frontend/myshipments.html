@@ -46,8 +46,8 @@
             }
         
             /* Make table cells semi-transparent */
-            .table td {
-                background-color: rgba(0, 0, 0, 0.5) !important;
+            .table th {
+                background-color: rgba(0, 0, 0, 0.795) !important;
             }
         
             /* Optional: Style submit and clear buttons */
@@ -71,7 +71,7 @@
     <body>
         <!-- Navigation Links -->
         <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-            <a class="navbar-brand text-danger" href="/dashboard.html"><strong>SCMXpertLite</strong></a>
+            <a class="navbar-brand text-danger" href="./dashboard.html"><strong>SCMXpertLite</strong></a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
               <span class="navbar-toggler-icon"></span>
             </button>
@@ -99,7 +99,7 @@
                         <div class="overlay"></div>
                         <!-- Shipments Table -->
                         <div class="form-container">
-                            <div id="error-message" class="alert alert-danger" style="display: none;"></div>
+                            <div id="error-message" class="alert alert-danger" style="display: none; margin-left: 35%; margin-right: 35%;""></div>
                             <!-- Session Error messages -->
                             <div class="alert alert-danger" id="shipmentError" style="display: none; margin-left: 35%; margin-right: 35%;"></div>
                             
@@ -165,7 +165,7 @@
         <script>
             $(document).ready(function() {
                 let currentPage = 1;
-                const rowsPerPage = 4;
+                const rowsPerPage = 10;
                 let totalPages;
                 let allShipmentsData;
                 let filteredShipmentsData;
@@ -201,6 +201,7 @@
                         const countdownInterval = setInterval(() => {
                             document.getElementById('shipmentError').innerText = `Session expired or authentication failed. Please log in again. Redirecting to Login Page in ${countdown} seconds`;
                             document.getElementById('shipmentError').style.display = 'block';
+                            $('#spinner').hide();
                             countdown--;
                             if (countdown < 0) {
                                 clearInterval(countdownInterval);
@@ -239,12 +240,26 @@
                         return response.json();
                     })
                     .then(data => {
-                        totalPages = Math.ceil(data.length / rowsPerPage);
-                        allShipmentsData = data;
-                        filteredShipmentsData = allShipmentsData;
-                        $('#spinner').hide();
-                        displayPage(currentPage, data);
-                        addPaginationListeners();
+                        if(data.length >=1)
+                        {
+                            totalPages = Math.ceil(data.length / rowsPerPage);
+                            allShipmentsData = data;
+                            filteredShipmentsData = allShipmentsData;
+                            $('#spinner').hide();
+                            displayPage(currentPage, data);
+                            addPaginationListeners();
+                        }
+                        else
+                        {
+                            document.getElementById('error-message').innerText = 'No Shipments found in DataBase';
+                            document.getElementById('error-message').style.display = 'block';
+                            $('#spinner').hide();
+                            setTimeout(function() 
+                            {
+                                document.getElementById('error-message').style.display = 'none';
+                            }, 3000);
+                        }
+
                     })
                     .catch(error => {
                         if (error.message.includes('Session expired') || error.message.includes('authentication failed')) 
@@ -252,24 +267,31 @@
                             let countdown = 10;
                             const countdownInterval = setInterval(() => 
                             {
-                                document.getElementById('shipmentError').innerText = `Session expired or authentication failed. Please log in again. Redirecting to Login Page in ${countdown} seconds`;
-                                document.getElementById('shipmentError').style.display = 'block';
+                                document.getElementById('error-message').innerText = `Session expired or authentication failed. Please log in again. Redirecting to Login Page in ${countdown} seconds`;
+                                document.getElementById('error-message').style.display = 'block';
+                                $('#spinner').hide();
                                 countdown--;
                                 if (countdown < 0) 
                                 {
                                     clearInterval(countdownInterval);
-                                    document.getElementById('shipmentError').style.display = 'none';
+                                    document.getElementById('error-message').style.display = 'none';
                                     localStorage.clear();
                                     window.location.href = 'home.html'; 
                                 }
                             }, 1000);
-                            document.getElementById('shipmentError').innerText = 'Session expired or authentication failed. Please log in again.';
+                            document.getElementById('error-message').innerText = 'Session expired or authentication failed. Please log in again.';
                         } 
                         else 
                         {
-                            document.getElementById('shipmentError').innerText = 'Error fetching data. Please try again later.';
+                            document.getElementById('error-message').innerText = 'Error fetching data. Please try again later.';
+                            $('#spinner').hide();
                         }
-                        document.getElementById('shipmentError').style.display = 'block';
+                        document.getElementById('error-message').style.display = 'block';
+
+                        setTimeout(function() 
+                        {
+                            document.getElementById('error-message').style.display = 'none';
+                        }, 3000);
                     });
                 }
 
@@ -317,18 +339,18 @@
                 {
                     const tr = document.createElement('tr');
                     tr.innerHTML = `
-                        <td>${shipment.shipmentNumber}</td>
-                        <td>${shipment.containerNumber}</td>
-                        <td>${shipment.route}</td>
-                        <td>${shipment.goods}</td>
-                        <td>${shipment.device}</td>
-                        <td>${shipment.deliveryDate}</td>
-                        <td>${shipment.poNumber}</td>
-                        <td>${shipment.deliveryNumber}</td>
-                        <td>${shipment.ndcNumber}</td>
-                        <td>${shipment.batchId}</td>
-                        <td>${shipment.serialNumberOfGoods}</td>
-                        <td>${shipment.description}</td>`;
+                        <th>${shipment.shipmentNumber}</th>
+                        <th>${shipment.containerNumber}</th>
+                        <th>${shipment.route}</th>
+                        <th>${shipment.goods}</th>
+                        <th>${shipment.device}</th>
+                        <th>${shipment.deliveryDate}</th>
+                        <th>${shipment.poNumber}</th>
+                        <th>${shipment.deliveryNumber}</th>
+                        <th>${shipment.ndcNumber}</th>
+                        <th>${shipment.batchId}</th>
+                        <th>${shipment.serialNumberOfGoods}</th>
+                        <th>${shipment.description}</th>`;
                     $('#shipmentTable tbody').append(tr);
                 }
 
