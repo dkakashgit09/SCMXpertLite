@@ -45,7 +45,7 @@ while True:
         userdata = (json.dumps(data)+"\n").encode('utf-8')
         print(userdata)
         c.send(userdata)
-        time.sleep(100)
+        time.sleep(1000)
     except Exception as e:
         print(e)
 c.close()
